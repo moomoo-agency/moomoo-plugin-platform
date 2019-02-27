@@ -1,0 +1,10 @@
+services:
+    moo_page.registry:
+        class: 'MooMoo\Platform\Bundle\PageBundle\Registry\PagesRegistry'
+
+    moo_page.abstract_page:
+        class: 'MooMoo\Platform\Bundle\PageBundle\Model\AbstractPage'
+        abstract: true
+        calls:
+            - [setTemplating, ['@templating']]
+

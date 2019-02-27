@@ -1,0 +1,12 @@
+services:
+    moo_rest_api.registry.rest_api.controllers:
+        class: 'MooMoo\Platform\Bundle\RestApiBundle\Controller\Registry\RestControllersRegistry'
+
+    moo_rest_api.registry.rest_api.field_providers:
+        class: 'MooMoo\Platform\Bundle\RestApiBundle\Field\Registry\RestFieldProvidersRegistry'
+
+    moo_rest_api.registrator.rest_api.controllers:
+        class: 'MooMoo\Platform\Bundle\RestApiBundle\Controller\Registrator\RestControllersRegistrator'
+
+    moo_rest_api.registrator.rest_api.fields:
+        class: 'MooMoo\Platform\Bundle\RestApiBundle\Field\Registrator\RestFieldsRegistrator'

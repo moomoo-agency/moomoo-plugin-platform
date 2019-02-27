@@ -1,0 +1,71 @@
+services:
+    moo_asset.registry.assets:
+        class: 'MooMoo\Platform\Bundle\AssetBundle\Registry\AssetsRegistry'
+
+    moo_asset.registry.footer_template_scripts:
+        class: 'MooMoo\Platform\Bundle\AssetBundle\Registry\FooterTemplateScriptsRegistry'
+
+    moo_asset.path_provider.absolute:
+        class: 'MooMoo\Platform\Bundle\AssetBundle\Path\Chain\Element\AbsoluteAssetPathProvider'
+
+    moo_asset.path_provider.bundle:
+        class: 'MooMoo\Platform\Bundle\AssetBundle\Path\Chain\Element\BundleAssetPathProvider'
+        arguments:
+            - '%kernel.bundles%'
+        calls:
+            - ['setSuccessor', ['@moo_asset.path_provider.absolute']]
+
+    moo_asset.path_provider.plugin:
+        class: 'MooMoo\Platform\Bundle\AssetBundle\Path\Chain\Element\PluginAssetPathProvider'
+        calls:
+            - ['setSuccessor', ['@moo_asset.path_provider.bundle']]
+
+    moo_asset.path_provider.uploads:
+        class: 'MooMoo\Platform\Bundle\AssetBundle\Path\Chain\Element\UploadsAssetPathProvider'
+        calls:
+            - ['setSuccessor', ['@moo_asset.path_provider.plugin']]
+
+    moo_asset.path_provider.main:
+        parent: moo_asset.path_provider.uploads
+
+    moo_asset.registrator.frontend.abstract:
+        class: 'MooMoo\Platform\Bundle\AssetBundle\Registrator\Assets\Chain\Element\AbstractAssetsRegistratorChainElement'
+        abstract: true
+        arguments:
+            - '@moo_asset.path_provider.main'
+
+    moo_asset.registrator.frontend.style:
+        class: 'MooMoo\Platform\Bundle\AssetBundle\Registrator\Assets\Chain\Element\StyleAssetsRegistratorChainElement'
+        parent: moo_asset.registrator.frontend.abstract
+
+    moo_asset.registrator.frontend.script:
+        class: 'MooMoo\Platform\Bundle\AssetBundle\Registrator\Assets\Chain\Element\ScriptAssetsRegistratorChainElement'
+        parent: moo_asset.registrator.frontend.abstract
+        calls:
+            - ['setSuccessor', ['@moo_asset.registrator.frontend.style']]
+
+    moo_asset.registrator.frontend:
+        parent: moo_asset.registrator.frontend.script
+
+    moo_asset.registrator.admin.abstract:
+        parent: moo_asset.registrator.frontend.abstract
+        calls:
+            - ['setRegistrationFunction', ['admin_enqueue_scripts']]
+
+    moo_asset.registrator.admin.style:
+        class: 'MooMoo\Platform\Bundle\AssetBundle\Registrator\Assets\Chain\Element\StyleAssetsRegistratorChainElement'
+        parent: moo_asset.registrator.admin.abstract
+
+    moo_asset.registrator.admin.script:
+        class: 'MooMoo\Platform\Bundle\AssetBundle\Registrator\Assets\Chain\Element\ScriptAssetsRegistratorChainElement'
+        parent: moo_asset.registrator.admin.abstract
+        calls:
+            - ['setSuccessor', ['@moo_asset.registrator.admin.style']]
+
+    moo_asset.registrator.admin:
+        parent: moo_asset.registrator.admin.script
+
+    moo_asset.registrator.footer_template_scripts:
+        class: 'MooMoo\Platform\Bundle\AssetBundle\Registrator\FooterTemplateScripts\FooterTemplateScriptsRegistrator'
+        arguments:
+            - '@templating'

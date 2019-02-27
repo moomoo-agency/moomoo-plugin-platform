@@ -1,0 +1,14 @@
+services:
+    moo_hook.registry.hooks:
+        class: 'MooMoo\Platform\Bundle\HookBundle\Registry\HooksRegistry'
+
+    moo_hook.hooks_registrator.action:
+        class: 'MooMoo\Platform\Bundle\HookBundle\Registrator\Chain\Element\ActionHooksRegistratorChainElement'
+        calls:
+            - ['setSuccessor', ['@moo_hook.hooks_registrator.filter']]
+
+    moo_hook.hooks_registrator.filter:
+        class: 'MooMoo\Platform\Bundle\HookBundle\Registrator\Chain\Element\FilterHooksRegistratorChainElement'
+
+    moo_hook.hooks_registrator.main:
+        parent: moo_hook.hooks_registrator.action

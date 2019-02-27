@@ -1,0 +1,38 @@
+services:
+    templating.name_parser:
+        class: 'MooMoo\Platform\Bundle\KernelBundle\Templating\TemplateNameParser'
+        arguments:
+            - '@kernel'
+
+    templating.php.loader:
+        class: 'Symfony\Component\Templating\Loader\FilesystemLoader'
+        arguments:
+            - []
+
+    templating.php.engine:
+        class: 'Symfony\Component\Templating\PhpEngine'
+        arguments:
+            - '@templating.name_parser'
+            - '@templating.php.loader'
+
+    twig.loader.filesystem:
+        class: 'Twig_Loader_Filesystem'
+
+    twig:
+        class: 'Twig\Environment'
+        arguments:
+            - '@twig.loader.filesystem'
+
+    templating.twig.engine:
+        class: 'MooMoo\Platform\Bundle\KernelBundle\Templating\Twig\TwigEngine'
+        arguments:
+            - '@twig'
+            - '@templating.name_parser'
+
+    templating:
+        class: 'Symfony\Component\Templating\DelegatingEngine'
+        arguments:
+            - ['@templating.php.engine', '@templating.twig.engine']
+
+    moo_kernel.boot_service.composite:
+        class: 'MooMoo\Platform\Bundle\KernelBundle\Boot\CompositeBootService'

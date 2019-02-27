@@ -1,0 +1,14 @@
+services:
+    moo_request.registry.request_handlers:
+        class: 'MooMoo\Platform\Bundle\RequestBundle\Registry\RequestHandlersRegistry'
+
+    moo_request.handlers_registrator.ajax:
+        class: 'MooMoo\Platform\Bundle\RequestBundle\Handler\Registrator\Chain\Element\AjaxRequestHandlersRegistratorChainElement'
+        calls:
+            - ['setSuccessor', ['@moo_request.handlers_registrator.not_ajax']]
+
+    moo_request.handlers_registrator.not_ajax:
+        class: 'MooMoo\Platform\Bundle\RequestBundle\Handler\Registrator\Chain\Element\NotAjaxRequestHandlersRegistratorChainElement'
+
+    moo_request.handlers_registrator.main:
+        parent: moo_request.handlers_registrator.ajax

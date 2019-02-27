@@ -1,0 +1,6 @@
+services:
+    moo_taxonomy.registry.taxonomies:
+        class: 'MooMoo\Platform\Bundle\TaxonomyBundle\Registry\TaxonomiesRegistry'
+
+    moo_taxonomy.registrator.taxonomies:
+        class: 'MooMoo\Platform\Bundle\TaxonomyBundle\Registrator\TaxonomiesRegistrator'
