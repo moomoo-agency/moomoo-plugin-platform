@@ -16,5 +16,13 @@
     "symfony/templating": "4.2.*",
     "symfony/twig-bridge": "4.2.*",
     "dg/composer-cleaner": "^2.0"
+  },
+  "scripts" : {
+    "post-install-cmd" : [
+      "[[ -f /usr/bin/wp ]] || sudo ln -s ./../wp-cli/wp-cli/bin/wp /usr/bin/wp",
+      "source ./../wp-cli/wp-cli/utils/wp-completion.bash",
+      "[[ -f ~/.bash_profile ]] || touch ~/.bash_profile",
+      "source ~/.bash_profile"
+    ]
   }
 }
