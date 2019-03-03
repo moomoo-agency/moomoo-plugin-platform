@@ -11,7 +11,7 @@ class CompositeBootService implements BootServiceInterface
     /**
      * @var BootServiceInterface[]
      */
-    private $services;
+    private $services =[];
 
     /**
      * @param BootServiceInterface $service
