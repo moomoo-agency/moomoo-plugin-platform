@@ -19,8 +19,8 @@ class PostBundle extends Bundle
 
         $container->addCompilerPass(
             new KernelCompilerPass(
-                'moo_post_type',
-                'moo_post.registry.post_types',
+                'moomoo_post_type',
+                'moomoo_post.registry.post_types',
                 'addPostType'
             )
         );
@@ -32,9 +32,9 @@ class PostBundle extends Bundle
     public function boot()
     {
         /** @var PostTypesRegistryInterface $postTypesRegistry */
-        $postTypesRegistry = $this->container->get('moo_post.registry.post_types');
+        $postTypesRegistry = $this->container->get('moomoo_post.registry.post_types');
         /** @var PostTypesRegistratorInterface $postTypesRegistrator */
-        $postTypesRegistrator = $this->container->get('moo_post.registrator.post_types');
+        $postTypesRegistrator = $this->container->get('moomoo_post.registrator.post_types');
         $postTypesRegistrator->registerPostTypes($postTypesRegistry->getPostTypes());
         
         parent::boot();

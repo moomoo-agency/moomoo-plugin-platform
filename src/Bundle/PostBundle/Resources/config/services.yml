@@ -1,6 +1,8 @@
 services:
-    moo_post.registry.post_types:
+    moomoo_post.registry.post_types:
         class: 'MooMoo\Platform\Bundle\PostBundle\PostType\Registry\PostTypesRegistry'
+        public: true
 
-    moo_post.registrator.post_types:
+    moomoo_post.registrator.post_types:
         class: 'MooMoo\Platform\Bundle\PostBundle\PostType\Registrator\PostTypesRegistrator'
+        public: true

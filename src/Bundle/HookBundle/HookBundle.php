@@ -19,8 +19,8 @@ class HookBundle extends Bundle
 
         $container->addCompilerPass(
             new KernelCompilerPass(
-                'moo_hook',
-                'moo_hook.registry.hooks',
+                'moomoo_hook',
+                'moomoo_hook.registry.hooks',
                 'addHook'
             )
         );
@@ -32,9 +32,9 @@ class HookBundle extends Bundle
     public function boot()
     {
         /** @var HooksRegistryInterface $hooksRegistry */
-        $hooksRegistry = $this->container->get('moo_hook.registry.hooks');
+        $hooksRegistry = $this->container->get('moomoo_hook.registry.hooks');
         /** @var HooksRegistratorInterface $hooksRegistrator */
-        $hooksRegistrator = $this->container->get('moo_hook.hooks_registrator.main');
+        $hooksRegistrator = $this->container->get('moomoo_hook.hooks_registrator.main');
         $hooksRegistrator->registerHooks($hooksRegistry->getHooks());
         
         parent::boot();

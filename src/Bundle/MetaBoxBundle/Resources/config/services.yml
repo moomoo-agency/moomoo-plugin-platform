@@ -1,6 +1,8 @@
 services:
-    moo_meta_box.registry.meta_boxes:
+    moomoo_meta_box.registry.meta_boxes:
         class: 'MooMoo\Platform\Bundle\MetaBoxBundle\Registry\MetaBoxesRegistry'
+        public: true
 
-    moo_meta_box.registrator.meta_boxes:
+    moomoo_meta_box.registrator.meta_boxes:
         class: 'MooMoo\Platform\Bundle\MetaBoxBundle\Registrator\MetaBoxesRegistrator'
+        public: true

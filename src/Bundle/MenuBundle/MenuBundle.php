@@ -19,15 +19,15 @@ class MenuBundle extends Bundle
 
         $container->addCompilerPass(
             new KernelCompilerPass(
-                'moo_admin_menu_page',
-                'moo_menu.registry.admin_menu_pages',
+                'moomoo_admin_menu_page',
+                'moomoo_menu.registry.admin_menu_pages',
                 'addMenuElement'
             )
         );
         $container->addCompilerPass(
             new KernelCompilerPass(
-                'moo_admin_bar_node',
-                'moo_menu.registry.admin_bar_nodes',
+                'moomoo_admin_bar_node',
+                'moomoo_menu.registry.admin_bar_nodes',
                 'addMenuElement'
             )
         );
@@ -39,15 +39,15 @@ class MenuBundle extends Bundle
     public function boot()
     {
         /** @var MenuElementsRegistryInterface $adminMenuPagesRegistry */
-        $adminMenuPagesRegistry = $this->container->get('moo_menu.registry.admin_menu_pages');
+        $adminMenuPagesRegistry = $this->container->get('moomoo_menu.registry.admin_menu_pages');
         /** @var MenuElementsRegistratorInterface $adminMenuPagesRegistrator */
-        $adminMenuPagesRegistrator = $this->container->get('moo_menu.registrator.admin_menu_pages');
+        $adminMenuPagesRegistrator = $this->container->get('moomoo_menu.registrator.admin_menu_pages');
         $adminMenuPagesRegistrator->register($adminMenuPagesRegistry->getMenuElements());
 
         /** @var MenuElementsRegistryInterface $adminBarNodesRegistry */
-        $adminBarNodesRegistry = $this->container->get('moo_menu.registry.admin_bar_nodes');
+        $adminBarNodesRegistry = $this->container->get('moomoo_menu.registry.admin_bar_nodes');
         /** @var MenuElementsRegistratorInterface $adminMenuPagesRegistrator */
-        $adminBarNodesRegistrator = $this->container->get('moo_menu.registrator.admin_bar_nodes');
+        $adminBarNodesRegistrator = $this->container->get('moomoo_menu.registrator.admin_bar_nodes');
         $adminBarNodesRegistrator->register($adminBarNodesRegistry->getMenuElements());
         
         parent::boot();

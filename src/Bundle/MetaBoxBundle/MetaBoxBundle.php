@@ -19,8 +19,8 @@ class MetaBoxBundle extends Bundle
 
         $container->addCompilerPass(
             new KernelCompilerPass(
-                'moo_meta_box',
-                'moo_meta_box.registry.meta_boxes',
+                'moomoo_meta_box',
+                'moomoo_meta_box.registry.meta_boxes',
                 'addMetaBox'
             )
         );
@@ -32,9 +32,9 @@ class MetaBoxBundle extends Bundle
     public function boot()
     {
         /** @var MetaBoxesRegistryInterface $metaBoxesRegistry */
-        $metaBoxesRegistry = $this->container->get('moo_meta_box.registry.meta_boxes');
+        $metaBoxesRegistry = $this->container->get('moomoo_meta_box.registry.meta_boxes');
         /** @var MetaBoxesRegistratorInterface $metaBoxesRegistrator */
-        $metaBoxesRegistrator = $this->container->get('moo_meta_box.registrator.meta_boxes');
+        $metaBoxesRegistrator = $this->container->get('moomoo_meta_box.registrator.meta_boxes');
         $metaBoxesRegistrator->registerMetaBoxes($metaBoxesRegistry->getMetaBoxes());
         
         parent::boot();

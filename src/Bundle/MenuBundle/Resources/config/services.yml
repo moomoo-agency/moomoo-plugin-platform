@@ -1,14 +1,18 @@
 services:
-    moo_menu.registrator.admin_menu_pages:
+    moomoo_menu.registrator.admin_menu_pages:
         class: 'MooMoo\Platform\Bundle\MenuBundle\Registrator\AdminMenuPagesRegistrator'
+        public: true
         arguments:
-            - '@moo_page.registry'
+            - '@moomoo_page.registry'
 
-    moo_menu.registrator.admin_bar_nodes:
+    moomoo_menu.registrator.admin_bar_nodes:
         class: 'MooMoo\Platform\Bundle\MenuBundle\Registrator\AdminBarNodesRegistrator'
+        public: true
 
-    moo_menu.registry.admin_menu_pages:
+    moomoo_menu.registry.admin_menu_pages:
         class: 'MooMoo\Platform\Bundle\MenuBundle\Registry\MenuElementsRegistry'
+        public: true
 
-    moo_menu.registry.admin_bar_nodes:
+    moomoo_menu.registry.admin_bar_nodes:
         class: 'MooMoo\Platform\Bundle\MenuBundle\Registry\MenuElementsRegistry'
+        public: true

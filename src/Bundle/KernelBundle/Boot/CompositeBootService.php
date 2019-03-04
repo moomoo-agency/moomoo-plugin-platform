@@ -6,7 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class CompositeBootService implements BootServiceInterface
 {
-    const TAG = 'moo_boot_service';
+    const TAG = 'moomoo_boot_service';
 
     /**
      * @var BootServiceInterface[]

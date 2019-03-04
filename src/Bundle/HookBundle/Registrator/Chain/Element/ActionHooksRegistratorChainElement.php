@@ -19,6 +19,6 @@ class ActionHooksRegistratorChainElement extends AbstractHooksRegistratorChainEl
      */
     public function register(HookInterface $hook)
     {
-        add_action($hook->getTag(), array($hook, 'getFunction'), $hook->getPriority(), $hook->getAcceptedArgs());
+        add_action($hook->getTag(), [$hook, 'getFunction'], $hook->getPriority(), $hook->getAcceptedArgs());
     }
 }

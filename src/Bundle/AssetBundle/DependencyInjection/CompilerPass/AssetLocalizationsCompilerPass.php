@@ -8,8 +8,8 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class AssetLocalizationsCompilerPass implements CompilerPassInterface
 {
-    const LOCALIZATION_TAG = 'moo_asset_localization';
-    const ASSET_TAG = 'moo_asset';
+    const LOCALIZATION_TAG = 'moomoo_asset_localization';
+    const ASSET_TAG = 'moomoo_asset';
 
     /**
      * @var array

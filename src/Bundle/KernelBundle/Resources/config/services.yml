@@ -34,5 +34,6 @@ services:
         arguments:
             - ['@templating.php.engine', '@templating.twig.engine']
 
-    moo_kernel.boot_service.composite:
+    moomoo_kernel.boot_service.composite:
         class: 'MooMoo\Platform\Bundle\KernelBundle\Boot\CompositeBootService'
+        public: true

@@ -24,16 +24,16 @@ class AssetBundle extends Bundle
 
         $container->addCompilerPass(
             new KernelCompilerPass(
-                'moo_footer_template_script',
-                'moo_asset.registry.footer_template_scripts',
+                'moomoo_footer_template_script',
+                'moomoo_asset.registry.footer_template_scripts',
                 'addScript'
             )
         );
         
         $container->addCompilerPass(
             new KernelCompilerPass(
-                'moo_asset',
-                'moo_asset.registry.assets',
+                'moomoo_asset',
+                'moomoo_asset.registry.assets',
                 'addAsset'
             )
         );
@@ -48,20 +48,20 @@ class AssetBundle extends Bundle
     public function boot()
     {
         /** @var AssetsRegistryInterface $assetsRegistry */
-        $assetsRegistry = $this->container->get('moo_asset.registry.assets');
+        $assetsRegistry = $this->container->get('moomoo_asset.registry.assets');
 
         /** @var AssetsRegistratorInterface $frontendAssetsRegistrator */
-        $frontendAssetsRegistrator = $this->container->get('moo_asset.registrator.frontend');
+        $frontendAssetsRegistrator = $this->container->get('moomoo_asset.registrator.frontend');
         $frontendAssetsRegistrator->registerAssets($assetsRegistry->getAssets(Asset::FRONTEND_CATEGORY));
 
         /** @var AssetsRegistratorInterface $adminAssetsRegistrator */
-        $adminAssetsRegistrator = $this->container->get('moo_asset.registrator.admin');
+        $adminAssetsRegistrator = $this->container->get('moomoo_asset.registrator.admin');
         $adminAssetsRegistrator->registerAssets($assetsRegistry->getAssets(Asset::ADMIN_CATEGORY));
 
         /** @var FooterTemplateScriptsRegistryInterface $footerTemplateScriptsRegistry */
-        $footerTemplateScriptsRegistry = $this->container->get('moo_asset.registry.footer_template_scripts');
+        $footerTemplateScriptsRegistry = $this->container->get('moomoo_asset.registry.footer_template_scripts');
         /** @var FooterTemplateScriptsRegistratorInterface $footerTemplateScriptsRegistrator */
-        $footerTemplateScriptsRegistrator = $this->container->get('moo_asset.registrator.footer_template_scripts');
+        $footerTemplateScriptsRegistrator = $this->container->get('moomoo_asset.registrator.footer_template_scripts');
         $footerTemplateScriptsRegistrator->registerScripts($footerTemplateScriptsRegistry->getScripts());
         
         parent::boot();

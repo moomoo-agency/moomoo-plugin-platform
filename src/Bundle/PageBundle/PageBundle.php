@@ -17,8 +17,8 @@ class PageBundle extends Bundle
 
         $container->addCompilerPass(
             new KernelCompilerPass(
-                'moo_page',
-                'moo_page.registry',
+                'moomoo_page',
+                'moomoo_page.registry',
                 'addPage'
             )
         );

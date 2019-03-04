@@ -19,8 +19,8 @@ class RequestBundle extends Bundle
 
         $container->addCompilerPass(
             new KernelCompilerPass(
-                'moo_request_handler',
-                'moo_request.registry.request_handlers',
+                'moomoo_request_handler',
+                'moomoo_request.registry.request_handlers',
                 'addHandler'
             )
         );
@@ -32,9 +32,9 @@ class RequestBundle extends Bundle
     public function boot()
     {
         /** @var RequestHandlersRegistryInterface $requestHandlersRegistry */
-        $requestHandlersRegistry = $this->container->get('moo_request.registry.request_handlers');
+        $requestHandlersRegistry = $this->container->get('moomoo_request.registry.request_handlers');
         /** @var RequestHandlersRegistratorInterface $requestHandlersRegistrator */
-        $requestHandlersRegistrator = $this->container->get('moo_request.handlers_registrator.main');
+        $requestHandlersRegistrator = $this->container->get('moomoo_request.handlers_registrator.main');
         $requestHandlersRegistrator->registerRequestHandlers($requestHandlersRegistry->getHandlers());
 
         parent::boot();

@@ -19,8 +19,8 @@ class TaxonomyBundle extends Bundle
 
         $container->addCompilerPass(
             new KernelCompilerPass(
-                'moo_taxonomy',
-                'moo_taxonomy.registry.taxonomies',
+                'moomoo_taxonomy',
+                'moomoo_taxonomy.registry.taxonomies',
                 'addTaxonomy'
             )
         );
@@ -32,9 +32,9 @@ class TaxonomyBundle extends Bundle
     public function boot()
     {
         /** @var TaxonomiesRegistryInterface $restMetaFieldProvidersRegistry */
-        $taxonomiesRegistry = $this->container->get('moo_taxonomy.registry.taxonomies');
+        $taxonomiesRegistry = $this->container->get('moomoo_taxonomy.registry.taxonomies');
         /** @var TaxonomiesRegistratorInterface $taxonomiesRegistrator */
-        $taxonomiesRegistrator = $this->container->get('moo_taxonomy.registrator.taxonomies');
+        $taxonomiesRegistrator = $this->container->get('moomoo_taxonomy.registrator.taxonomies');
         $taxonomiesRegistrator->registerTaxonomies($taxonomiesRegistry->getTaxonomies());
         
         parent::boot();

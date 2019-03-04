@@ -22,15 +22,15 @@ class RestApiBundle extends Bundle
 
         $container->addCompilerPass(
             new KernelCompilerPass(
-                'moo_rest_controller',
-                'moo_rest_api.registry.rest_api.controllers',
+                'moomoo_rest_controller',
+                'moomoo_rest_api.registry.rest_api.controllers',
                 'addController'
             )
         );
         $container->addCompilerPass(
             new KernelCompilerPass(
-                'moo_rest_field_provider',
-                'moo_rest_api.registry.rest_api.field_providers',
+                'moomoo_rest_field_provider',
+                'moomoo_rest_api.registry.rest_api.field_providers',
                 'addProvider'
             )
         );
@@ -42,15 +42,15 @@ class RestApiBundle extends Bundle
     public function boot()
     {
         /** @var RestControllersRegistryInterface $restControllersRegistry */
-        $restControllersRegistry = $this->container->get('moo_rest_api.registry.rest_api.controllers');
+        $restControllersRegistry = $this->container->get('moomoo_rest_api.registry.rest_api.controllers');
         /** @var RestControllersRegistratorInterface $restControllersRegistrator */
-        $restControllersRegistrator = $this->container->get('moo_rest_api.registrator.rest_api.controllers');
+        $restControllersRegistrator = $this->container->get('moomoo_rest_api.registrator.rest_api.controllers');
         $restControllersRegistrator->registerRestControllers($restControllersRegistry->getControllers());
 
         /** @var RestFieldProvidersRegistryInterface $restFieldProvidersRegistry */
-        $restFieldProvidersRegistry = $this->container->get('moo_rest_api.registry.rest_api.field_providers');
+        $restFieldProvidersRegistry = $this->container->get('moomoo_rest_api.registry.rest_api.field_providers');
         /** @var RestFieldsRegistratorInterface $restFieldsRegistrator */
-        $restFieldsRegistrator = $this->container->get('moo_rest_api.registrator.rest_api.fields');
+        $restFieldsRegistrator = $this->container->get('moomoo_rest_api.registrator.rest_api.fields');
         $restFieldsRegistrator->registerFields($restFieldProvidersRegistry->getRestFieldProviders());
 
         parent::boot();

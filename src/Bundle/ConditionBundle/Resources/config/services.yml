@@ -1,21 +1,21 @@
 services:
-    moo_condition.is_backend:
+    moomoo_condition.is_backend:
         class: 'MooMoo\Platform\Bundle\ConditionBundle\Model\IsBackendCondition'
 
-    moo_condition.is_frontend:
-        parent: moo_condition.is_backend
+    moomoo_condition.is_frontend:
+        parent: moomoo_condition.is_backend
         calls:
             - [setValidResult, [false]]
 
-    moo_condition.is_post_create_page:
+    moomoo_condition.is_post_create_page:
         class: 'MooMoo\Platform\Bundle\ConditionBundle\Model\IsPostEditPage'
         arguments:
             - 'new'
 
-    moo_condition.is_post_edit_page:
+    moomoo_condition.is_post_edit_page:
         class: 'MooMoo\Platform\Bundle\ConditionBundle\Model\IsPostEditPage'
         arguments:
             - 'edit'
 
-    moo_condition.is_post_create_or_edit_page:
+    moomoo_condition.is_post_create_or_edit_page:
         class: 'MooMoo\Platform\Bundle\ConditionBundle\Model\IsPostEditPage'

@@ -13,7 +13,7 @@ class Kernel
     /**
      * @var string
      */
-    protected $pluginPrefix = 'moo_plugin';
+    protected $pluginPrefix = 'moomoo_plugin';
 
     /**
      * @var string

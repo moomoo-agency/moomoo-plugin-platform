@@ -20,7 +20,7 @@ class KernelBundle extends Bundle
         $container->addCompilerPass(
             new KernelCompilerPass(
                 CompositeBootService::TAG,
-                'moo_kernel.boot_service.composite',
+                'moomoo_kernel.boot_service.composite',
                 'addService'
             )
         );
@@ -32,7 +32,7 @@ class KernelBundle extends Bundle
     public function boot()
     {
         /** @var BootServiceInterface $compositeBoot */
-        $compositeBoot = $this->container->get('moo_kernel.boot_service.composite');
+        $compositeBoot = $this->container->get('moomoo_kernel.boot_service.composite');
         $compositeBoot->boot($this->container);
 
         parent::boot();

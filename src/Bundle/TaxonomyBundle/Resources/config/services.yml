@@ -1,6 +1,8 @@
 services:
-    moo_taxonomy.registry.taxonomies:
+    moomoo_taxonomy.registry.taxonomies:
         class: 'MooMoo\Platform\Bundle\TaxonomyBundle\Registry\TaxonomiesRegistry'
+        public: true
 
-    moo_taxonomy.registrator.taxonomies:
+    moomoo_taxonomy.registrator.taxonomies:
         class: 'MooMoo\Platform\Bundle\TaxonomyBundle\Registrator\TaxonomiesRegistrator'
+        public: true
