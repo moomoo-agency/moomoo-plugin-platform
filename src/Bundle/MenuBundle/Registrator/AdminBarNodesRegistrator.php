@@ -14,26 +14,31 @@ class AdminBarNodesRegistrator implements MenuElementsRegistratorInterface
      */
     public function register(array $menuElements)
     {
-        foreach ($menuElements as $menuElement) {
-            if (!$menuElement instanceof AdminBarNodeInterface) {
-                throw new \Exception('AdminBarNodesRegistrator can register just AdminBarNodeInterface');
-            }
-            if ($menuElement instanceof ConditionAwareInterface && $menuElement->hasConditions()) {
-                $evaluated = true;
-                foreach ($menuElement->getConditions() as $condition) {
-                    if ($condition->evaluate() === false) {
-                        $evaluated = false;
-                        break;
+        add_action(
+            'init',
+            function () use ($menuElements) {
+                foreach ($menuElements as $menuElement) {
+                    if (!$menuElement instanceof AdminBarNodeInterface) {
+                        throw new \Exception('AdminBarNodesRegistrator can register just AdminBarNodeInterface');
+                    }
+                    if ($menuElement instanceof ConditionAwareInterface && $menuElement->hasConditions()) {
+                        $evaluated = true;
+                        foreach ($menuElement->getConditions() as $condition) {
+                            if ($condition->evaluate() === false) {
+                                $evaluated = false;
+                                break;
+                            }
+                        }
+                        if (!$evaluated) {
+                            return;
+                        }
+                        $this->addNode($menuElement);
+                    } else {
+                        $this->addNode($menuElement);
                     }
                 }
-                if (!$evaluated) {
-                    return;
-                }
-                $this->addNode($menuElement);
-            } else {
-                $this->addNode($menuElement);
             }
-        }
+        );
     }
 
     /**

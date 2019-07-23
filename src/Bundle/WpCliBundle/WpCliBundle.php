@@ -4,9 +4,8 @@ namespace MooMoo\Platform\Bundle\WpCliBundle;
 
 use MooMoo\Platform\Bundle\KernelBundle\Bundle\Bundle;
 use MooMoo\Platform\Bundle\KernelBundle\DependencyInjection\CompilerPass\KernelCompilerPass;
-use MooMoo\Platform\Bundle\WpCliBundle\Command\Registry\WpCliCommandsRegistryInterface;
-use MooMoo\Platform\Bundle\WpCliBundle\Registrator\WpCliCommandsRegistrator;
 use MooMoo\Platform\Bundle\WpCliBundle\Registrator\WpCliCommandsRegistratorInterface;
+use MooMoo\Platform\Bundle\WpCliBundle\Registry\WpCliCommandsRegistryInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class WpCliBundle extends Bundle

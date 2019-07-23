@@ -20,23 +20,28 @@ abstract class AbstractHooksRegistratorChainElement implements
      */
     public function registerHooks(array $hooks)
     {
-        foreach ($hooks as $hook) {
-            if ($hook instanceof ConditionAwareInterface && $hook->hasConditions()) {
-                $evaluated = true;
-                foreach ($hook->getConditions() as $condition) {
-                    if ($condition->evaluate() === false) {
-                        $evaluated = false;
-                        break;
+        add_action(
+            'init',
+            function () use ($hooks) {
+                foreach ($hooks as $hook) {
+                    if ($hook instanceof ConditionAwareInterface && $hook->hasConditions()) {
+                        $evaluated = true;
+                        foreach ($hook->getConditions() as $condition) {
+                            if ($condition->evaluate() === false) {
+                                $evaluated = false;
+                                break;
+                            }
+                        }
+                        if (!$evaluated) {
+                            continue;
+                        }
+                        $this->registerHook($hook);
+                    } else {
+                        $this->registerHook($hook);
                     }
                 }
-                if (!$evaluated) {
-                    continue;
-                }
-                $this->registerHook($hook);
-            } else {
-                $this->registerHook($hook);
             }
-        }
+        );
     }
 
     /**

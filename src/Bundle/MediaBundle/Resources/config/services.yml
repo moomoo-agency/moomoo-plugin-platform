@@ -1,0 +1,14 @@
+services:
+    moomoo_media.registry.image_sizes:
+        class: 'MooMoo\Platform\Bundle\MediaBundle\Registry\ImageSizesRegistry'
+
+    moomoo_media.registry.mime_types:
+        class: 'MooMoo\Platform\Bundle\MediaBundle\Registry\MimeTypesRegistry'
+
+    moomoo_media.registrator.image_sizes:
+        class: 'MooMoo\Platform\Bundle\MediaBundle\Registrator\ImageSizesRegistrator'
+        public: true
+
+    moomoo_media.registrator.mime_types:
+        class: 'MooMoo\Platform\Bundle\MediaBundle\Registrator\MimeTypesRegistrator'
+        public: true

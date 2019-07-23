@@ -2,8 +2,13 @@
 
 namespace MooMoo\Platform\Bundle\TaxonomyBundle\Model;
 
-abstract class AbstractTaxonomy implements TaxonomyInterface
+use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareInterface;
+use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareTrait;
+
+abstract class AbstractTaxonomy implements TaxonomyInterface, ConditionAwareInterface
 {
+    use ConditionAwareTrait;
+    
     /**
      * @var TermInterface[]
      */

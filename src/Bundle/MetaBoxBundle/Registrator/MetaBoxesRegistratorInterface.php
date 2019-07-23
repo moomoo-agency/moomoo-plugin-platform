@@ -2,11 +2,12 @@
 
 namespace MooMoo\Platform\Bundle\MetaBoxBundle\Registrator;
 
+use MooMoo\Platform\Bundle\MetaBoxBundle\Model\MetaBoxInterface;
+
 interface MetaBoxesRegistratorInterface
 {
     /**
-     * @param array $metaBoxes
-     * @return mixed
+     * @param MetaBoxInterface[] $metaBoxes
      */
     public function registerMetaBoxes(array $metaBoxes);
 }

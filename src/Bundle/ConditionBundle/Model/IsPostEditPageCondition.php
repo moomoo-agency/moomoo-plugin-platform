@@ -2,42 +2,53 @@
 
 namespace MooMoo\Platform\Bundle\ConditionBundle\Model;
 
-class IsPostEditPage extends AbstractCondition
+class IsPostEditPageCondition extends AbstractCondition
 {
     const NEW_TYPE = 'new';
     const EDIT_TYPE = 'edit';
 
-    /**
-     * @var string
-     */
-    protected $actionType = null;
+    const ACTION_FIELD = 'action';
+    const POST_TYPE_FIELD = 'post_type';
 
     /**
      * @var string
      */
-    protected $postType = null;
+    protected $action = null;
+
+    /**
+     * @var string
+     */
+    protected $postType = 'post';
 
     /**
      * @var array
      */
-    protected $validActionTypes = [
+    protected $validActions = [
         self::NEW_TYPE,
         self::EDIT_TYPE
     ];
 
     /**
-     * @param string|null $actionType
-     * @throws \Exception
+     * {@inheritdoc}
      */
-    public function __construct($actionType = null)
+    public function __construct(array $parameters = [])
     {
-        if ($actionType !== null && !in_array($actionType, $this->validActionTypes)) {
+        parent::__construct($parameters);
+
+        $arguments = $this->get(self::ARGUMENTS_FIELD, []);
+
+        $action = isset($arguments[self::ACTION_FIELD]) ? $arguments[self::ACTION_FIELD] : null;
+        if ($action !== null && !in_array($action, $this->validActions)) {
             throw new \Exception(
-                sprintf('Not valid actionType filled, valid types are - %s', implode(',', $this->validActionTypes))
+                sprintf('Not valid action filled, valid actions are - %s', implode(',', $this->validActions))
             );
         }
+        $this->action = $action;
 
-        $this->actionType = $actionType;
+        $postType = isset($arguments[self::POST_TYPE_FIELD]) ? $arguments[self::POST_TYPE_FIELD] : null;
+        if ($postType) {
+            $this->postType = $postType;
+        }
     }
 
     /**
@@ -56,10 +67,6 @@ class IsPostEditPage extends AbstractCondition
      */
     protected function getResult()
     {
-        if (!is_admin()) {
-            return false;
-        }
-        
         return $this->checkAction() && $this->checkPostType();
     }
 
@@ -70,9 +77,9 @@ class IsPostEditPage extends AbstractCondition
     {
         global $pagenow;
 
-        if ($this->actionType === self::EDIT_TYPE) {
+        if ($this->action === self::EDIT_TYPE) {
             return in_array($pagenow, ['post.php']);
-        } elseif ($this->actionType === self::NEW_TYPE) {
+        } elseif ($this->action === self::NEW_TYPE) {
             return in_array($pagenow, ['post-new.php']);
         } else {
             return in_array($pagenow, ['post.php', 'post-new.php']);

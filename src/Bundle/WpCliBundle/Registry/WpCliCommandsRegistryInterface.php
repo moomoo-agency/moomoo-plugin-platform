@@ -1,6 +1,6 @@
 <?php
 
-namespace MooMoo\Platform\Bundle\WpCliBundle\Command\Registry;
+namespace MooMoo\Platform\Bundle\WpCliBundle\Registry;
 
 use MooMoo\Platform\Bundle\WpCliBundle\Model\WpCliCommandInterface;
 

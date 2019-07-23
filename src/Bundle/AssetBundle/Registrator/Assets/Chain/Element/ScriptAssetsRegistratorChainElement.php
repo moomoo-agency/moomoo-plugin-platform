@@ -4,6 +4,7 @@ namespace MooMoo\Platform\Bundle\AssetBundle\Registrator\Assets\Chain\Element;
 
 use MooMoo\Platform\Bundle\AssetBundle\Model\AssetInterface;
 use MooMoo\Platform\Bundle\AssetBundle\Model\AssetLocalizationInterface;
+use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareInterface;
 
 class ScriptAssetsRegistratorChainElement extends AbstractAssetsRegistratorChainElement
 {
@@ -43,8 +44,23 @@ class ScriptAssetsRegistratorChainElement extends AbstractAssetsRegistratorChain
     {
         $params = [];
         foreach ($localizations as $localization) {
-            $params[$localization->getObjectName()][$localization->getPropertyName()] =
-                $localization->getPropertyData();
+            if ($localization instanceof ConditionAwareInterface && $localization->hasConditions()) {
+                $evaluated = true;
+                foreach ($localization->getConditions() as $condition) {
+                    if ($condition->evaluate() === false) {
+                        $evaluated = false;
+                        break;
+                    }
+                }
+                if (!$evaluated) {
+                    continue;
+                }
+                $params[$localization->getObjectName()][$localization->getPropertyName()] =
+                    $localization->getPropertyData();
+            } else {
+                $params[$localization->getObjectName()][$localization->getPropertyName()] =
+                    $localization->getPropertyData();
+            }
         }
 
         return $params;

@@ -2,7 +2,6 @@
 
 namespace MooMoo\Platform\Bundle\WpCliBundle\Registry;
 
-use MooMoo\Platform\Bundle\WpCliBundle\Command\Registry\WpCliCommandsRegistryInterface;
 use MooMoo\Platform\Bundle\WpCliBundle\Model\WpCliCommandInterface;
 
 class WpCliCommandsRegistry implements WpCliCommandsRegistryInterface

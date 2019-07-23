@@ -2,6 +2,7 @@
 
 namespace MooMoo\Platform\Bundle\MenuBundle\Model;
 
+use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareTrait;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 class AdminMenuPage extends ParameterBag implements AdminMenuPageInterface
@@ -14,7 +15,9 @@ class AdminMenuPage extends ParameterBag implements AdminMenuPageInterface
     const ICON_URL_FIELD = 'icon_url';
     const POSITION_FIELD = 'position';
     const PAGE_FIELD = 'page';
-
+    
+    use ConditionAwareTrait;
+    
     /**
      * @inheritDoc
      */

@@ -2,7 +2,9 @@
 
 namespace MooMoo\Platform\Bundle\MenuBundle\Model;
 
-interface MenuElementInterface
+use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareInterface;
+
+interface MenuElementInterface extends ConditionAwareInterface
 {
     /**
      * @return string

@@ -1,15 +1,20 @@
 services:
     moomoo_wpcli.condition.is_wp_cli_defined:
-        class: 'MooMoo\Platform\Bundle\Condition\Model\IsConstantDefinedCondition'
+        class: 'MooMoo\Platform\Bundle\ConditionBundle\Model\SimpleCondition'
         arguments:
-            - 'WP_CLI'
+            - name: is_wp_cli_defined
+              function: defined
+              arguments: ['WP_CLI']
+        tags:
+            - {name: moomoo_condition}
 
     moomoo_wpcli.registry.commands:
-        class: 'MooMoo\Platform\Bundle\WpCliBundle\Command\Registry\WpCliCommandsRegistry'
+        class: 'MooMoo\Platform\Bundle\WpCliBundle\Registry\WpCliCommandsRegistry'
+        public: true
 
 
     moomoo_wpcli.registrator.commands:
-        class: 'MooMoo\Platform\Bundle\WpCliBundle\Command\Registrator\WpCliCommandsRegistrator'
+        class: 'MooMoo\Platform\Bundle\WpCliBundle\Registrator\WpCliCommandsRegistrator'
         public: true
         calls:
             - [addCondition, ['@moomoo_wpcli.condition.is_wp_cli_defined']]

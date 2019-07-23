@@ -6,3 +6,11 @@ services:
     moomoo_post.registrator.post_types:
         class: 'MooMoo\Platform\Bundle\PostBundle\PostType\Registrator\PostTypesRegistrator'
         public: true
+
+    moomoo_post.registry.post_statuses:
+        class: 'MooMoo\Platform\Bundle\PostBundle\PostStatus\Registry\PostStatusesRegistry'
+        public: true
+
+    moomoo_post.registrator.post_statuses:
+        class: 'MooMoo\Platform\Bundle\PostBundle\PostStatus\Registrator\PostStatusesRegistrator'
+        public: true
