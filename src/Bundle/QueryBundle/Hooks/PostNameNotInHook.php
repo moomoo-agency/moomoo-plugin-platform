@@ -30,12 +30,12 @@ class PostNameNotInHook extends AbstractHook
                 return !empty($sane) ? $wpdb->prepare('%s', $sane) : null;
             }, $query->query[self::QUERY_ARGUMENT]));
             if (!empty($names)) {
-                $where = sprintf(
+                $where = str_replace("''", "'", sprintf(
                     "%s AND %s.post_name NOT IN ('%s')",
                     $where,
                     $wpdb->posts,
                     implode("','", $names)
-                );
+                ));
             }
         }
         return $where;

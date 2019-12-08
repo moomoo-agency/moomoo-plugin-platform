@@ -13,10 +13,10 @@ interface WpCliCommandInterface
      * @param array $arguments
      * @return mixed
      */
-    public function getCallable($arguments = []);
+    public function execute($arguments = []);
 
     /**
      * @return array
      */
-    public function getArguments();
+    public function getAdditionalRegistrationParameters();
 }

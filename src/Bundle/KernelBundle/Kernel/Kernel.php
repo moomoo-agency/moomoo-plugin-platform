@@ -13,12 +13,17 @@ class Kernel
     /**
      * @var string
      */
-    protected $pluginPrefix = 'moomoo_plugin';
+    protected $pluginBaseName;
 
     /**
      * @var string
      */
-    protected $rootDir;
+    protected $pluginName;
+
+    /**
+     * @var array
+     */
+    protected $rootDirs = [];
 
     /**
      * @var ContainerInterface
@@ -28,43 +33,38 @@ class Kernel
     /**
      * @var BundleInterface[]
      */
-    protected $bundles = array();
+    protected $bundles = [];
 
     /**
      * @var bool
      */
     protected $booted = false;
 
-    /**
-     * @param string $pluginPrefix
-     * @return $this
-     */
-    public function setPluginPrefix($pluginPrefix)
+    public function __construct()
     {
-        $this->pluginPrefix = $pluginPrefix;
+        $pluginRootFile =debug_backtrace(2, 3)[0]['file'];
+        $this->pluginBaseName = plugin_basename($pluginRootFile);
+        $this->pluginName = explode('/', $this->pluginBaseName)[0];
+        $this->rootDirs[$this->pluginBaseName][] = realpath(sprintf('%s/src', dirname($pluginRootFile)));
 
-        return $this;
+        $r = new \ReflectionObject($this);
+        $this->rootDirs[$this->pluginBaseName][] = realpath(dirname($r->getFileName(), 3) . '/../..');
     }
 
     /**
      * @return string
      */
-    public function getPluginPrefix()
+    public function getPluginName()
     {
-        return $this->pluginPrefix;
+        return $this->pluginName;
     }
 
     /**
-     * {@inheritdoc}
+     * @return array
      */
-    public function getRootDir()
+    public function getRootDirs()
     {
-        if (null === $this->rootDir) {
-            $r = new \ReflectionObject($this);
-            $this->rootDir = realpath(dirname($r->getFileName(), 3) . '/../..');
-        }
-
-        return $this->rootDir;
+        return apply_filters(sprintf('%s_add_root_dir', $this->pluginName), $this->rootDirs);
     }
 
     public function registerBundles()
@@ -81,19 +81,20 @@ class Kernel
      */
     public function collectBundles()
     {
-        $roots = apply_filters(sprintf('%s_add_root_dir', $this->pluginPrefix), [$this->getRootDir()]);
-        $files = $this->findBundles($roots);
+        $files = $this->findBundles($this->getRootDirs());
 
-        $bundles = array();
-        foreach ($files as $file) {
-            $import  = Yaml::parse(file_get_contents($file), Yaml::PARSE_CONSTANT);
-            if (!empty($import)) {
-                if (!empty($import['bundles'])) {
-                    $bundles = array_merge($bundles, $this->getBundlesMapping($import['bundles']));
+        $bundles = [];
+        foreach ($files as $plugin => $pluginFiles) {
+            foreach ($pluginFiles as $file) {
+                $import = Yaml::parse(file_get_contents($file), Yaml::PARSE_CONSTANT);
+                if (!empty($import)) {
+                    if (!empty($import['bundles'])) {
+                        $bundles = array_merge($bundles, $this->getBundlesMapping($import['bundles'], $plugin));
+                    }
                 }
             }
         }
-        uasort($bundles, array($this, 'compareBundles'));
+        uasort($bundles, [$this, 'compareBundles']);
 
         return $bundles;
     }
@@ -124,56 +125,59 @@ class Kernel
      *
      * @return array
      */
-    protected function findBundles($roots = array())
+    protected function findBundles($roots = [])
     {
-        $paths = array();
-        foreach ($roots as $root) {
-            if (!is_dir($root)) {
-                continue;
-            }
-            $root = realpath($root);
-            $dir = new \RecursiveDirectoryIterator(
-                $root,
-                \FilesystemIterator::FOLLOW_SYMLINKS | \FilesystemIterator::SKIP_DOTS
-            );
-            $filter = new \RecursiveCallbackFilterIterator(
-                $dir,
-                function (\SplFileInfo $current) use (&$paths) {
-                    if (!$current->getRealPath()) {
-                        return false;
-                    }
-                    $fileName = strtolower($current->getFilename());
-                    if ($fileName === 'tests' || $current->isFile()) {
-                        return false;
-                    }
-                    if (!is_dir($current->getPathname() . '/Resources')) {
-                        return true;
-                    } else {
-                        $file = $current->getPathname() . '/Resources/config/bundles.yml';
-                        if (is_file($file)) {
-                            $paths[] = $file;
-                        }
-
-                        return false;
-                    }
+        $paths = [];
+        foreach ($roots as $plugin => $pluginRoots) {
+            foreach ($pluginRoots as $root) {
+                if (!is_dir($root)) {
+                    continue;
                 }
-            );
+                $root = realpath($root);
+                $dir = new \RecursiveDirectoryIterator(
+                    $root,
+                    \FilesystemIterator::FOLLOW_SYMLINKS | \FilesystemIterator::SKIP_DOTS
+                );
+                $filter = new \RecursiveCallbackFilterIterator(
+                    $dir,
+                    function (\SplFileInfo $current) use (&$paths, $plugin) {
+                        if (!$current->getRealPath()) {
+                            return false;
+                        }
+                        $fileName = strtolower($current->getFilename());
+                        if ($fileName === 'tests' || $current->isFile()) {
+                            return false;
+                        }
+                        if (!is_dir($current->getPathname() . '/Resources')) {
+                            return true;
+                        } else {
+                            $file = $current->getPathname() . '/Resources/config/bundles.yml';
+                            if (is_file($file)) {
+                                $paths[$plugin][] = $file;
+                            }
 
-            $iterator = new \RecursiveIteratorIterator($filter);
-            $iterator->rewind();
+                            return false;
+                        }
+                    }
+                );
+
+                $iterator = new \RecursiveIteratorIterator($filter);
+                $iterator->rewind();
+            }
         }
 
         return $paths;
     }
 
     /**
-     * @param $bundles
+     * @param array $bundles
+     * @param string $plugin
      *
      * @return array
      */
-    protected function getBundlesMapping(array $bundles)
+    protected function getBundlesMapping(array $bundles, $plugin)
     {
-        $result = array();
+        $result = [];
         foreach ($bundles as $bundle) {
             $priority = 0;
 
@@ -184,10 +188,11 @@ class Kernel
                 $class = $bundle;
             }
 
-            $result[$class] = array(
+            $result[$class] = [
                 'name'     => $class,
                 'priority' => $priority,
-            );
+                'plugin'   => $plugin
+            ];
         }
 
         return $result;
@@ -237,7 +242,7 @@ class Kernel
     {
         $container = $this->getContainerBuilder();
         
-        $extensions = array();
+        $extensions = [];
         foreach ($this->bundles as $bundle) {
             if ($extension = $bundle->getContainerExtension()) {
                 $container->registerExtension($extension);
@@ -277,8 +282,7 @@ class Kernel
     {
         return $this->container;
     }
-
-
+    
     /**
      * Boots the current kernel.
      */

@@ -25,7 +25,11 @@ class WpCliCommandsRegistrator implements WpCliCommandsRegistratorInterface, Con
         if ($evaluated) {
             foreach ($commands as $command) {
                 if ($command instanceof WpCliCommandInterface) {
-                    \WP_CLI::add_command($command->getName(), [$command, 'getCallable'], $command->getArguments());
+                    \WP_CLI::add_command(
+                        $command->getName(),
+                        [$command, 'execute'],
+                        $command->getAdditionalRegistrationParameters()
+                    );
                 }
             }
         }

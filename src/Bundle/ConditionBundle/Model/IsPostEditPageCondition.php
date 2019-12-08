@@ -18,7 +18,7 @@ class IsPostEditPageCondition extends AbstractCondition
     /**
      * @var string
      */
-    protected $postType = 'post';
+    protected $postType = null;
 
     /**
      * @var array
