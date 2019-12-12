@@ -2,10 +2,9 @@
 
 namespace MooMoo\Platform\Bundle\ConditionBundle\Registry;
 
-use Builderius\Bundle\CategoryBundle\Model\BuilderiusCategoryInterface;
 use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionInterface;
 
-class BuilderiusCategoriesRegistry implements ConditionsRegistryInterface
+class ConditionsRegistry implements ConditionsRegistryInterface
 {
     /**
      * @var ConditionInterface[]
@@ -27,7 +26,7 @@ class BuilderiusCategoriesRegistry implements ConditionsRegistryInterface
     /**
      * {@inheritdoc}
      */
-    public function getCategories()
+    public function getConditions()
     {
         return $this->conditions;
     }
@@ -35,10 +34,10 @@ class BuilderiusCategoriesRegistry implements ConditionsRegistryInterface
     /**
      * {@inheritdoc}
      */
-    public function getCategory($name)
+    public function getCondition($name)
     {
-        if ($this->hasCategory($name)) {
-            return $this->categories[$name];
+        if ($this->hasCondition($name)) {
+            return $this->conditions[$name];
         }
         
         return null;
@@ -47,9 +46,9 @@ class BuilderiusCategoriesRegistry implements ConditionsRegistryInterface
     /**
      * {@inheritdoc}
      */
-    public function hasCategory($name)
+    public function hasCondition($name)
     {
-        if (isset($this->categories[$name])) {
+        if (isset($this->conditions[$name])) {
             return true;
         }
 

@@ -71,7 +71,7 @@ class Kernel
     {
         foreach ($this->collectBundles() as $class => $params) {
             /** @var BundleInterface $bundle */
-            $bundle = new $class;
+            $bundle = new $class($params['plugin']);
             $this->bundles[$bundle->getName()] = $bundle;
         }
     }

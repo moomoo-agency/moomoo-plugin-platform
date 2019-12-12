@@ -15,8 +15,16 @@ abstract class AbstractAssetsRegistratorChainElement implements
      * @var AssetPathProviderInterface
      */
     protected $pathProvider;
-    
+
+    /**
+     * @var string
+     */
     protected $registrationFunction = 'wp_enqueue_scripts';
+
+    /**
+     * @var AssetsRegistratorChainElementInterface|null
+     */
+    private $successor;
 
     /**
      * @param AssetPathProviderInterface $pathProvider
@@ -33,11 +41,6 @@ abstract class AbstractAssetsRegistratorChainElement implements
     {
         $this->registrationFunction = $registrationFunction;
     }
-    
-    /**
-     * @var AssetsRegistratorChainElementInterface|null
-     */
-    private $successor;
     
     /**
      * @inheritDoc

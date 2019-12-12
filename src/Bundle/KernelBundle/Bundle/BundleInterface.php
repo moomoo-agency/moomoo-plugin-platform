@@ -54,4 +54,9 @@ interface BundleInterface extends ContainerAwareInterface
      * @return string The Bundle absolute path
      */
     public function getPath();
+    
+    /**
+     * @return string
+     */
+    public function getPluginName();
 }

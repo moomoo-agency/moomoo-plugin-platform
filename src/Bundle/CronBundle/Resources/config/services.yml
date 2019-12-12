@@ -1,0 +1,55 @@
+services:
+    moomoo_cron.checker.cron_command.chain.element.base:
+        class: 'MooMoo\Platform\Bundle\CronBundle\Checker\CronCommand\Chain\Element\BaseCronCommandCheckerChainElement'
+        calls:
+            - ['setSuccessor', ['@moomoo_cron.checker.cron_command.chain.element.recurrence']]
+
+    moomoo_cron.checker.cron_command.chain.element.recurrence:
+        class: 'MooMoo\Platform\Bundle\CronBundle\Checker\CronCommand\Chain\Element\RecurrenceCronCommandCheckerChainElement'
+
+    moomoo_cron.checker.cron_command:
+        parent: moomoo_cron.checker.cron_command.chain.element.base
+
+    moomoo_cron.checker.cron_schedule.chain.element.base:
+        class: 'MooMoo\Platform\Bundle\CronBundle\Checker\CronSchedule\Chain\Element\BaseCronScheduleCheckerChainElement'
+
+    moomoo_cron.checker.cron_schedule:
+        parent: moomoo_cron.checker.cron_schedule.chain.element.base
+
+    moomoo_cron.hook.cron_schedules_registration:
+        class: 'MooMoo\Platform\Bundle\CronBundle\Hooks\CronSchedulesRegistrationHook'
+        arguments:
+            - 'cron_schedules'
+        calls:
+            - ['setChecker', ['@moomoo_cron.checker.cron_schedule']]
+        tags:
+            - { name: moomoo_hook }
+
+    moomoo_cron.registry.cron_commands:
+        class: 'MooMoo\Platform\Bundle\CronBundle\Registry\CronCommandsRegistry'
+        public: true
+        arguments:
+            - '@moomoo_cron.checker.cron_command'
+
+    moomoo_cron.scheduler.cron_commands.chain.element.single:
+        class: 'MooMoo\Platform\Bundle\CronBundle\Scheduler\Chain\Element\CronSingleCommandsSchedulerChainElement'
+        arguments:
+            - '%kernel.bundles%'
+            - '@moomoo_hook.registry.hooks'
+        calls:
+            - ['setSuccessor', ['@moomoo_cron.scheduler.cron_commands.chain.element.recurrence']]
+
+    moomoo_cron.scheduler.cron_commands.chain.element.recurrence:
+        class: 'MooMoo\Platform\Bundle\CronBundle\Scheduler\Chain\Element\CronRecurrentCommandsSchedulerChainElement'
+        arguments:
+            - '%kernel.bundles%'
+            - '@moomoo_hook.registry.hooks'
+
+    moomoo_cron.scheduler.cron_commands:
+        parent: moomoo_cron.scheduler.cron_commands.chain.element.single
+        public: true
+
+    moomoo_cron.command.test:
+        class: 'MooMoo\Platform\Bundle\CronBundle\Model\TestCronCommand'
+        tags:
+            - { name: moomoo_cron_command }

@@ -25,12 +25,25 @@ abstract class Bundle implements BundleInterface
      * @var string
      */
     protected $path;
+    
+    /**
+     * @var string
+     */
+    protected $pluginName;
 
     /**
      * @var string
      */
     private $namespace;
-    
+
+    /**
+     * @param string $pluginName
+     */
+    public function __construct($pluginName)
+    {
+        $this->pluginName = $pluginName;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -115,6 +128,14 @@ abstract class Bundle implements BundleInterface
             $this->path = dirname($reflected->getFileName());
         }
         return $this->path;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPluginName()
+    {
+        return $this->pluginName;
     }
 
     /**
