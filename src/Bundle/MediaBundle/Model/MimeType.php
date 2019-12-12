@@ -2,7 +2,7 @@
 
 namespace MooMoo\Platform\Bundle\MediaBundle\Model;
 
-use Symfony\Component\HttpFoundation\ParameterBag;
+use MooMoo\Platform\Bundle\KernelBundle\ParameterBag\ParameterBag;
 
 class MimeType extends ParameterBag implements MimeTypeInterface
 {

@@ -2,7 +2,7 @@
 
 namespace MooMoo\Platform\Bundle\TaxonomyBundle\Model;
 
-use Symfony\Component\HttpFoundation\ParameterBag;
+use MooMoo\Platform\Bundle\KernelBundle\ParameterBag\ParameterBag;
 
 class Term extends ParameterBag implements TermInterface
 {

@@ -3,7 +3,7 @@
 namespace MooMoo\Platform\Bundle\MenuBundle\Model;
 
 use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareTrait;
-use Symfony\Component\HttpFoundation\ParameterBag;
+use MooMoo\Platform\Bundle\KernelBundle\ParameterBag\ParameterBag;
 
 class AdminMenuPage extends ParameterBag implements AdminMenuPageInterface
 {

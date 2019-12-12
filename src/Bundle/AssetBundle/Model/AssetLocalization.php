@@ -2,7 +2,7 @@
 
 namespace MooMoo\Platform\Bundle\AssetBundle\Model;
 
-use Symfony\Component\HttpFoundation\ParameterBag;
+use MooMoo\Platform\Bundle\KernelBundle\ParameterBag\ParameterBag;
 
 class AssetLocalization extends ParameterBag implements AssetLocalizationInterface
 {

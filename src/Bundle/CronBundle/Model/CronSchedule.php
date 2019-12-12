@@ -2,7 +2,7 @@
 
 namespace MooMoo\Platform\Bundle\CronBundle\Model;
 
-use Symfony\Component\HttpFoundation\ParameterBag;
+use MooMoo\Platform\Bundle\KernelBundle\ParameterBag\ParameterBag;
 
 class CronSchedule extends ParameterBag implements CronScheduleInterface
 {

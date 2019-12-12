@@ -3,8 +3,8 @@
 namespace MooMoo\Platform\Bundle\MenuBundle\Model;
 
 use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareTrait;
+use MooMoo\Platform\Bundle\KernelBundle\ParameterBag\ParameterBag;
 use MooMoo\Platform\Bundle\PostBundle\Url\UrlGeneratorInterface;
-use Symfony\Component\HttpFoundation\ParameterBag;
 
 class AdminBarNode extends ParameterBag implements AdminBarNodeInterface
 {

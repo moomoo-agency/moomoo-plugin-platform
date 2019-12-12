@@ -2,7 +2,7 @@
 
 namespace MooMoo\Platform\Bundle\ConditionBundle\Model;
 
-use Symfony\Component\HttpFoundation\ParameterBag;
+use MooMoo\Platform\Bundle\KernelBundle\ParameterBag\ParameterBag;
 
 abstract class AbstractCondition extends ParameterBag implements ConditionInterface
 {
