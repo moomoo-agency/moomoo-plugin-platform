@@ -1,0 +1,137 @@
+services:
+    moomoo_condition.is_gutenberg:
+        class: 'MooMoo\Platform\Bundle\ConditionBundle\Model\FunctionExistsCondition'
+        arguments:
+            - name: is_gutenberg
+              description: 'Condition to check whether the Guttenberg is installed'
+              function: register_block_type
+        tags:
+            - {name: moomoo_condition}
+
+    moomoo_condition.is_singular:
+        class: 'MooMoo\Platform\Bundle\ConditionBundle\Model\SimpleCondition'
+        arguments:
+            - name: is_singular
+              description: 'Condition to check whether the query is for an existing single post of any post type'
+              function: is_singular
+        tags:
+            - {name: moomoo_condition}
+
+    moomoo_condition.is_user_logged_in:
+        class: 'MooMoo\Platform\Bundle\ConditionBundle\Model\SimpleCondition'
+        arguments:
+            - name: is_user_logged_in
+              description: 'Condition to check whether the current visitor is a logged in user'
+              function: is_user_logged_in
+        tags:
+            - {name: moomoo_condition}
+
+    moomoo_condition.is_user_not_logged_in:
+        parent: moomoo_condition.is_user_logged_in
+        calls:
+            - ['setName', ['is_user_not_logged_in']]
+            - ['setDescription', ['Condition to check whether the current visitor is not logged in user']]
+            - ['setValidResult', [false]]
+        tags:
+            - {name: moomoo_condition}
+
+    moomoo_condition.is_backend:
+        class: 'MooMoo\Platform\Bundle\ConditionBundle\Model\SimpleCondition'
+        arguments:
+            - name: is_backend
+              description: 'Condition to check whether the current request is for an administrative interface page'
+              function: is_admin
+        tags:
+            - {name: moomoo_condition}
+
+    moomoo_condition.is_frontend:
+        parent: moomoo_condition.is_backend
+        calls:
+            - ['setName', ['is_frontend']]
+            - ['setDescription', ['Condition to check whether the current request is for frontend interface page']]
+            - ['setValidResult', [false]]
+            - ['addDependOnCondition', ['@is_not_customize_preview']]
+        tags:
+            - {name: moomoo_condition}
+
+    moomoo_condition.is_customize_preview:
+        class: 'MooMoo\Platform\Bundle\ConditionBundle\Model\SimpleCondition'
+        arguments:
+            - name: is_customize_preview
+              description: 'Condition to check whether the current request is for previewing site in the Customizer'
+              function: is_customize_preview
+        tags:
+            - {name: moomoo_condition}
+
+    moomoo_condition.is_not_customize_preview:
+        parent: moomoo_condition.is_customize_preview
+        calls:
+            - ['setName', ['is_not_customize_preview']]
+            - ['setDescription', ['Condition to check whether the current request is not for previewing site in the Customizer']]
+            - ['setValidResult', [false]]
+        tags:
+            - {name: moomoo_condition}
+
+    moomoo_condition.is_post_create_page:
+        class: 'MooMoo\Platform\Bundle\ConditionBundle\Model\IsPostEditPageCondition'
+        arguments:
+            - name: is_post_create_page
+              description: 'Condition to check whether the current request is for post/page create screen'
+              arguments:
+                  action: 'new'
+        tags:
+            - {name: moomoo_condition}
+
+    moomoo_condition.is_post_edit_page:
+        class: 'MooMoo\Platform\Bundle\ConditionBundle\Model\IsPostEditPageCondition'
+        arguments:
+            - name: is_post_edit_page
+              description: 'Condition to check whether the current request is for post/page update screen'
+              arguments:
+                  action: 'edit'
+        tags:
+            - {name: moomoo_condition}
+
+    moomoo_condition.is_post_create_or_edit_page:
+        class: 'MooMoo\Platform\Bundle\ConditionBundle\Model\IsPostEditPageCondition'
+        arguments:
+            - name: is_post_create_or_edit_page
+              description: 'Condition to check whether the current request is for post/page create or update screen'
+        tags:
+            - {name: moomoo_condition}
+
+    moomoo_condition.is_main_site:
+        class: 'MooMoo\Platform\Bundle\ConditionBundle\Model\SimpleCondition'
+        arguments:
+            - name: is_main_site
+              description: 'Condition to check whether the site is the main site of the current network'
+              function: is_main_site
+        tags:
+            - {name: moomoo_condition}
+
+    moomoo_condition.is_not_main_site:
+        parent: moomoo_condition.is_main_site
+        calls:
+            - ['setName', ['is_not_main_site']]
+            - ['setDescription', ['Condition to check whether the site is not main site of the current network']]
+            - ['setValidResult', [false]]
+        tags:
+            - {name: moomoo_condition}
+
+    moomoo_condition.is_front_page:
+        class: 'MooMoo\Platform\Bundle\ConditionBundle\Model\SimpleCondition'
+        arguments:
+            - name: is_front_page
+              description: 'Condition to check whether the query is for the front page of the site'
+              function: is_front_page
+        tags:
+            - {name: moomoo_condition}
+
+    moomoo_condition.is_not_front_page:
+        parent: moomoo_condition.is_front_page
+        calls:
+            - ['setName', ['is_not_front_page']]
+            - ['setDescription', ['Condition to check whether the query is not for the front page of the site']]
+            - ['setValidResult', [false]]
+        tags:
+            - {name: moomoo_condition}

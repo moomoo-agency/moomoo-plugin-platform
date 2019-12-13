@@ -3,6 +3,7 @@ services:
         class: 'MooMoo\Platform\Bundle\ConditionBundle\Model\SimpleCondition'
         arguments:
             - name: is_wp_cli_defined
+              description: 'Condition to check whether wp_cli is defined'
               function: defined
               arguments: ['WP_CLI']
         tags:
@@ -17,4 +18,4 @@ services:
         class: 'MooMoo\Platform\Bundle\WpCliBundle\Registrator\WpCliCommandsRegistrator'
         public: true
         calls:
-            - [addCondition, ['@moomoo_wpcli.condition.is_wp_cli_defined']]
+            - [addCondition, ['@is_wp_cli_defined']]

@@ -16,6 +16,17 @@ interface ConditionInterface
     public function setName($name);
 
     /**
+     * @return string
+     */
+    public function getDescription();
+
+    /**
+     * @param string $description
+     * @return $this
+     */
+    public function setDescription($description);
+
+    /**
      * @param ConditionInterface $condition
      * @return $this
      */

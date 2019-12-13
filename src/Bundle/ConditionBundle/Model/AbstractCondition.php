@@ -7,6 +7,7 @@ use MooMoo\Platform\Bundle\KernelBundle\ParameterBag\ParameterBag;
 abstract class AbstractCondition extends ParameterBag implements ConditionInterface
 {
     const NAME_FIELD = 'name';
+    const DESCRIPTION_FIELD = 'description';
     const DEPEND_ON_CONDITIONS = 'depend_on_conditions';
     const ARGUMENTS_FIELD = 'arguments';
 
@@ -29,6 +30,24 @@ abstract class AbstractCondition extends ParameterBag implements ConditionInterf
     public function setName($name)
     {
         $this->set(self::NAME_FIELD, $name);
+
+        return $this;
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function getDescription()
+    {
+        return $this->get(self::DESCRIPTION_FIELD);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setDescription($description)
+    {
+        $this->set(self::DESCRIPTION_FIELD, $description);
 
         return $this;
     }
