@@ -4,5 +4,7 @@ services:
 
     moomoo_condition.command.conditions_list:
         class: 'MooMoo\Platform\Bundle\ConditionBundle\Command\ConditionsListCommand'
+        arguments:
+            - '@moomoo_condition.registry.conditions'
         tags:
             - { name: moomoo_wpcli_command }

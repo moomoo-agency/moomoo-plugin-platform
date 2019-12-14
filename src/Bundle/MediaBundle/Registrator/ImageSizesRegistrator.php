@@ -28,7 +28,7 @@ class ImageSizesRegistrator implements ImageSizesRegistratorInterface
     public function registerImageSizes()
     {
         $imageSizes = $this->imageSizes;
-        add_action( 'after_setup_theme', function () use ($imageSizes) {
+        add_action('after_setup_theme', function () use ($imageSizes) {
             foreach ($imageSizes as $imageSize) {
                 add_image_size(
                     $imageSize->getName(),

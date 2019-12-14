@@ -1,21 +1,8 @@
 services:
-    moomoo_wpcli.condition.is_wp_cli_defined:
-        class: 'MooMoo\Platform\Bundle\ConditionBundle\Model\SimpleCondition'
-        arguments:
-            - name: is_wp_cli_defined
-              description: 'Condition to check whether wp_cli is defined'
-              function: defined
-              arguments: ['WP_CLI']
-        tags:
-            - {name: moomoo_condition}
-
     moomoo_wpcli.registry.commands:
         class: 'MooMoo\Platform\Bundle\WpCliBundle\Registry\WpCliCommandsRegistry'
         public: true
 
-
     moomoo_wpcli.registrator.commands:
         class: 'MooMoo\Platform\Bundle\WpCliBundle\Registrator\WpCliCommandsRegistrator'
         public: true
-        calls:
-            - [addCondition, ['@is_wp_cli_defined']]

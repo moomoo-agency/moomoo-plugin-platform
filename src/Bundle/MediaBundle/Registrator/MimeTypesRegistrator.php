@@ -28,7 +28,7 @@ class MimeTypesRegistrator implements MimeTypesRegistratorInterface
     public function registerMimeTypes()
     {
         $mimeTypes = $this->mimeTypes;
-        add_filter( 'upload_mimes', function ($existingMimes) use ($mimeTypes) {
+        add_filter('upload_mimes', function ($existingMimes) use ($mimeTypes) {
             foreach ($mimeTypes as $mimeType) {
                 $existingMimes[$mimeType->getExtension()] = $mimeType->getMimeType();
             }
