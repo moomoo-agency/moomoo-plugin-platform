@@ -1,8 +1,8 @@
 services:
-    moomoo_condition.is_gutenberg:
+    moomoo_condition.is_guttenberg:
         class: 'MooMoo\Platform\Bundle\ConditionBundle\Model\FunctionExistsCondition'
         arguments:
-            - name: is_gutenberg
+            - name: is_guttenberg
               description: 'Condition to check whether the Guttenberg is installed'
               function: register_block_type
         tags:
