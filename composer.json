@@ -8,12 +8,12 @@
     }
   },
   "require": {
-    "symfony/config": "4.2.*",
-    "symfony/finder": "4.2.*",
-    "symfony/dependency-injection": "4.2.*",
-    "symfony/yaml": "4.2.*",
-    "symfony/templating": "4.2.*",
-    "symfony/twig-bridge": "4.2.*",
+    "symfony/config": "3.4.*",
+    "symfony/finder": "3.4.*",
+    "symfony/dependency-injection": "3.4.*",
+    "symfony/yaml": "3.4.*",
+    "symfony/templating": "3.4.*",
+    "symfony/twig-bridge": "3.4.*",
     "dg/composer-cleaner": "^2.0"
   }
 }
