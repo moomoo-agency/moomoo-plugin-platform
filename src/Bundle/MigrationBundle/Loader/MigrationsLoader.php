@@ -2,7 +2,11 @@
 
 namespace MooMoo\Platform\Bundle\MigrationBundle\Loader;
 
+use MooMoo\Platform\Bundle\KernelBundle\Bundle\BundleInterface;
+use MooMoo\Platform\Bundle\MigrationBundle\Migration\Installation;
+use MooMoo\Platform\Bundle\MigrationBundle\Migration\Migration;
 use MooMoo\Platform\Bundle\MigrationBundle\Migration\MigrationState;
+use MooMoo\Platform\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -18,16 +22,23 @@ class MigrationsLoader
     protected $loadedVersions;
 
     /**
-     * @var array An array with bundles we must work from
+     * @var BundleInterface[]
      */
     protected $bundles;
 
     /**
-     * @param array $bundles
+     * @var array
      */
-    public function __construct(array $bundles)
+    protected $plugins;
+
+    /**
+     * @param array $bundles
+     * @param array $plugins
+     */
+    public function __construct(array $bundles, array $plugins)
     {
         $this->bundles = $bundles;
+        $this->plugins = $plugins;
     }
 
     /**
@@ -37,14 +48,7 @@ class MigrationsLoader
     {
         $result = [];
 
-        // process "pre" migrations
-        $preEvent = new PreMigrationEvent($this->connection);
-        $this->eventDispatcher->dispatch(MigrationEvents::PRE_UP, $preEvent);
-        $preMigrations = $preEvent->getMigrations();
-        foreach ($preMigrations as $migration) {
-            $result[] = new MigrationState($migration);
-        }
-        $this->loadedVersions = $preEvent->getLoadedVersions();
+        $this->loadedVersions = $this->getLoadedVersions();
 
         // process main migrations
         $migrationDirectories = $this->getMigrationDirectories();
@@ -54,17 +58,27 @@ class MigrationsLoader
             $this->loadMigrationScripts($migrationDirectories)
         );
 
-        $result[] = new MigrationState(new UpdateBundleVersionMigration($result));
+        return $result;
+    }
 
-        // process "post" migrations
-        $postEvent = new PostMigrationEvent($this->connection);
-        $this->eventDispatcher->dispatch(MigrationEvents::POST_UP, $postEvent);
-        $postMigrations = $postEvent->getMigrations();
-        foreach ($postMigrations as $migration) {
-            $result[] = new MigrationState($migration);
+    /**
+     * @return array
+     */
+    protected function getLoadedVersions()
+    {
+        $loadedPluginVersions = [];
+        foreach ($this->plugins as $plugin) {
+            $loadedPluginVersions[$plugin] = get_option(
+                sprintf('%s_loaded_migrations_version', explode(DIRECTORY_SEPARATOR, $plugin)[0]),
+                null
+            );
+        }
+        $loadedVersions = [];
+        foreach ($this->bundles as $bundleName => $bundle) {
+            $loadedVersions[$bundleName] = $loadedPluginVersions[$bundle->getPluginName()];
         }
 
-        return $result;
+        return $loadedVersions;
     }
 
     /**
@@ -80,10 +94,8 @@ class MigrationsLoader
     protected function getMigrationDirectories()
     {
         $result = [];
-
-        $bundles = $this->getBundleList();
-        foreach ($bundles as $bundleName => $bundle) {
-            $bundlePath          = $bundle->getPath();
+        foreach ($this->bundles as $bundleName => $bundle) {
+            $bundlePath = $bundle->getPath();
             $bundleMigrationPath = str_replace(
                 '/',
                 DIRECTORY_SEPARATOR,
@@ -96,7 +108,7 @@ class MigrationsLoader
                 // get directories contain versioned migration scripts
                 $finder = new Finder();
                 $finder->directories()->depth(0)->in($bundleMigrationPath);
-                /** @var SplFileInfo $directory */
+                /** @var \SplFileInfo $directory */
                 foreach ($finder as $directory) {
                     $bundleMigrationDirectories[$directory->getRelativePathname()] = $directory->getPathname();
                 }
@@ -312,24 +324,19 @@ class MigrationsLoader
             $reflClass  = new \ReflectionClass($className);
             $sourceFile = $reflClass->getFileName();
             if (isset($files['migrations'][$sourceFile])) {
-                if (is_subclass_of($className, 'Oro\Bundle\MigrationBundle\Migration\Migration')) {
+                if (is_subclass_of($className, Migration::class)) {
                     $migration = new $className;
                     if (isset($migrations[$sourceFile])) {
                         throw new \RuntimeException('A migration script must contains only one class.');
                     }
-                    if ($migration instanceof ContainerAwareInterface) {
-                        $migration->setContainer($this->container);
-                    }
                     $migrations[$sourceFile] = $migration;
                 }
             } elseif (isset($files['installers'][$sourceFile])) {
-                if (is_subclass_of($className, 'Oro\Bundle\MigrationBundle\Migration\Installation')) {
+                if (is_subclass_of($className, Installation::class)) {
+                    /** @var Installation $installer */
                     $installer = new $className;
                     if (isset($migrations[$sourceFile])) {
                         throw new \RuntimeException('An installation  script must contains only one class.');
-                    }
-                    if ($installer instanceof ContainerAwareInterface) {
-                        $installer->setContainer($this->container);
                     }
                     $migrations[$sourceFile] = $installer;
                     $installers[$sourceFile] = [
@@ -365,36 +372,13 @@ class MigrationsLoader
                     : null;
                 if ($loadedVersion) {
                     foreach (array_keys($bundleMigrationDirectories) as $migrationVersion) {
-                        if (empty($migrationVersion) || version_compare($migrationVersion, $loadedVersion) < 1) {
+                        $formattedMigrationVersion = str_replace('v', '', $migrationVersion);
+                        if (empty($migrationVersion) || version_compare($formattedMigrationVersion, $loadedVersion) < 1) {
                             unset($migrationDirectories[$bundleName][$migrationVersion]);
                         }
                     }
                 }
             }
         }
-    }
-
-    /**
-     * @return BundleInterface[] key = bundle name
-     */
-    protected function getBundleList()
-    {
-        $bundles = $this->kernel->getBundles();
-        if (!empty($this->bundles)) {
-            $includedBundles = [];
-            foreach ($this->bundles as $bundleName) {
-                if (isset($bundles[$bundleName])) {
-                    $includedBundles[$bundleName] = $bundles[$bundleName];
-                }
-            }
-            $bundles = $includedBundles;
-        }
-        if (!empty($this->excludeBundles)) {
-            foreach ($this->excludeBundles as $excludeBundle) {
-                unset($bundles[$excludeBundle]);
-            }
-        }
-
-        return $bundles;
     }
 }

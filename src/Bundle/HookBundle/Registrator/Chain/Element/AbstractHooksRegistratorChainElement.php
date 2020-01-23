@@ -21,7 +21,7 @@ abstract class AbstractHooksRegistratorChainElement implements
     public function registerHooks(array $hooks)
     {
         add_action(
-            'init',
+            'plugins_loaded',
             function () use ($hooks) {
                 foreach ($hooks as $hook) {
                     if ($hook instanceof ConditionAwareInterface && $hook->hasConditions()) {

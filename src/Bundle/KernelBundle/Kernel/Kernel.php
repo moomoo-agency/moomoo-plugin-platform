@@ -36,6 +36,11 @@ class Kernel
     protected $bundles = [];
 
     /**
+     * @var array
+     */
+    protected $plugins = [];
+
+    /**
      * @var bool
      */
     protected $booted = false;
@@ -70,6 +75,9 @@ class Kernel
     public function registerBundles()
     {
         foreach ($this->collectBundles() as $class => $params) {
+            if (!in_array($params['plugin'], $this->plugins)) {
+                $this->plugins[] = $params['plugin'];
+            }
             /** @var BundleInterface $bundle */
             $bundle = new $class($params['plugin']);
             $this->bundles[$bundle->getName()] = $bundle;
@@ -272,6 +280,7 @@ class Kernel
         $this->container = $this->buildContainer();
         $this->container->set('kernel', $this);
         $this->container->setParameter('kernel.bundles', $this->getBundles());
+        $this->container->setParameter('kernel.plugins', $this->plugins);
         $this->container->compile();
     }
     

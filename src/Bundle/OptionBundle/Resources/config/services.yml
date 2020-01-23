@@ -1,0 +1,13 @@
+services:
+  moomoo_option.registrator.non_site_option:
+    class: 'MooMoo\Platform\Bundle\OptionBundle\Registrator\Chain\Element\NonSiteOptionsRegistratorChainElement'
+    calls:
+      - ['setSuccessor', ['@moomoo_option.registrator.site_option']]
+
+  moomoo_option.registrator.site_option:
+    class: 'MooMoo\Platform\Bundle\OptionBundle\Registrator\Chain\Element\SiteOptionsRegistratorChainElement'
+
+  moomoo_option.registrator.main:
+    public: true
+    parent: moomoo_option.registrator.non_site_option
+

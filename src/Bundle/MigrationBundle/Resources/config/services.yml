@@ -1,2 +1,41 @@
 services:
+  moomoo_migration.is_latest_migrations_loaded:
+    class: 'MooMoo\Platform\Bundle\MigrationBundle\Condition\IsLatestMigrationsLoadedCondition'
+    arguments:
+      - name: is_latest_migrations_loaded
+        description: 'Condition to check whether the latest migrations loaded'
+    calls:
+      - ['setPlugins', ['%kernel.plugins%']]
+    tags:
+      - {name: moomoo_condition}
 
+  moomoo_migration.is_latest_migrations_not_loaded:
+    parent: 'moomoo_migration.is_latest_migrations_loaded'
+    calls:
+      - ['setName', ['is_latest_migrations_not_loaded']]
+      - ['setDescription', ['Condition to check whether the latest migrations not loaded']]
+      - ['setValidResult', [false]]
+    tags:
+      - {name: moomoo_condition}
+
+  moomoo_migration.loader.migrations:
+    class: 'MooMoo\Platform\Bundle\MigrationBundle\Loader\MigrationsLoader'
+    arguments:
+      - '%kernel.bundles%'
+      - '%kernel.plugins%'
+
+  moomoo_migration.executor.migrations:
+    class: 'MooMoo\Platform\Bundle\MigrationBundle\Executor\MigrationsExecutor'
+    arguments:
+      - '%kernel.plugins%'
+
+  moomoo_migration.hook.migrations_execution:
+    class: 'MooMoo\Platform\Bundle\MigrationBundle\Hook\MigrationsExecutionHook'
+    arguments:
+      - 'init'
+    calls:
+      - [setLoader, ['@moomoo_migration.loader.migrations']]
+      - [setExecutor, ['@moomoo_migration.executor.migrations']]
+      - [addCondition, ['@is_latest_migrations_not_loaded']]
+    tags:
+      - { name: moomoo_hook }
