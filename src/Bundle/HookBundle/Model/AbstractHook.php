@@ -5,36 +5,23 @@ namespace MooMoo\Platform\Bundle\HookBundle\Model;
 
 use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareInterface;
 use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareTrait;
+use MooMoo\Platform\Bundle\KernelBundle\ParameterBag\ParameterBag;
 
-abstract class AbstractHook implements HookInterface, ConditionAwareInterface
+abstract class AbstractHook extends ParameterBag implements HookInterface, ConditionAwareInterface
 {
+    const TAG_FIELD = 'tag';
+    const PRIORITY_FIELD = 'priority';
+    const ACCEPTED_ARGS_FIELD = 'accepted_args';
+    const INIT_HOOK_NAME_FIELD = 'init_hook';
+
     use ConditionAwareTrait;
 
     /**
-     * @var string
+     * @inheritDoc
      */
-    protected $tag;
-
-    /**
-     * @var int
-     */
-    protected $priority;
-
-    /**
-     * @var int
-     */
-    protected $acceptedArgs;
-
-    /**
-     * @param string $tag
-     * @param int $priority
-     * @param int $acceptedArgs
-     */
-    public function __construct($tag, $priority = 10, $acceptedArgs = 1)
+    public function getInitHookName()
     {
-        $this->tag = $tag;
-        $this->priority = $priority;
-        $this->acceptedArgs = $acceptedArgs;
+        return $this->get(self::INIT_HOOK_NAME_FIELD, 'init');
     }
 
     /**
@@ -42,7 +29,7 @@ abstract class AbstractHook implements HookInterface, ConditionAwareInterface
      */
     public function getTag()
     {
-        return $this->tag;
+        return $this->get(self::TAG_FIELD);
     }
 
     /**
@@ -50,7 +37,7 @@ abstract class AbstractHook implements HookInterface, ConditionAwareInterface
      */
     public function getAcceptedArgs()
     {
-        return $this->acceptedArgs;
+        return $this->get(self::ACCEPTED_ARGS_FIELD, 1);
     }
 
     /**
@@ -58,6 +45,6 @@ abstract class AbstractHook implements HookInterface, ConditionAwareInterface
      */
     public function getPriority()
     {
-        return $this->priority;
+        return $this->get(self::PRIORITY_FIELD, 10);
     }
 }

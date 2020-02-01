@@ -19,7 +19,7 @@ services:
     moomoo_cron.hook.cron_schedules_registration:
         class: 'MooMoo\Platform\Bundle\CronBundle\Hooks\CronSchedulesRegistrationHook'
         arguments:
-            - 'cron_schedules'
+            - tag: 'cron_schedules'
         calls:
             - ['setChecker', ['@moomoo_cron.checker.cron_schedule']]
         tags:

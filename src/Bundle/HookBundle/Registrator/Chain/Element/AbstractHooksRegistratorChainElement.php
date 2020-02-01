@@ -20,8 +20,23 @@ abstract class AbstractHooksRegistratorChainElement implements
      */
     public function registerHooks(array $hooks)
     {
+        $groupedHooks = [];
+        foreach ($hooks as $hook) {
+            $groupedHooks[$hook->getInitHookName()][] = $hook;
+        }
+        foreach ($groupedHooks as $initHookName => $hooks) {
+            $this->registerHooksByInitHook($initHookName, $hooks);
+        }
+    }
+
+    /**
+     * @param string $initHookName
+     * @param HookInterface[] $hooks
+     */
+    private function registerHooksByInitHook($initHookName, array $hooks)
+    {
         add_action(
-            'plugins_loaded',
+            $initHookName,
             function () use ($hooks) {
                 foreach ($hooks as $hook) {
                     if ($hook instanceof ConditionAwareInterface && $hook->hasConditions()) {

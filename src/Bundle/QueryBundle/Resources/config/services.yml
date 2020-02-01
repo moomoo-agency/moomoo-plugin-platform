@@ -5,44 +5,44 @@ services:
     moomoo_query.hook.post_name__not_in:
         class: 'MooMoo\Platform\Bundle\QueryBundle\Hooks\PostNameNotInHook'
         arguments:
-            - 'posts_where'
-            - 999
-            - 2
+            - tag: 'posts_where'
+              priority: 999
+              accepted_args: 2
         tags:
             - { name: moomoo_hook }
 
     moomoo_query.hook.post_status__not_in:
         class: 'MooMoo\Platform\Bundle\QueryBundle\Hooks\PostStatusNotInHook'
         arguments:
-            - 'posts_where'
-            - 999
-            - 2
+            - tag: 'posts_where'
+              priority: 999
+              accepted_args: 2
         tags:
             - { name: moomoo_hook }
 
     moomoo_query.hook.post_parent_join:
         class: 'MooMoo\Platform\Bundle\QueryBundle\Hooks\PostParentJoinHook'
         arguments:
-            - 'posts_join'
-            - 999
-            - 2
+            - tag: 'posts_join'
+              priority: 999
+              accepted_args: 2
         tags:
             - { name: moomoo_hook }
 
     moomoo_query.hook.parent_name__in:
         class: 'MooMoo\Platform\Bundle\QueryBundle\Hooks\ParentNameInHook'
         arguments:
-            - 'posts_where'
-            - 999
-            - 2
+            - tag: 'posts_where'
+              priority: 999
+              accepted_args: 2
         tags:
             - { name: moomoo_hook }
 
     moomoo_query.hook.parent_name__not_in:
         class: 'MooMoo\Platform\Bundle\QueryBundle\Hooks\ParentNameNotInHook'
         arguments:
-            - 'posts_where'
-            - 999
-            - 2
+            - tag: 'posts_where'
+              priority: 999
+              accepted_args: 2
         tags:
             - { name: moomoo_hook }

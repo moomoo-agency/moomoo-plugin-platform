@@ -32,7 +32,8 @@ services:
   moomoo_migration.hook.migrations_execution:
     class: 'MooMoo\Platform\Bundle\MigrationBundle\Hook\MigrationsExecutionHook'
     arguments:
-      - 'init'
+      - tag: 'init'
+        init_hook: 'plugins_loaded'
     calls:
       - [setLoader, ['@moomoo_migration.loader.migrations']]
       - [setExecutor, ['@moomoo_migration.executor.migrations']]

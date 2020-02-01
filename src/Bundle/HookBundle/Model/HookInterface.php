@@ -10,6 +10,11 @@ interface HookInterface
     /**
      * @return string
      */
+    public function getInitHookName();
+
+    /**
+     * @return string
+     */
     public function getType();
     
     /**
