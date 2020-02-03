@@ -24,7 +24,7 @@ class PluginNameForClassProvider
        foreach ($this->bundles as $name => $bundle) {
             if (strpos($class, $bundle->getNamespace()) !== false) {
                 if ($full === false) {
-                    return explode($bundle->getPluginName(), DIRECTORY_SEPARATOR)[0];
+                    return explode(DIRECTORY_SEPARATOR, $bundle->getPluginName())[0];
                 }
 
                 return $bundle->getPluginName();
