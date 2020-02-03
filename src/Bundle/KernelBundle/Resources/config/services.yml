@@ -37,3 +37,13 @@ services:
     moomoo_kernel.boot_service.composite:
         class: 'MooMoo\Platform\Bundle\KernelBundle\Boot\CompositeBootService'
         public: true
+
+    moomoo_kernel.provider.plugins_versions:
+        class: 'MooMoo\Platform\Bundle\KernelBundle\Provider\PluginsVersionsProvider'
+        arguments:
+            - '%kernel.plugins%'
+
+    moomoo_kernel.provider.plugin_name_for_class:
+        class: 'MooMoo\Platform\Bundle\KernelBundle\Provider\PluginNameForClassProvider'
+        arguments:
+            - '%kernel.bundles%'
