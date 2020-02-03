@@ -16,12 +16,17 @@ class PluginNameForClassProvider
 
     /**
      * @param string $class
+     * @param bool $full
      * @return string
      */
-    public function getPluginName($class)
+    public function getPluginName($class, $full = true)
     {
        foreach ($this->bundles as $name => $bundle) {
             if (strpos($class, $bundle->getNamespace()) !== false) {
+                if ($full === false) {
+                    return explode($bundle->getPluginName(), DIRECTORY_SEPARATOR)[0];
+                }
+
                 return $bundle->getPluginName();
             }
         }

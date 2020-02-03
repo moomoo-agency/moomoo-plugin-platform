@@ -36,6 +36,7 @@ class PluginsVersionsProvider
             foreach ($this->plugins as $plugin) {
                 $data = get_plugin_data(sprintf('%s/%s', WP_PLUGIN_DIR, $plugin));
                 $this->pluginsVersions[$plugin] = $data['Version'];
+                $this->pluginsVersions[explode($plugin, DIRECTORY_SEPARATOR)[0]] = $data['Version'];
             }
         }
 
