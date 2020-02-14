@@ -4,6 +4,9 @@ namespace MooMoo\Platform\Bundle\KernelBundle\Provider;
 
 class PluginNameForClassProvider
 {
+    /**
+     * array
+     */
     private $bundles;
 
     /**

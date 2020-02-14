@@ -23,6 +23,7 @@ services:
     arguments:
       - '%kernel.bundles%'
       - '%kernel.plugins%'
+      - '@service_container'
 
   moomoo_migration.executor.migrations:
     class: 'MooMoo\Platform\Bundle\MigrationBundle\Executor\MigrationsExecutor'

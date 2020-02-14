@@ -7,6 +7,8 @@ use MooMoo\Platform\Bundle\MigrationBundle\Migration\Installation;
 use MooMoo\Platform\Bundle\MigrationBundle\Migration\Migration;
 use MooMoo\Platform\Bundle\MigrationBundle\Migration\MigrationState;
 use MooMoo\Platform\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -32,13 +34,20 @@ class MigrationsLoader
     protected $plugins;
 
     /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
      * @param array $bundles
      * @param array $plugins
+     * @param ContainerInterface $container
      */
-    public function __construct(array $bundles, array $plugins)
+    public function __construct(array $bundles, array $plugins, ContainerInterface $container)
     {
         $this->bundles = $bundles;
         $this->plugins = $plugins;
+        $this->container = $container;
     }
 
     /**
@@ -329,6 +338,9 @@ class MigrationsLoader
                     if (isset($migrations[$sourceFile])) {
                         throw new \RuntimeException('A migration script must contains only one class.');
                     }
+                    if ($migration instanceof ContainerAwareInterface) {
+                        $migration->setContainer($this->container);
+                    }
                     $migrations[$sourceFile] = $migration;
                 }
             } elseif (isset($files['installers'][$sourceFile])) {
@@ -337,6 +349,9 @@ class MigrationsLoader
                     $installer = new $className;
                     if (isset($migrations[$sourceFile])) {
                         throw new \RuntimeException('An installation  script must contains only one class.');
+                    }
+                    if ($installer instanceof ContainerAwareInterface) {
+                        $installer->setContainer($this->container);
                     }
                     $migrations[$sourceFile] = $installer;
                     $installers[$sourceFile] = [
