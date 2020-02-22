@@ -49,11 +49,11 @@ class Kernel
     {
         $pluginRootFile =debug_backtrace(2, 3)[0]['file'];
         $this->pluginBaseName = plugin_basename($pluginRootFile);
-        $this->pluginName = explode('/', $this->pluginBaseName)[0];
-        $this->rootDirs[$this->pluginBaseName][] = realpath(sprintf('%s/src', dirname($pluginRootFile)));
+        $this->pluginName = explode(DIRECTORY_SEPARATOR, $this->pluginBaseName)[0];
+        $this->rootDirs[$this->pluginBaseName][] = realpath(sprintf('%s%ssrc', dirname($pluginRootFile), DIRECTORY_SEPARATOR));
 
         $r = new \ReflectionObject($this);
-        $this->rootDirs[$this->pluginBaseName][] = realpath(dirname($r->getFileName(), 3) . '/../..');
+        $this->rootDirs[$this->pluginBaseName][] = realpath(sprintf('%1$s%2$s..%1$s..', dirname($r->getFileName(), 3), DIRECTORY_SEPARATOR));
     }
 
     /**

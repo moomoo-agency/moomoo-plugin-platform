@@ -25,7 +25,7 @@ class MigrationsExecutor
      *
      * @param MigrationState[] $migrations
      *
-     * @throws \RuntimeException if at lease one migration failed
+     * @throws \Exception if at lease one migration failed
      */
     public function executeUp(array $migrations)
     {
@@ -49,11 +49,11 @@ class MigrationsExecutor
 
         if (!empty($failedMigrations)) {
             $wpdb->query( "ROLLBACK" );
-            throw new \RuntimeException(sprintf('Failed migrations: %s.', implode(', ', $failedMigrations)));
+            throw new \Exception(sprintf('Failed migrations: %s.', implode(', ', $failedMigrations)));
         } else {
             $wpdb->query( "COMMIT" );
             foreach ($this->plugins as $plugin) {
-                $data = get_plugin_data(sprintf('%s/%s', WP_PLUGIN_DIR, $plugin));
+                $data = get_plugin_data(sprintf('%s%s%s', WP_PLUGIN_DIR, DIRECTORY_SEPARATOR, $plugin));
                 update_option(
                     sprintf('%s_loaded_migrations_version', explode(DIRECTORY_SEPARATOR, $plugin)[0]),
                     $data['Version']
