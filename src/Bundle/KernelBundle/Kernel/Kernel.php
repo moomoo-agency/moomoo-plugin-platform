@@ -53,7 +53,7 @@ class Kernel
         $this->rootDirs[$this->pluginBaseName][] = realpath(sprintf('%s%ssrc', dirname($pluginRootFile), DIRECTORY_SEPARATOR));
 
         $r = new \ReflectionObject($this);
-        $this->rootDirs[$this->pluginBaseName][] = realpath(sprintf('%1$s%2$s..%1$s..', dirname($r->getFileName(), 3), DIRECTORY_SEPARATOR));
+        $this->rootDirs[$this->pluginBaseName][] = realpath(dirname($r->getFileName(), 3) . '/../..');
     }
 
     /**
