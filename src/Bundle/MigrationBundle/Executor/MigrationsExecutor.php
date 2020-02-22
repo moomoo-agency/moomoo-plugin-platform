@@ -53,9 +53,9 @@ class MigrationsExecutor
         } else {
             $wpdb->query( "COMMIT" );
             foreach ($this->plugins as $plugin) {
-                $data = get_plugin_data(sprintf('%s%s%s', WP_PLUGIN_DIR, DIRECTORY_SEPARATOR, $plugin));
+                $data = get_plugin_data(sprintf('%s/%s', WP_PLUGIN_DIR, $plugin));
                 update_option(
-                    sprintf('%s_loaded_migrations_version', explode(DIRECTORY_SEPARATOR, $plugin)[0]),
+                    sprintf('%s_loaded_migrations_version', explode('/', $plugin)[0]),
                     $data['Version']
                 );
             }
