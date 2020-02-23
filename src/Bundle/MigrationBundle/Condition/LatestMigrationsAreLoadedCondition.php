@@ -27,7 +27,7 @@ class LatestMigrationsAreLoadedCondition extends AbstractCondition
     {
         foreach ($this->pluginsVersions as $plugin => $version) {
             $pluginLoadedMigrationsVersion = get_option(
-                sprintf('%s_loaded_migrations_version', explode(DIRECTORY_SEPARATOR, $plugin)[0]),
+                sprintf('%s_loaded_migrations_version', explode('/', $plugin)[0]),
                 null
             );
             if (version_compare($version, $pluginLoadedMigrationsVersion) === 1) {
