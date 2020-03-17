@@ -3,6 +3,7 @@
 namespace MooMoo\Platform\Bundle\KernelBundle\Kernel;
 
 use MooMoo\Platform\Bundle\KernelBundle\Bundle\BundleInterface;
+use MooMoo\Platform\Bundle\KernelBundle\Provider\PluginsVersionsProvider;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\DependencyInjection\Compiler\MergeExtensionConfigurationPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -302,11 +303,16 @@ class Kernel
     protected function initializeContainer()
     {
         $this->debug = false;
+        $cacheValidForPluginsVersions = false;
+        $prefix = strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', explode('\\', get_class($this)))[0]);
+        $currentPluginsVersions = (new PluginsVersionsProvider($this->plugins))->getPluginsVersions();
+        $cachedPluginsVersions = json_decode(get_option($prefix . 'cached-plugin-versions'), true);
+        if ($currentPluginsVersions === $cachedPluginsVersions) {
+            $cacheValidForPluginsVersions = true;
+        }
+
         $class = 'MooMooCachedContainer';
-        $cacheDir = sprintf(
-            '%s/%s/cache/',
-            wp_upload_dir()['basedir'],
-            strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', explode('\\', get_class($this)))[0]));
+        $cacheDir = sprintf('%s/%s/cache/', wp_upload_dir()['basedir'], $prefix);
         $cache = new ConfigCache($cacheDir.'/'.$class.'.php', $this->debug);
         $cachePath = $cache->getPath();
 
@@ -316,6 +322,7 @@ class Kernel
         try {
             if (file_exists($cachePath) && \is_object($this->container = include $cachePath)
                 && (!$this->debug || (self::$freshCache[$cachePath] ?? $cache->isFresh()))
+                && $cacheValidForPluginsVersions === true
             ) {
                 self::$freshCache[$cachePath] = true;
                 $this->container->set('kernel', $this);
@@ -432,6 +439,8 @@ class Kernel
         unset($cache);
         $this->container = require $cachePath;
         $this->container->set('kernel', $this);
+
+        update_option($prefix . 'cached-plugin-versions', json_encode($currentPluginsVersions));
 
         if ($oldContainer && \get_class($this->container) !== $oldContainer->name) {
             // Because concurrent requests might still be using them,
