@@ -39,15 +39,14 @@ class MigrationsLoader
     protected $container;
 
     /**
-     * @param array $bundles
      * @param array $plugins
      * @param ContainerInterface $container
      */
-    public function __construct(array $bundles, array $plugins, ContainerInterface $container)
+    public function __construct(array $plugins, ContainerInterface $container)
     {
-        $this->bundles = $bundles;
         $this->plugins = $plugins;
         $this->container = $container;
+        $this->bundles = $container->get('kernel')->getBundles();
     }
 
     /**

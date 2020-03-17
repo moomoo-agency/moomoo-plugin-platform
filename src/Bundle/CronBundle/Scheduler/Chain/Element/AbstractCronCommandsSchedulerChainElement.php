@@ -6,6 +6,7 @@ use MooMoo\Platform\Bundle\CronBundle\Model\CronCommandInterface;
 use MooMoo\Platform\Bundle\CronBundle\Scheduler\CronCommandsSchedulerInterface;
 use MooMoo\Platform\Bundle\HookBundle\Registry\HooksRegistryInterface;
 use MooMoo\Platform\Bundle\KernelBundle\Bundle\BundleInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class AbstractCronCommandsSchedulerChainElement implements
     CronCommandsSchedulerInterface,
@@ -27,12 +28,12 @@ abstract class AbstractCronCommandsSchedulerChainElement implements
     private $successor;
 
     /**
-     * @param array $bundles
+     * @param ContainerInterface $container
      * @param HooksRegistryInterface $hooksRegistry
      */
-    public function __construct(array $bundles, HooksRegistryInterface $hooksRegistry)
+    public function __construct(ContainerInterface $container, HooksRegistryInterface $hooksRegistry)
     {
-        $this->bundles = $bundles;
+        $this->bundles = $container->get('kernel')->getBundles();
         $this->hooksRegistry = $hooksRegistry;
     }
 

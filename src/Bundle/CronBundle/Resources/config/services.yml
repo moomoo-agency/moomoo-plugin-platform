@@ -34,7 +34,7 @@ services:
     moomoo_cron.scheduler.cron_commands.chain.element.single:
         class: 'MooMoo\Platform\Bundle\CronBundle\Scheduler\Chain\Element\CronSingleCommandsSchedulerChainElement'
         arguments:
-            - '%kernel.bundles%'
+            - '@service_container'
             - '@moomoo_hook.registry.hooks'
         calls:
             - ['setSuccessor', ['@moomoo_cron.scheduler.cron_commands.chain.element.recurrence']]
@@ -42,7 +42,7 @@ services:
     moomoo_cron.scheduler.cron_commands.chain.element.recurrence:
         class: 'MooMoo\Platform\Bundle\CronBundle\Scheduler\Chain\Element\CronRecurrentCommandsSchedulerChainElement'
         arguments:
-            - '%kernel.bundles%'
+            - '@service_container'
             - '@moomoo_hook.registry.hooks'
 
     moomoo_cron.scheduler.cron_commands:

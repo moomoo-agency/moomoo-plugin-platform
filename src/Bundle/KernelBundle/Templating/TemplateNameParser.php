@@ -3,6 +3,7 @@
 namespace MooMoo\Platform\Bundle\KernelBundle\Templating;
 
 use MooMoo\Platform\Bundle\KernelBundle\Kernel\Kernel;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Templating\TemplateNameParserInterface;
 use Symfony\Component\Templating\TemplateReference;
 use Symfony\Component\Templating\TemplateReferenceInterface;
@@ -15,11 +16,11 @@ class TemplateNameParser implements TemplateNameParserInterface
     private $kernel;
 
     /**
-     * @param Kernel $kernel
+     * @param ContainerInterface $container
      */
-    public function __construct(Kernel $kernel)
+    public function __construct(ContainerInterface $container)
     {
-        $this->kernel = $kernel;
+        $this->kernel = $container->get('kernel');
     }
     
     /**

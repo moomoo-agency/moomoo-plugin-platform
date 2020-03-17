@@ -2,7 +2,7 @@ services:
     templating.name_parser:
         class: 'MooMoo\Platform\Bundle\KernelBundle\Templating\TemplateNameParser'
         arguments:
-            - '@kernel'
+            - '@service_container'
 
     templating.php.loader:
         class: 'Symfony\Component\Templating\Loader\FilesystemLoader'
@@ -40,10 +40,11 @@ services:
 
     moomoo_kernel.provider.plugins_versions:
         class: 'MooMoo\Platform\Bundle\KernelBundle\Provider\PluginsVersionsProvider'
+        public: true
         arguments:
             - '%kernel.plugins%'
 
     moomoo_kernel.provider.plugin_name_for_class:
         class: 'MooMoo\Platform\Bundle\KernelBundle\Provider\PluginNameForClassProvider'
         arguments:
-            - '%kernel.bundles%'
+            - '@service_container'

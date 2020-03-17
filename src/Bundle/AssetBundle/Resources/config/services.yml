@@ -13,7 +13,7 @@ services:
     moomoo_asset.path_provider.bundle:
         class: 'MooMoo\Platform\Bundle\AssetBundle\Path\Chain\Element\BundleAssetPathProvider'
         arguments:
-            - '%kernel.bundles%'
+            - '@service_container'
         calls:
             - ['setSuccessor', ['@moomoo_asset.path_provider.absolute']]
 

@@ -3,6 +3,7 @@
 namespace MooMoo\Platform\Bundle\AssetBundle\Path\Chain\Element;
 
 use MooMoo\Platform\Bundle\AssetBundle\Model\AssetInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class BundleAssetPathProvider extends AbstractAssetPathProviderChainElement
 {
@@ -12,11 +13,11 @@ class BundleAssetPathProvider extends AbstractAssetPathProviderChainElement
     private $bundles = [];
 
     /**
-     * @param array $bundles
+     * @param ContainerInterface $container
      */
-    public function __construct(array $bundles)
+    public function __construct(ContainerInterface $container)
     {
-        $this->bundles = $bundles;
+        $this->bundles = $container->get('kernel')->getBundles();
     }
     
     /**

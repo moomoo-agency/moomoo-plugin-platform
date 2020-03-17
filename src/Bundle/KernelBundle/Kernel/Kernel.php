@@ -3,13 +3,26 @@
 namespace MooMoo\Platform\Bundle\KernelBundle\Kernel;
 
 use MooMoo\Platform\Bundle\KernelBundle\Bundle\BundleInterface;
+use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\DependencyInjection\Compiler\MergeExtensionConfigurationPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
 
 class Kernel
 {
+    /**
+     * @var bool
+     */
+    protected $debug;
+
+    /**
+     * @var array
+     */
+    private static $freshCache = [];
+
     /**
      * @var string
      */
@@ -125,7 +138,7 @@ class Kernel
         // sort be priority
         return ($p1 < $p2) ? -1 : 1;
     }
-    
+
     /**
      * Finds all .../Resource/config/bundles.yml in given root folders
      *
@@ -213,7 +226,7 @@ class Kernel
     {
         return $this->bundles;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -232,7 +245,7 @@ class Kernel
 
         return $this->bundles[$name];
     }
-    
+
     /**
      * Gets a new ContainerBuilder instance used to build the service container.
      *
@@ -249,7 +262,7 @@ class Kernel
     protected function buildContainer()
     {
         $container = $this->getContainerBuilder();
-        
+
         $extensions = [];
         foreach ($this->bundles as $bundle) {
             if ($extension = $bundle->getContainerExtension()) {
@@ -264,10 +277,21 @@ class Kernel
 
         // ensure these extensions are implicitly loaded
         $container->getCompilerPassConfig()->setMergePass(new MergeExtensionConfigurationPass($extensions));
-        
+
         return $container;
     }
 
+    /**
+     * Gets the container's base class.
+     *
+     * All names except Container must be fully qualified.
+     *
+     * @return string
+     */
+    protected function getContainerBaseClass()
+    {
+        return 'Container';
+    }
 
     /**
      * Initializes the service container.
@@ -277,13 +301,189 @@ class Kernel
      */
     protected function initializeContainer()
     {
-        $this->container = $this->buildContainer();
+        $this->debug = false;
+        $class = 'MooMooCachedContainer';
+        $cacheDir = sprintf(
+            '%s/%s/cache/',
+            wp_upload_dir()['basedir'],
+            strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', explode('\\', get_class($this)))[0]));
+        $cache = new ConfigCache($cacheDir.'/'.$class.'.php', $this->debug);
+        $cachePath = $cache->getPath();
+
+        // Silence E_WARNING to ignore "include" failures - don't use "@" to prevent silencing fatal errors
+        $errorLevel = error_reporting(\E_ALL ^ \E_WARNING);
+
+        try {
+            if (file_exists($cachePath) && \is_object($this->container = include $cachePath)
+                && (!$this->debug || (self::$freshCache[$cachePath] ?? $cache->isFresh()))
+            ) {
+                self::$freshCache[$cachePath] = true;
+                $this->container->set('kernel', $this);
+                error_reporting($errorLevel);
+
+                return;
+            }
+        } catch (\Throwable $e) {
+        }
+
+        $oldContainer = \is_object($this->container) ? new \ReflectionClass($this->container) : $this->container = null;
+
+        try {
+            is_dir($cacheDir) ?: mkdir($cacheDir, 0777, true);
+
+            if ($lock = fopen($cachePath, 'w')) {
+                chmod($cachePath, 0666 & ~umask());
+                flock($lock, LOCK_EX | LOCK_NB, $wouldBlock);
+
+                if (!flock($lock, $wouldBlock ? LOCK_SH : LOCK_EX)) {
+                    fclose($lock);
+                } else {
+                    $cache = new class($cachePath, $this->debug) extends ConfigCache {
+                        public $lock;
+
+                        public function write($content, array $metadata = null)
+                        {
+                            rewind($this->lock);
+                            ftruncate($this->lock, 0);
+                            fwrite($this->lock, $content);
+
+                            if (null !== $metadata) {
+                                file_put_contents($this->getPath().'.meta', serialize($metadata));
+                                @chmod($this->getPath().'.meta', 0666 & ~umask());
+                            }
+
+                            if (\function_exists('opcache_invalidate') && filter_var(ini_get('opcache.enable'), FILTER_VALIDATE_BOOLEAN)) {
+                                @opcache_invalidate($this->getPath(), true);
+                            }
+                        }
+
+                        public function __destruct()
+                        {
+                            flock($this->lock, LOCK_UN);
+                            fclose($this->lock);
+                        }
+                    };
+                    $cache->lock = $lock;
+
+                    if (!\is_object($this->container = include $cachePath)) {
+                        $this->container = null;
+                    } elseif (!$oldContainer || \get_class($this->container) !== $oldContainer->name) {
+                        $this->container->set('kernel', $this);
+
+                        return;
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+        } finally {
+            error_reporting($errorLevel);
+        }
+
+        if ($collectDeprecations = $this->debug && !\defined('PHPUNIT_COMPOSER_INSTALL')) {
+            $collectedLogs = [];
+            $previousHandler = set_error_handler(function ($type, $message, $file, $line) use (&$collectedLogs, &$previousHandler) {
+                if (E_USER_DEPRECATED !== $type && E_DEPRECATED !== $type) {
+                    return $previousHandler ? $previousHandler($type, $message, $file, $line) : false;
+                }
+
+                if (isset($collectedLogs[$message])) {
+                    ++$collectedLogs[$message]['count'];
+
+                    return null;
+                }
+
+                $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+                // Clean the trace by removing first frames added by the error handler itself.
+                for ($i = 0; isset($backtrace[$i]); ++$i) {
+                    if (isset($backtrace[$i]['file'], $backtrace[$i]['line']) && $backtrace[$i]['line'] === $line && $backtrace[$i]['file'] === $file) {
+                        $backtrace = \array_slice($backtrace, 1 + $i);
+                        break;
+                    }
+                }
+
+                $collectedLogs[$message] = [
+                    'type' => $type,
+                    'message' => $message,
+                    'file' => $file,
+                    'line' => $line,
+                    'trace' => [$backtrace[0]],
+                    'count' => 1,
+                ];
+
+                return null;
+            });
+        }
+        try {
+            $container = null;
+            $container = $this->buildContainer();
+            $container->set('kernel', $this);
+            $container->setParameter('kernel.plugins', $this->plugins);
+            $container->compile();
+        } finally {
+            if ($collectDeprecations) {
+                restore_error_handler();
+
+                file_put_contents($cacheDir.'/'.$class.'Deprecations.log', serialize(array_values($collectedLogs)));
+                file_put_contents($cacheDir.'/'.$class.'Compiler.log', null !== $container ? implode("\n", $container->getCompiler()->getLog()) : '');
+            }
+        }
+
+        $this->dumpContainer($cache, $container, $class, $this->getContainerBaseClass());
+        unset($cache);
+        $this->container = require $cachePath;
         $this->container->set('kernel', $this);
-        $this->container->setParameter('kernel.bundles', $this->getBundles());
-        $this->container->setParameter('kernel.plugins', $this->plugins);
-        $this->container->compile();
+
+        if ($oldContainer && \get_class($this->container) !== $oldContainer->name) {
+            // Because concurrent requests might still be using them,
+            // old container files are not removed immediately,
+            // but on a next dump of the container.
+            static $legacyContainers = [];
+            $oldContainerDir = \dirname($oldContainer->getFileName());
+            $legacyContainers[$oldContainerDir.'.legacy'] = true;
+            foreach (glob(\dirname($oldContainerDir).\DIRECTORY_SEPARATOR.'*.legacy', GLOB_NOSORT) as $legacyContainer) {
+                if (!isset($legacyContainers[$legacyContainer]) && @unlink($legacyContainer)) {
+                    (new Filesystem())->remove(substr($legacyContainer, 0, -7));
+                }
+            }
+
+            touch($oldContainerDir.'.legacy');
+        }
     }
-    
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function dumpContainer(ConfigCache $cache, ContainerBuilder $container, $class, $baseClass)
+    {
+        // cache the container
+        $dumper = new PhpDumper($container);
+        $content = $dumper->dump([
+            'class' => $class,
+            'base_class' => $baseClass,
+            'file' => $cache->getPath(),
+            'as_files' => true,
+            'debug' => $this->debug,
+            'build_time' => $container->hasParameter('kernel.container_build_time')
+                ? $container->getParameter('kernel.container_build_time')
+                : time(),
+        ]);
+
+        $rootCode = array_pop($content);
+        $dir = \dirname($cache->getPath()).'/';
+        $fs = new Filesystem();
+
+        foreach ($content as $file => $code) {
+            $fs->dumpFile($dir.$file, $code);
+            @chmod($dir.$file, 0666 & ~umask());
+        }
+        $legacyFile = \dirname($dir.$file).'.legacy';
+        if (file_exists($legacyFile)) {
+            @unlink($legacyFile);
+        }
+
+        $cache->write($rootCode, $container->getResources());
+    }
+
     /**
      * @return ContainerInterface
      */
@@ -291,7 +491,7 @@ class Kernel
     {
         return $this->container;
     }
-    
+
     /**
      * Boots the current kernel.
      */
