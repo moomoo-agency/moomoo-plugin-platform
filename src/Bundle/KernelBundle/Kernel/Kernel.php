@@ -4,6 +4,7 @@ namespace MooMoo\Platform\Bundle\KernelBundle\Kernel;
 
 use MooMoo\Platform\Bundle\KernelBundle\Bundle\BundleInterface;
 use MooMoo\Platform\Bundle\KernelBundle\Provider\PluginsVersionsProvider;
+use Symfony\Bridge\ProxyManager\LazyProxy\PhpDumper\ProxyDumper;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\DependencyInjection\Compiler\MergeExtensionConfigurationPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -466,6 +467,11 @@ class Kernel
     {
         // cache the container
         $dumper = new PhpDumper($container);
+
+        if (class_exists('ProxyManager\Configuration') && class_exists('Symfony\Bridge\ProxyManager\LazyProxy\PhpDumper\ProxyDumper')) {
+            $dumper->setProxyDumper(new ProxyDumper());
+        }
+
         $content = $dumper->dump([
             'class' => $class,
             'base_class' => $baseClass,
