@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\Compiler\MergeExtensionConfigurationPa
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+use Symfony\Component\DependencyInjection\Dumper\XmlDumper;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
 
@@ -60,8 +61,9 @@ class Kernel
      */
     protected $booted = false;
 
-    public function __construct()
+    public function __construct($debug = false)
     {
+        $this->debug = $debug;
         $pluginRootFile =debug_backtrace(2, 3)[0]['file'];
         $this->pluginBaseName = plugin_basename($pluginRootFile);
         $this->pluginName = explode('/', $this->pluginBaseName)[0];
@@ -303,7 +305,6 @@ class Kernel
      */
     protected function initializeContainer()
     {
-        $this->debug = false;
         $cacheValidForPluginsVersions = false;
         $prefix = strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', explode('\\', get_class($this)))[0]);
         $currentPluginsVersions = (new PluginsVersionsProvider($this->plugins))->getPluginsVersions();
@@ -497,6 +498,15 @@ class Kernel
         }
 
         $cache->write($rootCode, $container->getResources());
+
+        if ($this->debug === true) {
+            $prefix = \strtolower(\preg_replace('/(?<!^)[A-Z]/', '-$0', \explode('\\', \get_class($this)))[0]);
+            $cacheDir = \sprintf('%s/%s/cache/', wp_upload_dir()['basedir'], $prefix);
+            $class = 'MooMooCachedContainer';
+
+            $xmlCache = new ConfigCache($cacheDir . '/' . $class . '.xml', false);
+            $xmlCache->write((new XmlDumper($container))->dump(), $container->getResources());
+        }
     }
 
     /**
