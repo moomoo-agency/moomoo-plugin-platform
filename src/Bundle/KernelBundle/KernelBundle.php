@@ -24,6 +24,13 @@ class KernelBundle extends Bundle
                 'addService'
             )
         );
+        $container->addCompilerPass(
+            new KernelCompilerPass(
+                'twig.extension',
+                'twig',
+                'addExtension'
+            )
+        );
     }
 
     /**
