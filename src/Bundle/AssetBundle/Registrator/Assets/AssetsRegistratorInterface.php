@@ -11,4 +11,9 @@ interface AssetsRegistratorInterface
      * @return mixed
      */
     public function registerAssets(array $assets);
+
+    /**
+     * @param AssetInterface $asset
+     */
+    public function registerAsset(AssetInterface $asset);
 }

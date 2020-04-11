@@ -71,7 +71,7 @@ abstract class AbstractAssetsRegistratorChainElement implements
     /**
      * @param AssetInterface $asset
      */
-    private function registerAsset(AssetInterface $asset)
+    public function registerAsset(AssetInterface $asset)
     {
         if ($this->isApplicable($asset)) {
             $this->register($asset);
