@@ -135,3 +135,21 @@ services:
             - ['setValidResult', [false]]
         tags:
             - {name: moomoo_condition}
+
+    moomoo_condition.is_in_the_loop:
+        class: 'MooMoo\Platform\Bundle\ConditionBundle\Model\SimpleCondition'
+        arguments:
+            - name: is_in_the_loop
+              description: 'Condition to check whether whether the caller is in the Loop'
+              function: in_the_loop
+        tags:
+            - {name: moomoo_condition}
+
+    moomoo_condition.is_not_in_the_loop:
+        parent: moomoo_condition.is_in_the_loop
+        calls:
+            - ['setName', ['is_not_in_the_loop']]
+            - ['setDescription', ['Condition to check whether whether the caller is not in the Loop']]
+            - ['setValidResult', [false]]
+        tags:
+            - {name: moomoo_condition}
