@@ -40,7 +40,7 @@ abstract class AbstractCondition extends ParameterBag implements ConditionInterf
      */
     public function isLazy()
     {
-        return $this->get(self::LAZY_FIELD);
+        return $this->get(self::LAZY_FIELD, false);
     }
 
     /**
@@ -109,7 +109,6 @@ abstract class AbstractCondition extends ParameterBag implements ConditionInterf
     {
         return $this->get(self::DEPEND_ON_CONDITIONS, []);
     }
-
 
     /**
      * @param bool $result
