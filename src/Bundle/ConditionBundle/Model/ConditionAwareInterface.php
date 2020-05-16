@@ -13,4 +13,14 @@ interface ConditionAwareInterface
      * @return ConditionInterface[]
      */
     public function getConditions();
+
+    /**
+     * @return ConditionInterface[]
+     */
+    public function getLazyConditions();
+
+    /**
+     * @return ConditionInterface[]
+     */
+    public function getNotLazyConditions();
 }

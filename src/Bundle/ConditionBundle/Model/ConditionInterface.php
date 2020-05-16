@@ -16,6 +16,17 @@ interface ConditionInterface
     public function setName($name);
 
     /**
+     * @return bool
+     */
+    public function isLazy();
+
+    /**
+     * @param bool $lazy
+     * @return $this
+     */
+    public function setLazy($lazy = false);
+
+    /**
      * @return string
      */
     public function getDescription();
@@ -28,12 +39,14 @@ interface ConditionInterface
 
     /**
      * @param ConditionInterface $condition
+     * @throws \Exception
      * @return $this
      */
     public function addDependOnCondition(ConditionInterface $condition);
 
     /**
      * @param ConditionInterface[] $conditions
+     * @throws \Exception
      * @return $this
      */
     public function setDependOnConditions(array $conditions);

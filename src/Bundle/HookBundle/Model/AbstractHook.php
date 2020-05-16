@@ -1,6 +1,5 @@
 <?php
 
-
 namespace MooMoo\Platform\Bundle\HookBundle\Model;
 
 use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareInterface;

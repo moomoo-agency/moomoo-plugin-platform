@@ -10,6 +10,7 @@ abstract class AbstractCondition extends ParameterBag implements ConditionInterf
     const DESCRIPTION_FIELD = 'description';
     const DEPEND_ON_CONDITIONS = 'depend_on_conditions';
     const ARGUMENTS_FIELD = 'arguments';
+    const LAZY_FIELD = 'lazy';
 
     /**
      * @var bool
@@ -33,7 +34,25 @@ abstract class AbstractCondition extends ParameterBag implements ConditionInterf
 
         return $this;
     }
-    
+
+    /**
+     * @inheritDoc
+     */
+    public function isLazy()
+    {
+        return $this->get(self::LAZY_FIELD);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setLazy($lazy = false)
+    {
+        $this->set(self::LAZY_FIELD, $lazy);
+
+        return $this;
+    }
+
     /**
      * @inheritDoc
      */
@@ -57,6 +76,13 @@ abstract class AbstractCondition extends ParameterBag implements ConditionInterf
      */
     public function addDependOnCondition(ConditionInterface $condition)
     {
+        if ($condition->isLazy() !== $this->isLazy()) {
+            if ($this->isLazy() === true) {
+                throw new \Exception('Lazy Condition can be dependent only on Lazy Condition');
+            } else {
+                throw new \Exception('Not Lazy Condition can be dependent only on Not Lazy Condition');
+            }
+        }
         $conditions = $this->get(self::DEPEND_ON_CONDITIONS, []);
         $conditions[$condition->getName()] = $condition;
         $this->set(self::DEPEND_ON_CONDITIONS, $conditions);
@@ -69,7 +95,9 @@ abstract class AbstractCondition extends ParameterBag implements ConditionInterf
      */
     public function setDependOnConditions(array $conditions)
     {
-        $this->set(self::DEPEND_ON_CONDITIONS, $conditions);
+        foreach ($conditions as $condition) {
+            $this->addDependOnCondition($condition);
+        }
 
         return $this;
     }

@@ -41,7 +41,7 @@ abstract class AbstractHooksRegistratorChainElement implements
                 foreach ($hooks as $hook) {
                     if ($hook instanceof ConditionAwareInterface && $hook->hasConditions()) {
                         $evaluated = true;
-                        foreach ($hook->getConditions() as $condition) {
+                        foreach ($hook->getNotLazyConditions() as $condition) {
                             if ($condition->evaluate() === false) {
                                 $evaluated = false;
                                 break;

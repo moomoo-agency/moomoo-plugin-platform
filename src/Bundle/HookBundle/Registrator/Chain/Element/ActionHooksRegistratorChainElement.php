@@ -2,6 +2,7 @@
 
 namespace MooMoo\Platform\Bundle\HookBundle\Registrator\Chain\Element;
 
+use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareInterface;
 use MooMoo\Platform\Bundle\HookBundle\Model\HookInterface;
 
 class ActionHooksRegistratorChainElement extends AbstractHooksRegistratorChainElement
@@ -19,6 +20,26 @@ class ActionHooksRegistratorChainElement extends AbstractHooksRegistratorChainEl
      */
     public function register(HookInterface $hook)
     {
-        add_action($hook->getTag(), [$hook, 'getFunction'], $hook->getPriority(), $hook->getAcceptedArgs());
+        add_action(
+            $hook->getTag(),
+            function () use ($hook) {
+                if ($hook instanceof ConditionAwareInterface) {
+                    $evaluated = true;
+                    foreach ($hook->getLazyConditions() as $condition) {
+                        if ($condition->evaluate() === false) {
+                            $evaluated = false;
+                            break;
+                        }
+                    }
+                    if ($evaluated) {
+                        call_user_func_array([$hook, 'getFunction'], func_get_args());
+                    }
+                } else {
+                    call_user_func_array([$hook, 'getFunction'], func_get_args());
+                }
+            },
+            $hook->getPriority(),
+            $hook->getAcceptedArgs()
+        );
     }
 }
