@@ -32,10 +32,10 @@ class FilterHooksRegistratorChainElement extends AbstractHooksRegistratorChainEl
                         }
                     }
                     if ($evaluated) {
-                        call_user_func_array([$hook, 'getFunction'], func_get_args());
+                        return call_user_func_array([$hook, 'getFunction'], func_get_args());
                     }
                 } else {
-                    call_user_func_array([$hook, 'getFunction'], func_get_args());
+                    return call_user_func_array([$hook, 'getFunction'], func_get_args());
                 }
             },
             $hook->getPriority(),
