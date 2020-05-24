@@ -126,14 +126,12 @@ abstract class AbstractCondition extends ParameterBag implements ConditionInterf
      */
     public function evaluate()
     {
-        $dependOnResult = true;
         if (!empty($this->getDependOnConditions())) {
             foreach ($this->getDependOnConditions() as $condition) {
-                $dependOnResult = $condition->evaluate();
+                if ($condition->evaluate() === false) {
+                    return false;
+                }
             }
-        }
-        if ($dependOnResult === false) {
-            return false;
         }
 
         return $this->validResult === (bool)$this->getResult();
