@@ -95,6 +95,7 @@ abstract class AbstractCondition extends ParameterBag implements ConditionInterf
      */
     public function setDependOnConditions(array $conditions)
     {
+        $this->set(self::DEPEND_ON_CONDITIONS, []);
         foreach ($conditions as $condition) {
             $this->addDependOnCondition($condition);
         }
