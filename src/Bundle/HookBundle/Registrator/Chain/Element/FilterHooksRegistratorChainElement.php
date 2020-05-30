@@ -3,6 +3,7 @@
 namespace MooMoo\Platform\Bundle\HookBundle\Registrator\Chain\Element;
 
 use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareInterface;
+use MooMoo\Platform\Bundle\HookBundle\Model\FilterInterface;
 use MooMoo\Platform\Bundle\HookBundle\Model\HookInterface;
 
 class FilterHooksRegistratorChainElement extends AbstractHooksRegistratorChainElement
@@ -20,6 +21,7 @@ class FilterHooksRegistratorChainElement extends AbstractHooksRegistratorChainEl
      */
     public function register(HookInterface $hook)
     {
+        /** @var FilterInterface $hook */
         add_filter(
             $hook->getTag(),
             function () use ($hook) {
@@ -33,6 +35,8 @@ class FilterHooksRegistratorChainElement extends AbstractHooksRegistratorChainEl
                     }
                     if ($evaluated) {
                         return call_user_func_array([$hook, 'getFunction'], func_get_args());
+                    } else {
+                        return $hook->returnOnFailedConditions(func_get_args());
                     }
                 } else {
                     return call_user_func_array([$hook, 'getFunction'], func_get_args());
