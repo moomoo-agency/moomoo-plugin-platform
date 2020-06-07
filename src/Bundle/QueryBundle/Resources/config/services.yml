@@ -20,6 +20,15 @@ services:
         tags:
             - { name: moomoo_hook }
 
+    moomoo_query.hook.post_type__not_in:
+      class: 'MooMoo\Platform\Bundle\QueryBundle\Hooks\PostTypeNotInHook'
+      arguments:
+        - tag: 'posts_where'
+          priority: 999
+          accepted_args: 2
+      tags:
+        - { name: moomoo_hook }
+
     moomoo_query.hook.post_parent_join:
         class: 'MooMoo\Platform\Bundle\QueryBundle\Hooks\PostParentJoinHook'
         arguments:
