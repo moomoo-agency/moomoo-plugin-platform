@@ -23,4 +23,10 @@ interface TaxonomyInterface
      * @return TermInterface[]
      */
     public function getTerms();
+
+    /**
+     * @param TermInterface $term
+     * @return $this
+     */
+    public function addTerm(TermInterface $term);
 }

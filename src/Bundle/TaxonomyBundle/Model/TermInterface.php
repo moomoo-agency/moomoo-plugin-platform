@@ -33,4 +33,15 @@ interface TermInterface
      * @return string
      */
     public function getSlug();
+
+    /**
+     * @return TermMetaInterface[]
+     */
+    public function getTermMeta();
+
+    /**
+     * @param TermMetaInterface $termMeta
+     * @return $this
+     */
+    public function addTermMeta(TermMetaInterface $termMeta);
 }

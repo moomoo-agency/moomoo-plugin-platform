@@ -15,8 +15,7 @@ abstract class AbstractTaxonomy implements TaxonomyInterface, ConditionAwareInte
     protected $terms = [];
 
     /**
-     * @param TermInterface $term
-     * @return $this
+     * {@inheritDoc}
      */
     public function addTerm(TermInterface $term)
     {

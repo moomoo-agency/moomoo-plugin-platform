@@ -44,7 +44,7 @@ class TaxonomiesRegistrator implements TaxonomiesRegistratorInterface
             register_taxonomy($taxonomy->getName(), $taxonomy->getObjectType(), $taxonomy->getArguments());
             if (!empty($taxonomy->getTerms())) {
                 foreach ($taxonomy->getTerms() as $term) {
-                    wp_insert_term(
+                    $termResult = wp_insert_term(
                         $term->getName(),
                         $term->getTaxonomy(),
                         [
@@ -54,6 +54,17 @@ class TaxonomiesRegistrator implements TaxonomiesRegistratorInterface
                             Term::SLUG_FIELD => $term->getSlug(),
                         ]
                     );
+                    if (!$termResult instanceof \WP_Error && isset($termResult['term_id']) &&
+                        !empty($term->getTermMeta())) {
+                        foreach ($term->getTermMeta() as $termMeta) {
+                            add_term_meta(
+                                $termResult['term_id'],
+                                $termMeta->getKey(),
+                                $termMeta->getValue(),
+                                $termMeta->isUnique()
+                            );
+                        }
+                    }
                 }
             }
         }

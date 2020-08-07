@@ -12,6 +12,7 @@ class Term extends ParameterBag implements TermInterface
     const DESCRIPTION_FIELD = 'description';
     const PARENT_FIELD = 'parent';
     const SLUG_FIELD = 'slug';
+    const TERM_META_FIELD = 'term_meta';
 
 
     /**
@@ -60,5 +61,25 @@ class Term extends ParameterBag implements TermInterface
     public function getSlug()
     {
         return $this->get(self::SLUG_FIELD);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTermMeta()
+    {
+        return $this->get(self::TERM_META_FIELD, []);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function addTermMeta(TermMetaInterface $termMeta)
+    {
+        $meta = $this->getTermMeta();
+        $meta[] = $termMeta;
+        $this->set(self::TERM_META_FIELD, $meta);
+
+        return $this;
     }
 }
