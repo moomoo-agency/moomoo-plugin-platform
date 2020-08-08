@@ -60,14 +60,14 @@ class TaxonomiesRegistrator implements TaxonomiesRegistratorInterface
                         $termResult = $termResult['term_id'];
                     }
                 } else {
-                    $termResult = get_term($term->getName(), $term->getTaxonomy());
+                    $termResult = get_term_by('name', $term->getName(), $term->getTaxonomy());
                     $termResult = $termResult->term_id;
                 }
                 if (!empty($term->getTermMeta())) {
                     foreach ($term->getTermMeta() as $termMeta) {
-                        if ( metadata_exists( 'term', $termResult , $termMeta->getKey() ) ) {
+                        if (!metadata_exists('term', $termResult, $termMeta->getKey())) {
                             add_term_meta(
-                                $termResult['term_id'],
+                                $termResult,
                                 $termMeta->getKey(),
                                 $termMeta->getValue(),
                                 $termMeta->isUnique()
