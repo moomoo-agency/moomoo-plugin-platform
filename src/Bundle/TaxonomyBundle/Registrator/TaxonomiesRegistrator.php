@@ -42,8 +42,10 @@ class TaxonomiesRegistrator implements TaxonomiesRegistratorInterface
     {
         if (!taxonomy_exists($taxonomy->getName())) {
             register_taxonomy($taxonomy->getName(), $taxonomy->getObjectType(), $taxonomy->getArguments());
-            if (!empty($taxonomy->getTerms())) {
-                foreach ($taxonomy->getTerms() as $term) {
+        }
+        if (!empty($taxonomy->getTerms())) {
+            foreach ($taxonomy->getTerms() as $term) {
+                if (!term_exists($term->getName(), $term->getTaxonomy(), $term->getParent())) {
                     $termResult = wp_insert_term(
                         $term->getName(),
                         $term->getTaxonomy(),
@@ -54,9 +56,16 @@ class TaxonomiesRegistrator implements TaxonomiesRegistratorInterface
                             Term::SLUG_FIELD => $term->getSlug(),
                         ]
                     );
-                    if (!$termResult instanceof \WP_Error && isset($termResult['term_id']) &&
-                        !empty($term->getTermMeta())) {
-                        foreach ($term->getTermMeta() as $termMeta) {
+                    if (!$termResult instanceof \WP_Error && isset($termResult['term_id'])) {
+                        $termResult = $termResult['term_id'];
+                    }
+                } else {
+                    $termResult = get_term($term->getName(), $term->getTaxonomy());
+                    $termResult = $termResult->term_id;
+                }
+                if (!empty($term->getTermMeta())) {
+                    foreach ($term->getTermMeta() as $termMeta) {
+                        if ( metadata_exists( 'term', $termResult , $termMeta->getKey() ) ) {
                             add_term_meta(
                                 $termResult['term_id'],
                                 $termMeta->getKey(),
