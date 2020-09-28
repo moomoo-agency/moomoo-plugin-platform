@@ -10,8 +10,9 @@ class TestKernel extends Kernel
      * @param string $pluginBaseName
      * {@inheritDoc}
      */
-    public function __construct($pluginBaseName)
+    public function __construct($pluginBaseName, $debug = false)
     {
+        $this->debug = $debug;
         $pluginRootFile =debug_backtrace(2, 3)[0]['file'];
         $this->pluginBaseName = $pluginBaseName;
         $this->pluginName = explode('/', $this->pluginBaseName)[0];

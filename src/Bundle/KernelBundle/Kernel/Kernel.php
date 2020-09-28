@@ -61,6 +61,9 @@ class Kernel
      */
     protected $booted = false;
 
+    /**
+     * @param false $debug
+     */
     public function __construct($debug = false)
     {
         $this->debug = $debug;
