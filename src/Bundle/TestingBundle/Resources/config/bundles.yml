@@ -1,0 +1,2 @@
+bundles:
+    - { name: MooMoo\Platform\Bundle\TestingBundle\TestingBundle }
