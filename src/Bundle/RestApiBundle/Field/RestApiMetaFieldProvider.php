@@ -2,7 +2,7 @@
 
 namespace MooMoo\Platform\Bundle\RestApiBundle\Field;
 
-class RestMetaFieldProvider implements RestFieldProviderInterface
+class RestApiMetaFieldProvider implements RestApiFieldProviderInterface
 {
     /**
      * @var string

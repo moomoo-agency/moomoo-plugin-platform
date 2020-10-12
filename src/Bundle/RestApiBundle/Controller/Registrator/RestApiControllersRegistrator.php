@@ -2,7 +2,7 @@
 
 namespace MooMoo\Platform\Bundle\RestApiBundle\Controller\Registrator;
 
-class RestControllersRegistrator implements RestControllersRegistratorInterface
+class RestApiControllersRegistrator implements RestApiControllersRegistratorInterface
 {
     /**
      * @inheritDoc

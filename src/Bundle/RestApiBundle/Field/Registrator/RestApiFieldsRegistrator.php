@@ -2,9 +2,9 @@
 
 namespace MooMoo\Platform\Bundle\RestApiBundle\Field\Registrator;
 
-use MooMoo\Platform\Bundle\RestApiBundle\Field\RestFieldProviderInterface;
+use MooMoo\Platform\Bundle\RestApiBundle\Field\RestApiFieldProviderInterface;
 
-class RestFieldsRegistrator implements RestFieldsRegistratorInterface
+class RestApiFieldsRegistrator implements RestApiFieldsRegistratorInterface
 {
     /**
      * @inheritDoc
@@ -13,15 +13,15 @@ class RestFieldsRegistrator implements RestFieldsRegistratorInterface
     {
         add_action('rest_api_init', function () use ($fieldProviders) {
             foreach ($fieldProviders as $provider) {
-                $this->registerRestField($provider);
+                $this->registerRestApiField($provider);
             }
         });
     }
 
     /**
-     * @param RestFieldProviderInterface $provider
+     * @param RestApiFieldProviderInterface $provider
      */
-    private function registerRestField(RestFieldProviderInterface $provider)
+    private function registerRestApiField(RestApiFieldProviderInterface $provider)
     {
         register_rest_field(
             $provider->getObjectType(),

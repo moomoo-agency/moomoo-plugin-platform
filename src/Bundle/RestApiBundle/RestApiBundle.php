@@ -4,11 +4,12 @@ namespace MooMoo\Platform\Bundle\RestApiBundle;
 
 use MooMoo\Platform\Bundle\KernelBundle\Bundle\Bundle;
 use MooMoo\Platform\Bundle\KernelBundle\DependencyInjection\CompilerPass\KernelCompilerPass;
-use MooMoo\Platform\Bundle\RestApiBundle\Controller\Registrator\RestControllersRegistratorInterface;
-use MooMoo\Platform\Bundle\RestApiBundle\Controller\Registry\RestControllersRegistryInterface;
-use MooMoo\Platform\Bundle\RestApiBundle\Field\Registrator\RestFieldsRegistrator;
-use MooMoo\Platform\Bundle\RestApiBundle\Field\Registrator\RestFieldsRegistratorInterface;
-use MooMoo\Platform\Bundle\RestApiBundle\Field\Registry\RestFieldProvidersRegistryInterface;
+use MooMoo\Platform\Bundle\RestApiBundle\Controller\Registrator\RestApiControllersRegistratorInterface;
+use MooMoo\Platform\Bundle\RestApiBundle\Controller\Registry\RestApiControllersRegistryInterface;
+use MooMoo\Platform\Bundle\RestApiBundle\Endpoint\Registrator\RestApiEndpointsRegistratorInterface;
+use MooMoo\Platform\Bundle\RestApiBundle\Endpoint\Registry\RestApiEndpointsRegistryInterface;
+use MooMoo\Platform\Bundle\RestApiBundle\Field\Registrator\RestApiFieldsRegistratorInterface;
+use MooMoo\Platform\Bundle\RestApiBundle\Field\Registry\RestApiFieldProvidersRegistryInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class RestApiBundle extends Bundle
@@ -20,6 +21,13 @@ class RestApiBundle extends Bundle
     {
         parent::build($container);
 
+        $container->addCompilerPass(
+            new KernelCompilerPass(
+                'moomoo_rest_endpoint',
+                'moomoo_rest_api.registry.rest_api.endpoints',
+                'addEndpoint'
+            )
+        );
         $container->addCompilerPass(
             new KernelCompilerPass(
                 'moomoo_rest_controller',
@@ -41,17 +49,23 @@ class RestApiBundle extends Bundle
      */
     public function boot()
     {
-        /** @var RestControllersRegistryInterface $restControllersRegistry */
+        /** @var RestApiEndpointsRegistryInterface $restEndpointsRegistry */
+        $restEndpointsRegistry = $this->container->get('moomoo_rest_api.registry.rest_api.endpoints');
+        /** @var RestApiEndpointsRegistratorInterface $restEndpointsRegistrator */
+        $restEndpointsRegistrator = $this->container->get('moomoo_rest_api.registrator.rest_api.endpoints');
+        $restEndpointsRegistrator->registerRestEndpoints($restEndpointsRegistry->getEndpoints());
+
+        /** @var RestApiControllersRegistryInterface $restControllersRegistry */
         $restControllersRegistry = $this->container->get('moomoo_rest_api.registry.rest_api.controllers');
-        /** @var RestControllersRegistratorInterface $restControllersRegistrator */
+        /** @var RestApiControllersRegistratorInterface $restControllersRegistrator */
         $restControllersRegistrator = $this->container->get('moomoo_rest_api.registrator.rest_api.controllers');
         $restControllersRegistrator->registerRestControllers($restControllersRegistry->getControllers());
 
-        /** @var RestFieldProvidersRegistryInterface $restFieldProvidersRegistry */
+        /** @var RestApiFieldProvidersRegistryInterface $restFieldProvidersRegistry */
         $restFieldProvidersRegistry = $this->container->get('moomoo_rest_api.registry.rest_api.field_providers');
-        /** @var RestFieldsRegistratorInterface $restFieldsRegistrator */
+        /** @var RestApiFieldsRegistratorInterface $restFieldsRegistrator */
         $restFieldsRegistrator = $this->container->get('moomoo_rest_api.registrator.rest_api.fields');
-        $restFieldsRegistrator->registerFields($restFieldProvidersRegistry->getRestFieldProviders());
+        $restFieldsRegistrator->registerFields($restFieldProvidersRegistry->getRestApiFieldProviders());
 
         parent::boot();
     }

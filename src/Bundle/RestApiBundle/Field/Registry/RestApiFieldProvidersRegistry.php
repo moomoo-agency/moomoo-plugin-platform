@@ -3,20 +3,20 @@
 namespace MooMoo\Platform\Bundle\RestApiBundle\Field\Registry;
 
 use MooMoo\Platform\Bundle\KernelBundle\Boot\BootServiceInterface;
-use MooMoo\Platform\Bundle\RestApiBundle\Field\RestFieldProviderInterface;
+use MooMoo\Platform\Bundle\RestApiBundle\Field\RestApiFieldProviderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class RestFieldProvidersRegistry implements RestFieldProvidersRegistryInterface
+class RestApiFieldProvidersRegistry implements RestApiFieldProvidersRegistryInterface
 {
     /**
-     * @var RestFieldProviderInterface[]
+     * @var RestApiFieldProviderInterface[]
      */
     private $providers = [];
 
     /**
-     * @param RestFieldProviderInterface $provider
+     * @param RestApiFieldProviderInterface $provider
      */
-    public function addProvider(RestFieldProviderInterface $provider)
+    public function addProvider(RestApiFieldProviderInterface $provider)
     {
         $this->providers[] = $provider;
     }
@@ -24,7 +24,7 @@ class RestFieldProvidersRegistry implements RestFieldProvidersRegistryInterface
     /**
      * {@inheritdoc}
      */
-    public function getRestFieldProviders()
+    public function getRestApiFieldProviders()
     {
         return $this->providers;
     }

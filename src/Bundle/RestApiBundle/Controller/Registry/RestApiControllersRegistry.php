@@ -2,7 +2,7 @@
 
 namespace MooMoo\Platform\Bundle\RestApiBundle\Controller\Registry;
 
-class RestControllersRegistry implements RestControllersRegistryInterface
+class RestApiControllersRegistry implements RestApiControllersRegistryInterface
 {
     private $restControllers = [];
 

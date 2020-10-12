@@ -2,7 +2,7 @@
 
 namespace MooMoo\Platform\Bundle\RestApiBundle\Field;
 
-interface RestFieldProviderInterface
+interface RestApiFieldProviderInterface
 {
     /**
      * @return string

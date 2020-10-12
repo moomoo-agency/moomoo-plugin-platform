@@ -1,16 +1,24 @@
 services:
+    moomoo_rest_api.registry.rest_api.endpoints:
+        class: 'MooMoo\Platform\Bundle\RestApiBundle\Endpoint\Registry\RestApiEndpointsRegistry'
+        public: true
+
     moomoo_rest_api.registry.rest_api.controllers:
-        class: 'MooMoo\Platform\Bundle\RestApiBundle\Controller\Registry\RestControllersRegistry'
+        class: 'MooMoo\Platform\Bundle\RestApiBundle\Controller\Registry\RestApiControllersRegistry'
         public: true
 
     moomoo_rest_api.registry.rest_api.field_providers:
-        class: 'MooMoo\Platform\Bundle\RestApiBundle\Field\Registry\RestFieldProvidersRegistry'
+        class: 'MooMoo\Platform\Bundle\RestApiBundle\Field\Registry\RestApiFieldProvidersRegistry'
+        public: true
+
+    moomoo_rest_api.registrator.rest_api.endpoints:
+        class: 'MooMoo\Platform\Bundle\RestApiBundle\Endpoint\Registrator\RestApiEndpointsRegistrator'
         public: true
 
     moomoo_rest_api.registrator.rest_api.controllers:
-        class: 'MooMoo\Platform\Bundle\RestApiBundle\Controller\Registrator\RestControllersRegistrator'
+        class: 'MooMoo\Platform\Bundle\RestApiBundle\Controller\Registrator\RestApiControllersRegistrator'
         public: true
 
     moomoo_rest_api.registrator.rest_api.fields:
-        class: 'MooMoo\Platform\Bundle\RestApiBundle\Field\Registrator\RestFieldsRegistrator'
+        class: 'MooMoo\Platform\Bundle\RestApiBundle\Field\Registrator\RestApiFieldsRegistrator'
         public: true

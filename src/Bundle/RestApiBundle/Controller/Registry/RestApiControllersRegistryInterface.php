@@ -2,7 +2,7 @@
 
 namespace MooMoo\Platform\Bundle\RestApiBundle\Controller\Registry;
 
-interface RestControllersRegistryInterface
+interface RestApiControllersRegistryInterface
 {
     /**
      * @return \WP_REST_Controller[]
