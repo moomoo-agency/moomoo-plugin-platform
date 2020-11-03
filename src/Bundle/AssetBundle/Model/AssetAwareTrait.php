@@ -27,9 +27,25 @@ trait AssetAwareTrait
 
     /**
      * @param AssetInterface $asset
+     * @return $this
      */
     public function addAsset(AssetInterface $asset)
     {
-        $this->assets[] = $asset;
+        if (!in_array($asset, $this->assets)) {
+            $this->assets[] = $asset;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param AssetInterface[] $assets
+     * @return $this
+     */
+    public function setAssets(array $assets)
+    {
+        $this->assets = $assets;
+
+        return $this;
     }
 }

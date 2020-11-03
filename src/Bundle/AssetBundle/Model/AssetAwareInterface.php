@@ -13,4 +13,16 @@ interface AssetAwareInterface
      * @return AssetInterface[]
      */
     public function getAssets();
+
+    /**
+     * @param AssetInterface $asset
+     * @return $this
+     */
+    public function addAsset(AssetInterface $asset);
+
+    /**
+     * @param AssetInterface[] $assets
+     * @return $this
+     */
+    public function setAssets(array $assets);
 }

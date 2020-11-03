@@ -13,7 +13,7 @@ class TestKernel extends Kernel
     public function __construct($pluginBaseName, $debug = false)
     {
         $this->debug = $debug;
-        $pluginRootFile =debug_backtrace(2, 3)[0]['file'];
+        $pluginRootFile = WP_PLUGIN_DIR . '/' . $pluginBaseName;
         $this->pluginBaseName = $pluginBaseName;
         $this->pluginName = explode('/', $this->pluginBaseName)[0];
         $this->rootDirs[$this->pluginBaseName][] = realpath(sprintf('%s/src', dirname($pluginRootFile)));
