@@ -15,23 +15,7 @@ interface RestApiEndpointInterface
     public function getRoute();
 
     /**
-     * @return string
+     * @see register_rest_route()
      */
-    public function getMethods();
-
-    /**
-     * @param array $data
-     * @return mixed
-     */
-    public function callback(array $data);
-
-    /**
-     * @return array
-     */
-    public function getArguments();
-
-    /**
-     * @return bool
-     */
-    public function permissionCallback();
+    public function registerRoutes();
 }
