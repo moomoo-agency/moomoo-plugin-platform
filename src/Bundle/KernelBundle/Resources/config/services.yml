@@ -16,7 +16,7 @@ services:
             - '@templating.php.loader'
 
     twig.loader.filesystem:
-        class: 'Twig_Loader_Filesystem'
+        class: 'Twig\Loader\FilesystemLoader'
 
     twig:
         class: 'Twig\Environment'
