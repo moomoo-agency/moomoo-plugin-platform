@@ -50,6 +50,11 @@ class Asset implements AssetInterface, ConditionAwareInterface
     private $localizations = [];
 
     /**
+     * @var AssetDataItemInterface[]
+     */
+    private $assetData = [];
+
+    /**
      * @param string $category
      * @param string $type
      * @param string $handle
@@ -147,5 +152,27 @@ class Asset implements AssetInterface, ConditionAwareInterface
     public function addLocalization(AssetLocalizationInterface $localization)
     {
         $this->localizations[] = $localization;
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAssetData()
+    {
+        return $this->assetData;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function addAssetDataItem(AssetDataItemInterface $dataItem)
+    {
+        if (!in_array($dataItem, $this->assetData)) {
+            $this->assetData[$dataItem->getKey()] = $dataItem;
+        }
+
+        return $this;
     }
 }

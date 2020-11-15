@@ -26,5 +26,10 @@ class StyleAssetsRegistratorChainElement extends AbstractAssetsRegistratorChainE
             $asset->getVersion() ? : '1.0.0',
             $asset->getExtra() ? : 'all'
         );
+        if (!empty($asset->getAssetData())) {
+            foreach ($asset->getAssetData() as $dataItem) {
+                wp_style_add_data($asset->getHandle(), $dataItem->getKey(), $dataItem->getValue());
+            }
+        }
     }
 }

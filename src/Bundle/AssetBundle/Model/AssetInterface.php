@@ -55,4 +55,15 @@ interface AssetInterface
      * @return $this
      */
     public function addLocalization(AssetLocalizationInterface $localization);
+
+    /**
+     * @return AssetDataItemInterface[]
+     */
+    public function getAssetData();
+
+    /**
+     * @param AssetDataItemInterface $dataItem
+     * @return $this
+     */
+    public function addAssetDataItem(AssetDataItemInterface $dataItem);
 }

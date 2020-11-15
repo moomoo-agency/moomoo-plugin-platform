@@ -34,6 +34,11 @@ class ScriptAssetsRegistratorChainElement extends AbstractAssetsRegistratorChain
                 wp_localize_script($asset->getHandle(), $objectName, $data);
             }
         }
+        if (!empty($asset->getAssetData())) {
+            foreach ($asset->getAssetData() as $dataItem) {
+                wp_script_add_data($asset->getHandle(), $dataItem->getKey(), $dataItem->getValue());
+            }
+        }
     }
     
     /**
