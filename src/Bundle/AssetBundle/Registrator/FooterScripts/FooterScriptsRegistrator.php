@@ -42,7 +42,7 @@ class FooterScriptsRegistrator implements FooterScriptsRegistratorInterface
         if (!empty($script->getDependencies())) {
             $wp_scripts = wp_scripts();
             foreach ($script->getDependencies() as $dependency) {
-                if (in_array($dependency, $wp_scripts->registered)) {
+                if (in_array($dependency, array_keys($wp_scripts->registered))) {
                     $wp_scripts->enqueue($dependency);
                 }
             }
