@@ -58,11 +58,11 @@ class AssetBundle extends Bundle
         $adminAssetsRegistrator = $this->container->get('moomoo_asset.registrator.admin');
         $adminAssetsRegistrator->registerAssets($assetsRegistry->getAssets(Asset::ADMIN_CATEGORY));
 
-        /** @var FooterScriptsRegistryInterface $footerTemplateScriptsRegistry */
-        $footerTemplateScriptsRegistry = $this->container->get('moomoo_asset.registry.footer_template_scripts');
-        /** @var FooterScriptsRegistratorInterface $footerTemplateScriptsRegistrator */
-        $footerTemplateScriptsRegistrator = $this->container->get('moomoo_asset.registrator.footer_template_scripts');
-        $footerTemplateScriptsRegistrator->registerScripts($footerTemplateScriptsRegistry->getScripts());
+        /** @var FooterScriptsRegistryInterface $footerScriptsRegistry */
+        $footerScriptsRegistry = $this->container->get('moomoo_asset.registry.footer_scripts');
+        /** @var FooterScriptsRegistratorInterface $footerScriptsRegistrator */
+        $footerScriptsRegistrator = $this->container->get('moomoo_asset.registrator.footer_scripts');
+        $footerScriptsRegistrator->registerScripts($footerScriptsRegistry->getScripts());
         
         parent::boot();
     }
