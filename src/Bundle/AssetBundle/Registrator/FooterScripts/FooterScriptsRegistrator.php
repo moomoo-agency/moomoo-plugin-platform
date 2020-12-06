@@ -12,6 +12,27 @@ class FooterScriptsRegistrator implements FooterScriptsRegistratorInterface
      */
     public function registerScripts(array $scripts)
     {
+        add_action('wp_enqueue_scripts', function () use ($scripts) {
+            foreach ($scripts as $script) {
+                if (!empty($script->getDependencies())) {
+                    if ($script instanceof ConditionAwareInterface && $script->hasConditions()) {
+                        $evaluated = true;
+                        foreach ($script->getConditions() as $condition) {
+                            if ($condition->evaluate() === false) {
+                                $evaluated = false;
+                                break;
+                            }
+                        }
+                        if (!$evaluated) {
+                            continue;
+                        }
+                        $this->enqueueDependency($script);
+                    } else {
+                        $this->enqueueDependency($script);
+                    }
+                }
+            }
+        });
         add_action('wp_footer', function () use ($scripts) {
             /** @var FooterScriptInterface[] $scripts */
             foreach ($scripts as $script) {
@@ -33,11 +54,11 @@ class FooterScriptsRegistrator implements FooterScriptsRegistratorInterface
             }
         });
     }
-    
+
     /**
      * @param FooterScriptInterface $script
      */
-    private function registerScript(FooterScriptInterface $script)
+    private function enqueueDependency(FooterScriptInterface $script)
     {
         if (!empty($script->getDependencies())) {
             $wp_scripts = wp_scripts();
@@ -47,6 +68,13 @@ class FooterScriptsRegistrator implements FooterScriptsRegistratorInterface
                 }
             }
         }
+    }
+
+    /**
+     * @param FooterScriptInterface $script
+     */
+    private function registerScript(FooterScriptInterface $script)
+    {
         echo $this->getFinalContent(
             $script->getId(),
             $script->getType(),
