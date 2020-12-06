@@ -3,8 +3,8 @@ services:
         class: 'MooMoo\Platform\Bundle\AssetBundle\Registry\AssetsRegistry'
         public: true
 
-    moomoo_asset.registry.footer_template_scripts:
-        class: 'MooMoo\Platform\Bundle\AssetBundle\Registry\FooterTemplateScriptsRegistry'
+    moomoo_asset.registry.footer_scripts:
+        class: 'MooMoo\Platform\Bundle\AssetBundle\Registry\FooterScriptsRegistry'
         public: true
 
     moomoo_asset.path_provider.absolute:
@@ -69,8 +69,6 @@ services:
         parent: moomoo_asset.registrator.admin.script
         public: true
 
-    moomoo_asset.registrator.footer_template_scripts:
-        class: 'MooMoo\Platform\Bundle\AssetBundle\Registrator\FooterTemplateScripts\FooterTemplateScriptsRegistrator'
+    moomoo_asset.registrator.footer_scripts:
+        class: 'MooMoo\Platform\Bundle\AssetBundle\Registrator\FooterScripts\FooterScriptsRegistrator'
         public: true
-        arguments:
-            - '@templating'

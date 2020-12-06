@@ -1,33 +1,19 @@
 <?php
 
-namespace MooMoo\Platform\Bundle\AssetBundle\Registrator\FooterTemplateScripts;
+namespace MooMoo\Platform\Bundle\AssetBundle\Registrator\FooterScripts;
 
-use MooMoo\Platform\Bundle\AssetBundle\Model\FooterTemplateScriptInterface;
+use MooMoo\Platform\Bundle\AssetBundle\Model\FooterScriptInterface;
 use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareInterface;
-use Symfony\Component\Templating\EngineInterface;
 
-class FooterTemplateScriptsRegistrator implements FooterTemplateScriptsRegistratorInterface
+class FooterScriptsRegistrator implements FooterScriptsRegistratorInterface
 {
-    /**
-     * @var EngineInterface
-     */
-    private $templating;
-
-    /**
-     * @param EngineInterface $templating
-     */
-    public function __construct(EngineInterface $templating)
-    {
-        $this->templating = $templating;
-    }
-
     /**
      * @inheritDoc
      */
     public function registerScripts(array $scripts)
     {
         add_action('wp_footer', function () use ($scripts) {
-            /** @var FooterTemplateScriptInterface[] $scripts */
+            /** @var FooterScriptInterface[] $scripts */
             foreach ($scripts as $script) {
                 if ($script instanceof ConditionAwareInterface && $script->hasConditions()) {
                     $evaluated = true;
@@ -49,14 +35,22 @@ class FooterTemplateScriptsRegistrator implements FooterTemplateScriptsRegistrat
     }
     
     /**
-     * @param FooterTemplateScriptInterface $script
+     * @param FooterScriptInterface $script
      */
-    private function registerScript(FooterTemplateScriptInterface $script)
+    private function registerScript(FooterScriptInterface $script)
     {
+        if (!empty($script->getDependencies())) {
+            $wp_scripts = wp_scripts();
+            foreach ($script->getDependencies() as $dependency) {
+                if (in_array($dependency, $wp_scripts->registered)) {
+                    $wp_scripts->enqueue($dependency);
+                }
+            }
+        }
         echo $this->getFinalContent(
             $script->getId(),
             $script->getType(),
-            $this->templating->render($script->getTemplatePath())
+            $script->getContent()
         );
     }
 
@@ -68,6 +62,11 @@ class FooterTemplateScriptsRegistrator implements FooterTemplateScriptsRegistrat
      */
     private function getFinalContent($id, $type, $content)
     {
-        return sprintf('<script type="%s" id="%s">%s</script>', $type, $id, $content);
+        return sprintf(
+            '<script%s%s>%s</script>',
+            $type ? sprintf(' type="%s"', $type) : '',
+            $id ? sprintf(' id="%s"', $id) : '',
+            $content
+        );
     }
 }

@@ -21,7 +21,7 @@ interface AssetInterface
     public function getSource();
 
     /**
-     * @return AssetInterface[]
+     * @return array
      */
     public function getDependencies();
 

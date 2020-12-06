@@ -5,9 +5,9 @@ namespace MooMoo\Platform\Bundle\AssetBundle;
 use MooMoo\Platform\Bundle\AssetBundle\DependencyInjection\CompilerPass\AssetLocalizationsCompilerPass;
 use MooMoo\Platform\Bundle\AssetBundle\Model\Asset;
 use MooMoo\Platform\Bundle\AssetBundle\Registrator\Assets\AssetsRegistratorInterface;
-use MooMoo\Platform\Bundle\AssetBundle\Registrator\FooterTemplateScripts\FooterTemplateScriptsRegistratorInterface;
+use MooMoo\Platform\Bundle\AssetBundle\Registrator\FooterScripts\FooterScriptsRegistratorInterface;
 use MooMoo\Platform\Bundle\AssetBundle\Registry\AssetsRegistryInterface;
-use MooMoo\Platform\Bundle\AssetBundle\Registry\FooterTemplateScriptsRegistryInterface;
+use MooMoo\Platform\Bundle\AssetBundle\Registry\FooterScriptsRegistryInterface;
 use MooMoo\Platform\Bundle\KernelBundle\Bundle\Bundle;
 use MooMoo\Platform\Bundle\KernelBundle\DependencyInjection\CompilerPass\KernelCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -24,8 +24,8 @@ class AssetBundle extends Bundle
 
         $container->addCompilerPass(
             new KernelCompilerPass(
-                'moomoo_footer_template_script',
-                'moomoo_asset.registry.footer_template_scripts',
+                'moomoo_footer_script',
+                'moomoo_asset.registry.footer_scripts',
                 'addScript'
             )
         );
@@ -58,9 +58,9 @@ class AssetBundle extends Bundle
         $adminAssetsRegistrator = $this->container->get('moomoo_asset.registrator.admin');
         $adminAssetsRegistrator->registerAssets($assetsRegistry->getAssets(Asset::ADMIN_CATEGORY));
 
-        /** @var FooterTemplateScriptsRegistryInterface $footerTemplateScriptsRegistry */
+        /** @var FooterScriptsRegistryInterface $footerTemplateScriptsRegistry */
         $footerTemplateScriptsRegistry = $this->container->get('moomoo_asset.registry.footer_template_scripts');
-        /** @var FooterTemplateScriptsRegistratorInterface $footerTemplateScriptsRegistrator */
+        /** @var FooterScriptsRegistratorInterface $footerTemplateScriptsRegistrator */
         $footerTemplateScriptsRegistrator = $this->container->get('moomoo_asset.registrator.footer_template_scripts');
         $footerTemplateScriptsRegistrator->registerScripts($footerTemplateScriptsRegistry->getScripts());
         
