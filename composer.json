@@ -8,14 +8,14 @@
     }
   },
   "require": {
-    "symfony/config": "3.4.*",
-    "symfony/finder": "3.4.*",
-    "symfony/filesystem": "3.4.*",
-    "symfony/dependency-injection": "3.4.*",
-    "symfony/proxy-manager-bridge": "3.4.*",
-    "symfony/yaml": "3.4.*",
-    "symfony/templating": "3.4.*",
-    "symfony/twig-bridge": "3.4.*",
-    "dg/composer-cleaner": "^2.0"
+    "symfony/config": "5.2.0",
+    "symfony/finder": "5.2.0",
+    "symfony/filesystem": "5.2.0",
+    "symfony/dependency-injection": "5.2.0",
+    "symfony/proxy-manager-bridge": "5.2.0",
+    "symfony/yaml": "5.2.0",
+    "symfony/templating": "5.2.0",
+    "symfony/twig-bridge": "5.2.0",
+    "dg/composer-cleaner": "2.2"
   }
 }
