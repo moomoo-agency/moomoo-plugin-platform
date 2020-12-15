@@ -4,7 +4,7 @@ namespace MooMoo\Platform\Bundle\QueryBundle\Hooks;
 
 use MooMoo\Platform\Bundle\HookBundle\Model\AbstractHook;
 
-class TitleInHook extends AbstractHook
+class TitleHook extends AbstractHook
 {
     const QUERY_ARGUMENT = 'title';
     
