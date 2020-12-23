@@ -7,6 +7,7 @@ use MooMoo\Platform\Bundle\KernelBundle\Boot\CompositeBootService;
 use MooMoo\Platform\Bundle\KernelBundle\Bundle\Bundle;
 use MooMoo\Platform\Bundle\KernelBundle\DependencyInjection\CompilerPass\KernelCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
 
 class KernelBundle extends Bundle
 {
@@ -29,6 +30,13 @@ class KernelBundle extends Bundle
                 'twig.extension',
                 'twig',
                 'addExtension'
+            )
+        );
+        $container->addCompilerPass(
+            new RegisterListenersPass(
+                'event_dispatcher',
+                'moomoo_event_listener',
+                'moomoo_event_subscriber'
             )
         );
     }

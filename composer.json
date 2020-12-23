@@ -9,6 +9,7 @@
   },
   "require": {
     "symfony/config": "5.2.0",
+    "symfony/event-dispatcher": "5.2.0",
     "symfony/finder": "5.2.0",
     "symfony/filesystem": "5.2.0",
     "symfony/dependency-injection": "5.2.0",

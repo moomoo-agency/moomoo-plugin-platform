@@ -48,3 +48,6 @@ services:
         class: 'MooMoo\Platform\Bundle\KernelBundle\Provider\PluginNameForClassProvider'
         arguments:
             - '@service_container'
+
+    event_dispatcher:
+        class: 'Symfony\Component\EventDispatcher\EventDispatcher'
