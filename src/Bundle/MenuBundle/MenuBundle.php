@@ -49,7 +49,7 @@ class MenuBundle extends Bundle
         /** @var MenuElementsRegistratorInterface $adminMenuPagesRegistrator */
         $adminBarNodesRegistrator = $this->container->get('moomoo_menu.registrator.admin_bar_nodes');
         $adminBarNodesRegistrator->register($adminBarNodesRegistry->getMenuElements());
-        
+
         parent::boot();
     }
 }

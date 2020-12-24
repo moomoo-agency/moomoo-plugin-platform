@@ -35,7 +35,7 @@ class PostTypesRegistry implements PostTypesRegistryInterface
         if ($this->hasPostType($type)) {
             return $this->postTypes[$type];
         }
-        
+
         return null;
     }
 

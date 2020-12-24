@@ -14,7 +14,7 @@ class AdminBarNode extends ParameterBag implements AdminBarNodeInterface
     const HREF_FIELD = 'href';
     const GROUP_FIELD = 'group';
     const META_FIELD = 'meta';
-    
+
     use ConditionAwareTrait;
 
     /**
@@ -29,7 +29,8 @@ class AdminBarNode extends ParameterBag implements AdminBarNodeInterface
     {
         $this->urlGenerator = $urlGenerator;
     }
-        /**
+
+    /**
      * @inheritDoc
      */
     public function getIdentifier()
@@ -63,7 +64,7 @@ class AdminBarNode extends ParameterBag implements AdminBarNodeInterface
         } elseif ($this->urlGenerator) {
             return $this->urlGenerator->generate();
         }
-        
+
         return false;
     }
 

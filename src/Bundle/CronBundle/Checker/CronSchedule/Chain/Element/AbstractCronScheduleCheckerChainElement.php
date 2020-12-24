@@ -34,7 +34,7 @@ abstract class AbstractCronScheduleCheckerChainElement implements CronScheduleCh
     public function check(CronScheduleInterface $schedule)
     {
         $result = $this->checkSchedule($schedule);
-        
+
         if ($this->getSuccessor()) {
             return $this->getSuccessor()->check($schedule);
         } else {

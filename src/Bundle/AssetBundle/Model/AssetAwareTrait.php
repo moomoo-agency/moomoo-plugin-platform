@@ -8,7 +8,7 @@ trait AssetAwareTrait
      * @var AssetInterface[]
      */
     private $assets = [];
-    
+
     /**
      * @return bool
      */

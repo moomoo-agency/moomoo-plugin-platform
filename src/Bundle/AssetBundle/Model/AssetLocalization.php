@@ -25,7 +25,7 @@ class AssetLocalization extends ParameterBag implements AssetLocalizationInterfa
     {
         return $this->get(self::PROPERTY_NAME_FIELD);
     }
-    
+
     /**
      * @inheritDoc
      */

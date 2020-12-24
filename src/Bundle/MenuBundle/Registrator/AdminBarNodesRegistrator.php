@@ -2,9 +2,11 @@
 
 namespace MooMoo\Platform\Bundle\MenuBundle\Registrator;
 
+use Exception;
 use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareInterface;
 use MooMoo\Platform\Bundle\MenuBundle\Model\AdminBarNodeInterface;
 use MooMoo\Platform\Bundle\MenuBundle\Model\MenuElementInterface;
+use WP_Admin_Bar;
 
 class AdminBarNodesRegistrator implements MenuElementsRegistratorInterface
 {
@@ -19,7 +21,7 @@ class AdminBarNodesRegistrator implements MenuElementsRegistratorInterface
             function () use ($menuElements) {
                 foreach ($menuElements as $menuElement) {
                     if (!$menuElement instanceof AdminBarNodeInterface) {
-                        throw new \Exception('AdminBarNodesRegistrator can register just AdminBarNodeInterface');
+                        throw new Exception('AdminBarNodesRegistrator can register just AdminBarNodeInterface');
                     }
                     if ($menuElement instanceof ConditionAwareInterface && $menuElement->hasConditions()) {
                         $evaluated = true;
@@ -48,7 +50,7 @@ class AdminBarNodesRegistrator implements MenuElementsRegistratorInterface
     {
         add_action(
             'admin_bar_menu',
-            function (\WP_Admin_Bar $wp_admin_bar) use ($menuElement) {
+            function (WP_Admin_Bar $wp_admin_bar) use ($menuElement) {
                 $wp_admin_bar->add_node(
                     [
                         'parent' => $menuElement->getParent(),

@@ -23,8 +23,8 @@ class StyleAssetsRegistratorChainElement extends AbstractAssetsRegistratorChainE
             $asset->getHandle(),
             $this->pathProvider->getAssetPath($asset),
             $asset->getDependencies(),
-            $asset->getVersion() ? : '1.0.0',
-            $asset->getExtra() ? : 'all'
+            $asset->getVersion() ?: '1.0.0',
+            $asset->getExtra() ?: 'all'
         );
         if (!empty($asset->getAssetData())) {
             foreach ($asset->getAssetData() as $dataItem) {

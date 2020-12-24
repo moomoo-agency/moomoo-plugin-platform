@@ -51,7 +51,7 @@ class PostBundle extends Bundle
         /** @var PostStatusesRegistratorInterface $postStatusesRegistrator */
         $postStatusesRegistrator = $this->container->get('moomoo_post.registrator.post_statuses');
         $postStatusesRegistrator->registerPostStatuses($postStatusesRegistry->getPostStatuses());
-        
+
         parent::boot();
     }
 }

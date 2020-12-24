@@ -2,6 +2,7 @@
 
 namespace MooMoo\Platform\Bundle\CronBundle\Registry;
 
+use Exception;
 use MooMoo\Platform\Bundle\CronBundle\Checker\CronCommand\CronCommandCheckerInterface;
 use MooMoo\Platform\Bundle\CronBundle\Model\CronCommandInterface;
 
@@ -27,13 +28,13 @@ class CronCommandsRegistry implements CronCommandsRegistryInterface
 
     /**
      * @param CronCommandInterface $command
-     * @throws \Exception
+     * @throws Exception
      */
     public function addCronCommand(CronCommandInterface $command)
     {
         if ($this->checker->check($command)) {
             if (isset($this->commands[$command->getName()])) {
-                throw new \Exception(sprintf('CronCommand with name "%s" already exists', $command->getName()));
+                throw new Exception(sprintf('CronCommand with name "%s" already exists', $command->getName()));
             }
             $this->commands[$command->getName()] = $command;
         }
@@ -55,7 +56,7 @@ class CronCommandsRegistry implements CronCommandsRegistryInterface
         if ($this->hasCronCommand($name)) {
             return $this->commands[$name];
         }
-        
+
         return null;
     }
 

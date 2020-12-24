@@ -15,7 +15,7 @@ class CronRecurrentCommandsSchedulerChainElement extends AbstractCronCommandsSch
         if ($command instanceof CronRecurrentCommandInterface) {
             return true;
         }
-        
+
         return false;
     }
 

@@ -8,7 +8,7 @@ use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareTrait;
 class Asset implements AssetInterface, ConditionAwareInterface
 {
     use ConditionAwareTrait;
-    
+
     /**
      * @var string
      */
@@ -38,7 +38,7 @@ class Asset implements AssetInterface, ConditionAwareInterface
      * @var string
      */
     private $type;
-    
+
     /**
      * @var string
      */
@@ -71,7 +71,8 @@ class Asset implements AssetInterface, ConditionAwareInterface
         array $dependencies = [],
         $version = false,
         $extra = null
-    ) {
+    )
+    {
         $this->category = $category;
         $this->type = $type;
         $this->handle = $handle;
@@ -128,7 +129,7 @@ class Asset implements AssetInterface, ConditionAwareInterface
     {
         return $this->type;
     }
-    
+
     /**
      * @return string
      */
@@ -136,7 +137,7 @@ class Asset implements AssetInterface, ConditionAwareInterface
     {
         return $this->category;
     }
-    
+
     /**
      * @return AssetLocalizationInterface[]
      */
@@ -144,7 +145,7 @@ class Asset implements AssetInterface, ConditionAwareInterface
     {
         return $this->localizations;
     }
-    
+
     /**
      * @param AssetLocalizationInterface $localization
      * @return $this

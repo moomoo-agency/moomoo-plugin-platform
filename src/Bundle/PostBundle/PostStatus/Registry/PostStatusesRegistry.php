@@ -35,7 +35,7 @@ class PostStatusesRegistry implements PostStatusesRegistryInterface
         if ($this->hasPostStatus($Status)) {
             return $this->postStatuses[$Status];
         }
-        
+
         return null;
     }
 

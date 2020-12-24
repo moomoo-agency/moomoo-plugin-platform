@@ -36,7 +36,7 @@ class HookBundle extends Bundle
         /** @var HooksRegistratorInterface $hooksRegistrator */
         $hooksRegistrator = $this->container->get('moomoo_hook.hooks_registrator.main');
         $hooksRegistrator->registerHooks($hooksRegistry->getHooks());
-        
+
         parent::boot();
     }
 }

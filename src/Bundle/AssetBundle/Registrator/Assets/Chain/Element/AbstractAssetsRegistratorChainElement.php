@@ -41,7 +41,7 @@ abstract class AbstractAssetsRegistratorChainElement implements
     {
         $this->registrationFunction = $registrationFunction;
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -79,7 +79,7 @@ abstract class AbstractAssetsRegistratorChainElement implements
             $this->getSuccessor()->register($asset);
         }
     }
-    
+
     /**
      * @param AssetsRegistratorChainElementInterface $assetRegistrator
      */

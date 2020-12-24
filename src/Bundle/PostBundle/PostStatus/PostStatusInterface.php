@@ -8,12 +8,12 @@ interface PostStatusInterface
      * @return string
      */
     public function getStatus();
-    
+
     /**
      * @return array
      */
     public function getPostTypes();
-    
+
     /**
      * @return array
      */

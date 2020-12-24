@@ -1,2 +1,2 @@
 bundles:
-    - { name: MooMoo\Platform\Bundle\AssetBundle\AssetBundle, priority: 1000 }
+  - { name: MooMoo\Platform\Bundle\AssetBundle\AssetBundle, priority: 1000 }

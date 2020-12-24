@@ -45,7 +45,7 @@ abstract class AbstractCronCommandsSchedulerChainElement implements
         if (!empty($commands)) {
             foreach ($commands as $command) {
                 $commandClass = get_class($command);
-                $filteredBundles = array_filter($this->bundles, function(BundleInterface $bundle) use ($commandClass) {
+                $filteredBundles = array_filter($this->bundles, function (BundleInterface $bundle) use ($commandClass) {
                     if (strpos($commandClass, $bundle->getNamespace()) !== false) {
                         return true;
                     }

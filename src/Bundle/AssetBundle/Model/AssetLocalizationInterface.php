@@ -8,12 +8,12 @@ interface AssetLocalizationInterface
      * @return string
      */
     public function getObjectName();
-    
+
     /**
      * @return string
      */
     public function getPropertyName();
-    
+
     /**
      * @return mixed
      */

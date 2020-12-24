@@ -2,7 +2,7 @@
 
 namespace MooMoo\Platform\Bundle\AssetBundle\Model;
 
-interface FooterScriptInterface
+interface InlineAssetInterface
 {
     /**
      * @return string
@@ -14,6 +14,17 @@ interface FooterScriptInterface
      * @return $this
      */
     public function setType($type);
+
+    /**
+     * @return string
+     */
+    public function getTagType();
+
+    /**
+     * @param string $tagType
+     * @return $this
+     */
+    public function setTagType($tagType);
 
     /**
      * @return string
@@ -47,4 +58,15 @@ interface FooterScriptInterface
      * @return $this
      */
     public function setDependencies(array $dependencies);
+
+    /**
+     * @return AssetDataItemInterface[]
+     */
+    public function getAssetData();
+
+    /**
+     * @param AssetDataItemInterface $dataItem
+     * @return $this
+     */
+    public function addAssetDataItem(AssetDataItemInterface $dataItem);
 }

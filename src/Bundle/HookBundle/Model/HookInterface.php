@@ -16,7 +16,7 @@ interface HookInterface
      * @return string
      */
     public function getType();
-    
+
     /**
      * @return string
      */

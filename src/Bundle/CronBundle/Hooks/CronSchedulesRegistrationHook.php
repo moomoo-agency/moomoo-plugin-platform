@@ -45,7 +45,7 @@ class CronSchedulesRegistrationHook extends AbstractHook
             $this->schedules[$schedule->getName()] = $schedule;
         }
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -66,7 +66,7 @@ class CronSchedulesRegistrationHook extends AbstractHook
                 CronSchedule::DISPLAY_FIELD => esc_html__($schedule->getDisplay())
             ];
         }
-        
+
         return $schedules;
     }
 }

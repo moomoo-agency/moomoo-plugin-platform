@@ -2,6 +2,7 @@
 
 namespace MooMoo\Platform\Bundle\AssetBundle\DependencyInjection\CompilerPass;
 
+use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -46,7 +47,7 @@ class AssetLocalizationsCompilerPass implements CompilerPassInterface
                 }
             }
             if ($handle === null) {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     sprintf(
                         'Tag "%s" for service "%s" does not have required param "handle"',
                         self::LOCALIZATION_TAG,

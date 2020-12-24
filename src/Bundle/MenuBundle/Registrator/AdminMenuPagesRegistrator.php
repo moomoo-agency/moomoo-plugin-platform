@@ -2,6 +2,7 @@
 
 namespace MooMoo\Platform\Bundle\MenuBundle\Registrator;
 
+use Exception;
 use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareInterface;
 use MooMoo\Platform\Bundle\MenuBundle\Model\AdminMenuPageInterface;
 use MooMoo\Platform\Bundle\MenuBundle\Model\MenuElementInterface;
@@ -33,7 +34,7 @@ class AdminMenuPagesRegistrator implements MenuElementsRegistratorInterface
             function () use ($menuElements) {
                 foreach ($menuElements as $menuElement) {
                     if (!$menuElement instanceof AdminMenuPageInterface) {
-                        throw new \Exception('AdminMenuPagesRegistrator can register just AdminMenuPageInterface');
+                        throw new Exception('AdminMenuPagesRegistrator can register just AdminMenuPageInterface');
                     }
                     if ($menuElement instanceof ConditionAwareInterface && $menuElement->hasConditions()) {
                         $evaluated = true;
@@ -54,7 +55,7 @@ class AdminMenuPagesRegistrator implements MenuElementsRegistratorInterface
             }
         );
     }
-    
+
     /**
      * @param AdminMenuPageInterface $menuElement
      */

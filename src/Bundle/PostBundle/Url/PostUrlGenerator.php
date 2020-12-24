@@ -2,6 +2,8 @@
 
 namespace MooMoo\Platform\Bundle\PostBundle\Url;
 
+use WP_Post;
+
 class PostUrlGenerator implements UrlGeneratorInterface
 {
     /**
@@ -14,7 +16,7 @@ class PostUrlGenerator implements UrlGeneratorInterface
      */
     public function generate()
     {
-        /** @var \WP_Post $post */
+        /** @var WP_Post $post */
         $post = get_post();
         if ($post) {
             $link = get_permalink($post->ID);

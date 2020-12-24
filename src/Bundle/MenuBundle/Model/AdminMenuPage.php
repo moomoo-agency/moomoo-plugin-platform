@@ -15,9 +15,9 @@ class AdminMenuPage extends ParameterBag implements AdminMenuPageInterface
     const ICON_URL_FIELD = 'icon_url';
     const POSITION_FIELD = 'position';
     const PAGE_FIELD = 'page';
-    
+
     use ConditionAwareTrait;
-    
+
     /**
      * @inheritDoc
      */

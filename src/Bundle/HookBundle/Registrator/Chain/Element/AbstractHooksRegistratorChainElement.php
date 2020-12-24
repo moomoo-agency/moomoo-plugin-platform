@@ -14,7 +14,7 @@ abstract class AbstractHooksRegistratorChainElement implements
      * @var HooksRegistratorChainElementInterface|null
      */
     private $successor;
-    
+
     /**
      * @inheritDoc
      */

@@ -2,6 +2,7 @@
 
 namespace MooMoo\Platform\Bundle\AssetBundle\Path\Chain\Element;
 
+use InvalidArgumentException;
 use MooMoo\Platform\Bundle\AssetBundle\Model\AssetInterface;
 
 class PluginAssetPathProvider extends AbstractAssetPathProviderChainElement
@@ -22,11 +23,11 @@ class PluginAssetPathProvider extends AbstractAssetPathProviderChainElement
         }
 
         if ($subFolder === null) {
-            throw new \InvalidArgumentException('Not correct asset type');
+            throw new InvalidArgumentException('Not correct asset type');
         }
 
-        $base_url = untrailingslashit( get_site_url(null, sprintf('/wp-content/%s/', static::BASE_FOLDER)) );
-        $plugins_path = sprintf('%swp-content/%s', ABSPATH, static::BASE_FOLDER );
+        $base_url = untrailingslashit(get_site_url(null, sprintf('/wp-content/%s/', static::BASE_FOLDER)));
+        $plugins_path = sprintf('%swp-content/%s', ABSPATH, static::BASE_FOLDER);
         $assetPathParts = explode(':', $asset->getSource());
 
         $relativePath = sprintf(
@@ -47,7 +48,7 @@ class PluginAssetPathProvider extends AbstractAssetPathProviderChainElement
         } elseif ($this->getSuccessor()) {
             return $this->getSuccessor()->getAssetPath($asset);
         }
-        
+
         return null;
     }
 }

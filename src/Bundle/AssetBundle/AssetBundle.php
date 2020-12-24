@@ -5,9 +5,9 @@ namespace MooMoo\Platform\Bundle\AssetBundle;
 use MooMoo\Platform\Bundle\AssetBundle\DependencyInjection\CompilerPass\AssetLocalizationsCompilerPass;
 use MooMoo\Platform\Bundle\AssetBundle\Model\Asset;
 use MooMoo\Platform\Bundle\AssetBundle\Registrator\Assets\AssetsRegistratorInterface;
-use MooMoo\Platform\Bundle\AssetBundle\Registrator\FooterScripts\FooterScriptsRegistratorInterface;
+use MooMoo\Platform\Bundle\AssetBundle\Registrator\InlineAssets\InlineAssetsRegistratorInterface;
 use MooMoo\Platform\Bundle\AssetBundle\Registry\AssetsRegistryInterface;
-use MooMoo\Platform\Bundle\AssetBundle\Registry\FooterScriptsRegistryInterface;
+use MooMoo\Platform\Bundle\AssetBundle\Registry\InlineAssetsRegistryInterface;
 use MooMoo\Platform\Bundle\KernelBundle\Bundle\Bundle;
 use MooMoo\Platform\Bundle\KernelBundle\DependencyInjection\CompilerPass\KernelCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -24,12 +24,12 @@ class AssetBundle extends Bundle
 
         $container->addCompilerPass(
             new KernelCompilerPass(
-                'moomoo_footer_script',
-                'moomoo_asset.registry.footer_scripts',
-                'addScript'
+                'moomoo_inline_asset',
+                'moomoo_asset.registry.inline_assets',
+                'addAsset'
             )
         );
-        
+
         $container->addCompilerPass(
             new KernelCompilerPass(
                 'moomoo_asset',
@@ -58,12 +58,12 @@ class AssetBundle extends Bundle
         $adminAssetsRegistrator = $this->container->get('moomoo_asset.registrator.admin');
         $adminAssetsRegistrator->registerAssets($assetsRegistry->getAssets(Asset::ADMIN_CATEGORY));
 
-        /** @var FooterScriptsRegistryInterface $footerScriptsRegistry */
-        $footerScriptsRegistry = $this->container->get('moomoo_asset.registry.footer_scripts');
-        /** @var FooterScriptsRegistratorInterface $footerScriptsRegistrator */
-        $footerScriptsRegistrator = $this->container->get('moomoo_asset.registrator.footer_scripts');
-        $footerScriptsRegistrator->registerScripts($footerScriptsRegistry->getScripts());
-        
+        /** @var InlineAssetsRegistryInterface $inlineAssetsRegistry */
+        $inlineAssetsRegistry = $this->container->get('moomoo_asset.registry.inline_assets');
+        /** @var InlineAssetsRegistratorInterface $inlineAssetsRegistrator */
+        $inlineAssetsRegistrator = $this->container->get('moomoo_asset.registrator.inline_assets');
+        $inlineAssetsRegistrator->registerAssets($inlineAssetsRegistry->getAssets());
+
         parent::boot();
     }
 }

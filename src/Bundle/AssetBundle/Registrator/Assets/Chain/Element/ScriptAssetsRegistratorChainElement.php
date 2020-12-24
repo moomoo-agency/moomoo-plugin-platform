@@ -25,8 +25,8 @@ class ScriptAssetsRegistratorChainElement extends AbstractAssetsRegistratorChain
             $asset->getHandle(),
             $this->pathProvider->getAssetPath($asset),
             $asset->getDependencies(),
-            $asset->getVersion() ? : '1.0.0',
-            $asset->getExtra() ? : true
+            $asset->getVersion() ?: '1.0.0',
+            $asset->getExtra() ?: true
         );
         if (!empty($asset->getLocalizations())) {
             $params = $this->transformLocalizations($asset->getLocalizations());
@@ -40,7 +40,7 @@ class ScriptAssetsRegistratorChainElement extends AbstractAssetsRegistratorChain
             }
         }
     }
-    
+
     /**
      * @param AssetLocalizationInterface[] $localizations
      * @return array

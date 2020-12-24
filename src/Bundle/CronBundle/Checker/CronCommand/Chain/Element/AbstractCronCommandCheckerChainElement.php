@@ -34,7 +34,7 @@ abstract class AbstractCronCommandCheckerChainElement implements CronCommandChec
     public function check(CronCommandInterface $command)
     {
         $result = $this->checkCommand($command);
-        
+
         if ($this->getSuccessor()) {
             return $this->getSuccessor()->check($command);
         } else {

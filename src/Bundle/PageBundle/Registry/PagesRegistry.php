@@ -18,7 +18,7 @@ class PagesRegistry implements PagesRegistryInterface
     {
         $this->pages[$page->getSlug()] = $page;
     }
-    
+
     /**
      * {@inheritdoc}
      */

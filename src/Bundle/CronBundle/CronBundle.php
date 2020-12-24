@@ -2,8 +2,8 @@
 
 namespace MooMoo\Platform\Bundle\CronBundle;
 
-use MooMoo\Platform\Bundle\CronBundle\Scheduler\CronCommandsSchedulerInterface;
 use MooMoo\Platform\Bundle\CronBundle\Registry\CronCommandsRegistryInterface;
+use MooMoo\Platform\Bundle\CronBundle\Scheduler\CronCommandsSchedulerInterface;
 use MooMoo\Platform\Bundle\KernelBundle\Bundle\Bundle;
 use MooMoo\Platform\Bundle\KernelBundle\DependencyInjection\CompilerPass\KernelCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

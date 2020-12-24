@@ -6,7 +6,7 @@ interface AssetInterface
 {
     const FRONTEND_CATEGORY = 'frontend';
     const ADMIN_CATEGORY = 'admin';
-    
+
     const SCRIPT_TYPE = 'script';
     const STYLE_TYPE = 'style';
 

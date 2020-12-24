@@ -2,9 +2,7 @@
 
 namespace MooMoo\Platform\Bundle\MenuBundle\Registry;
 
-use MooMoo\Platform\Bundle\KernelBundle\Boot\BootServiceInterface;
 use MooMoo\Platform\Bundle\MenuBundle\Model\MenuElementInterface;
-use MooMoo\Platform\Bundle\MenuBundle\Registrator\MenuElementsRegistratorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class MenuElementsRegistry implements MenuElementsRegistryInterface
@@ -47,7 +45,7 @@ class MenuElementsRegistry implements MenuElementsRegistryInterface
         if ($this->hasMenuElement($identifier)) {
             return $this->menuElements[$identifier];
         }
-        
+
         return null;
     }
 

@@ -6,14 +6,17 @@ use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareInterface;
 use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareTrait;
 use MooMoo\Platform\Bundle\KernelBundle\ParameterBag\ParameterBag;
 
-class FooterScript extends ParameterBag implements FooterScriptInterface, ConditionAwareInterface
+class InlineAsset extends ParameterBag implements InlineAssetInterface, ConditionAwareInterface
 {
     use ConditionAwareTrait;
 
     const TYPE_FIELD = 'type';
+    const TAG_TYPE_FIELD = 'tagType';
     const ID_FIELD = 'id';
     const CONTENT_FIELD = 'content';
     const DEPENDENCIES_FIELD = 'dependencies';
+    const ASSET_DATA_FIELD = 'assetData';
+
     /**
      * @inheritDoc
      */
@@ -28,6 +31,24 @@ class FooterScript extends ParameterBag implements FooterScriptInterface, Condit
     public function setType($type)
     {
         $this->set(self::TYPE_FIELD, $type);
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTagType()
+    {
+        return $this->get(self::TAG_TYPE_FIELD, 'text/javascript');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setTagType($tagType)
+    {
+        $this->set(self::TAG_TYPE_FIELD, $tagType);
 
         return $this;
     }
@@ -82,6 +103,28 @@ class FooterScript extends ParameterBag implements FooterScriptInterface, Condit
     public function setDependencies(array $dependencies)
     {
         $this->set(self::DEPENDENCIES_FIELD, $dependencies);
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAssetData()
+    {
+        return $this->get(self::ASSET_DATA_FIELD, []);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function addAssetDataItem(AssetDataItemInterface $dataItem)
+    {
+        $assetData = $this->getAssetData();
+        if (!in_array($dataItem, $assetData)) {
+            $assetData[$dataItem->getKey()] = $dataItem;
+            $this->set(self::ASSET_DATA_FIELD, $dataItem);
+        }
 
         return $this;
     }

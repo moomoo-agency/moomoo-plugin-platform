@@ -8,7 +8,7 @@ interface AdminMenuPageInterface extends MenuElementInterface
      * @return string
      */
     public function getMenuSlug();
-    
+
     /**
      * @return string
      */
@@ -23,7 +23,7 @@ interface AdminMenuPageInterface extends MenuElementInterface
      * @return string
      */
     public function getPage();
-    
+
     /**
      * @return string
      */

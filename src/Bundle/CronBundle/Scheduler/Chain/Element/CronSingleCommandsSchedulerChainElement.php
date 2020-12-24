@@ -15,7 +15,7 @@ class CronSingleCommandsSchedulerChainElement extends AbstractCronCommandsSchedu
         if ($command instanceof CronSingleCommandInterface) {
             return true;
         }
-        
+
         return false;
     }
 

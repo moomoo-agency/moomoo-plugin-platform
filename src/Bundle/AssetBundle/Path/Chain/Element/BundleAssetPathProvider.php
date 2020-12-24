@@ -2,6 +2,7 @@
 
 namespace MooMoo\Platform\Bundle\AssetBundle\Path\Chain\Element;
 
+use InvalidArgumentException;
 use MooMoo\Platform\Bundle\AssetBundle\Model\AssetInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -19,7 +20,7 @@ class BundleAssetPathProvider extends AbstractAssetPathProviderChainElement
     {
         $this->bundles = $container->get('kernel')->getBundles();
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -34,10 +35,10 @@ class BundleAssetPathProvider extends AbstractAssetPathProviderChainElement
         }
 
         if ($subFolder === null) {
-            throw new \InvalidArgumentException('Not correct asset type');
+            throw new InvalidArgumentException('Not correct asset type');
         }
 
-        $plugins_url = untrailingslashit( plugins_url( '/') );
+        $plugins_url = untrailingslashit(plugins_url('/'));
         $plugins_path = ABSPATH . 'wp-content/plugins';
         $assetPathParts = explode(':', $asset->getSource());
 

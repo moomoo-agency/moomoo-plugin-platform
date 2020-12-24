@@ -1,16 +1,16 @@
 services:
-    moomoo_hook.registry.hooks:
-        class: 'MooMoo\Platform\Bundle\HookBundle\Registry\HooksRegistry'
-        public: true
+  moomoo_hook.registry.hooks:
+    class: 'MooMoo\Platform\Bundle\HookBundle\Registry\HooksRegistry'
+    public: true
 
-    moomoo_hook.hooks_registrator.action:
-        class: 'MooMoo\Platform\Bundle\HookBundle\Registrator\Chain\Element\ActionHooksRegistratorChainElement'
-        calls:
-            - ['setSuccessor', ['@moomoo_hook.hooks_registrator.filter']]
+  moomoo_hook.hooks_registrator.action:
+    class: 'MooMoo\Platform\Bundle\HookBundle\Registrator\Chain\Element\ActionHooksRegistratorChainElement'
+    calls:
+      - [ 'setSuccessor', [ '@moomoo_hook.hooks_registrator.filter' ] ]
 
-    moomoo_hook.hooks_registrator.filter:
-        class: 'MooMoo\Platform\Bundle\HookBundle\Registrator\Chain\Element\FilterHooksRegistratorChainElement'
+  moomoo_hook.hooks_registrator.filter:
+    class: 'MooMoo\Platform\Bundle\HookBundle\Registrator\Chain\Element\FilterHooksRegistratorChainElement'
 
-    moomoo_hook.hooks_registrator.main:
-        parent: moomoo_hook.hooks_registrator.action
-        public: true
+  moomoo_hook.hooks_registrator.main:
+    parent: moomoo_hook.hooks_registrator.action
+    public: true

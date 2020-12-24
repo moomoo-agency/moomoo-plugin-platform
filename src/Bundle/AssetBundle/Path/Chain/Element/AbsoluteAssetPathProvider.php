@@ -16,7 +16,7 @@ class AbsoluteAssetPathProvider extends AbstractAssetPathProviderChainElement
         } elseif ($this->getSuccessor()) {
             return $this->getSuccessor()->getAssetPath($asset);
         }
-        
+
         return null;
     }
 }
