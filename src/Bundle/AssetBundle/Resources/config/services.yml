@@ -73,7 +73,7 @@ services:
     class: 'MooMoo\Platform\Bundle\AssetBundle\Registrator\InlineAssets\Chain\Element\StyleInlineAssetsRegistratorChainElement'
 
   moomoo_asset.registrator.inline_assets.script:
-    class: 'MooMoo\Platform\Bundle\AssetBundle\Registrator\Assets\Chain\Element\ScriptInlineAssetsRegistratorChainElement'
+    class: 'MooMoo\Platform\Bundle\AssetBundle\Registrator\InlineAssets\Chain\Element\ScriptInlineAssetsRegistratorChainElement'
     calls:
       - [ 'setSuccessor', [ '@moomoo_asset.registrator.inline_assets.style' ] ]
 
