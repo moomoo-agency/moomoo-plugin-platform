@@ -317,7 +317,7 @@ class Kernel
         }
 
         $class = 'MooMooCachedContainer';
-        $cacheDir = sprintf('%s/%s/cache/', wp_upload_dir()['basedir'], $prefix);
+        $cacheDir = sprintf('%s/%s/cache', wp_upload_dir()['basedir'], $prefix);
         $cache = new ConfigCache($cacheDir.'/'.$class.'.php', $this->debug);
         $cachePath = $cache->getPath();
 
