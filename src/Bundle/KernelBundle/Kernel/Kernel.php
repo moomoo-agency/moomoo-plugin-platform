@@ -310,7 +310,7 @@ class Kernel
     {
         $cacheValidForPluginsVersions = false;
         $prefix = strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', explode('\\', get_class($this)))[0]);
-        $fs = new \Builderius\Symfony\Component\Filesystem\Filesystem();
+        $fs = new Filesystem();
         $currentPluginsVersions = (new PluginsVersionsProvider($this->plugins))->getPluginsVersions();
         foreach ($currentPluginsVersions as $plugin => $version) {
             if (strpos($plugin, '/') !== false) {
