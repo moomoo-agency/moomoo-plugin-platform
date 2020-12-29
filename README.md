@@ -1,2 +1,2 @@
 # moomoo-plugin-platform
-OOP based platform for creating Wordpress plugins
+OOP based platform for Wordpress plugins creation
