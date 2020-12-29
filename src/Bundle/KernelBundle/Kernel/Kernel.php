@@ -310,7 +310,24 @@ class Kernel
     {
         $cacheValidForPluginsVersions = false;
         $prefix = strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', explode('\\', get_class($this)))[0]);
+        $fs = new \Builderius\Symfony\Component\Filesystem\Filesystem();
         $currentPluginsVersions = (new PluginsVersionsProvider($this->plugins))->getPluginsVersions();
+        foreach ($currentPluginsVersions as $plugin => $version) {
+            if (strpos($plugin, '/') !== false) {
+                register_activation_hook(
+                    sprintf('%s/%s', wp_normalize_path( WP_PLUGIN_DIR ), $plugin),
+                    function () use ($prefix, $fs){
+                        $fs->remove(sprintf('%s/%s/cache', wp_upload_dir()['basedir'], $prefix));
+                    }
+                );
+                register_deactivation_hook(
+                    sprintf('%s/%s', wp_normalize_path( WP_PLUGIN_DIR ), $plugin),
+                    function () use ($prefix, $fs){
+                        $fs->remove(sprintf('%s/%s/cache', wp_upload_dir()['basedir'], $prefix));
+                    }
+                );
+            }
+        }
         $cachedPluginsVersions = json_decode(get_option($prefix . 'cached-plugin-versions'), true);
         if ($currentPluginsVersions === $cachedPluginsVersions) {
             $cacheValidForPluginsVersions = true;
