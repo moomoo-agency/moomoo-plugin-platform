@@ -2,9 +2,11 @@
 
 namespace MooMoo\Platform\Bundle\AssetBundle\Registrator\InlineAssets\Chain\Element;
 
+use MooMoo\Platform\Bundle\AssetBundle\Event\InlineAssetsContainingEvent;
 use MooMoo\Platform\Bundle\AssetBundle\Model\InlineAssetInterface;
 use MooMoo\Platform\Bundle\AssetBundle\Registrator\InlineAssets\InlineAssetsRegistratorInterface;
 use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 abstract class AbstractInlineAssetsRegistratorChainElement implements
     InlineAssetsRegistratorInterface,
@@ -13,9 +15,22 @@ abstract class AbstractInlineAssetsRegistratorChainElement implements
     const ASSET_REGISTRATION_FUNCTION = null;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    /**
      * @var InlineAssetsRegistratorChainElementInterface|null
      */
     private $successor;
+
+    /**
+     * @param EventDispatcherInterface $eventDispatcher
+     */
+    public function __construct(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
 
     /**
      * @inheritDoc
@@ -23,7 +38,9 @@ abstract class AbstractInlineAssetsRegistratorChainElement implements
     public function registerAssets(array $assets)
     {
         add_action('wp_enqueue_scripts', function () use ($assets) {
-            foreach ($assets as $asset) {
+            $event = new InlineAssetsContainingEvent($assets);
+            $this->eventDispatcher->dispatch($event, 'moomoo_inline_assets_before_registration');
+            foreach ($event->getAssets() as $asset) {
                 if (!empty($asset->getDependencies())) {
                     if ($asset instanceof ConditionAwareInterface && $asset->hasConditions()) {
                         $evaluated = true;
@@ -44,7 +61,9 @@ abstract class AbstractInlineAssetsRegistratorChainElement implements
             }
         });
         add_action(static::ASSET_REGISTRATION_FUNCTION, function () use ($assets) {
-            foreach ($assets as $asset) {
+            $event = new InlineAssetsContainingEvent($assets);
+            $this->eventDispatcher->dispatch($event, 'moomoo_inline_assets_before_registration');
+            foreach ($event->getAssets() as $asset) {
                 if ($asset instanceof ConditionAwareInterface && $asset->hasConditions()) {
                     $evaluated = true;
                     foreach ($asset->getConditions() as $condition) {

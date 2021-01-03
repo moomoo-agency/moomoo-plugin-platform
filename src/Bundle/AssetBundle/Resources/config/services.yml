@@ -35,6 +35,7 @@ services:
     abstract: true
     arguments:
       - '@moomoo_asset.path_provider.main'
+      - '@event_dispatcher'
 
   moomoo_asset.registrator.frontend.style:
     class: 'MooMoo\Platform\Bundle\AssetBundle\Registrator\Assets\Chain\Element\StyleAssetsRegistratorChainElement'
@@ -69,11 +70,19 @@ services:
     parent: moomoo_asset.registrator.admin.script
     public: true
 
+  moomoo_asset.registrator.inline_assets.abstract:
+    class: 'MooMoo\Platform\Bundle\AssetBundle\Registrator\InlineAssets\Chain\Element\AbstractInlineAssetsRegistratorChainElement'
+    abstract: true
+    arguments:
+      - '@event_dispatcher'
+
   moomoo_asset.registrator.inline_assets.style:
     class: 'MooMoo\Platform\Bundle\AssetBundle\Registrator\InlineAssets\Chain\Element\StyleInlineAssetsRegistratorChainElement'
+    parent: moomoo_asset.registrator.inline_assets.abstract
 
   moomoo_asset.registrator.inline_assets.script:
     class: 'MooMoo\Platform\Bundle\AssetBundle\Registrator\InlineAssets\Chain\Element\ScriptInlineAssetsRegistratorChainElement'
+    parent: moomoo_asset.registrator.inline_assets.abstract
     calls:
       - [ 'setSuccessor', [ '@moomoo_asset.registrator.inline_assets.style' ] ]
 

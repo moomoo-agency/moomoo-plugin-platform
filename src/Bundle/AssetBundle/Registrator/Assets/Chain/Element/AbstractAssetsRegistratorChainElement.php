@@ -2,6 +2,8 @@
 
 namespace MooMoo\Platform\Bundle\AssetBundle\Registrator\Assets\Chain\Element;
 
+use MooMoo\Platform\Bundle\AssetBundle\Event\AssetsContainingEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use MooMoo\Platform\Bundle\AssetBundle\Model\AssetInterface;
 use MooMoo\Platform\Bundle\AssetBundle\Path\AssetPathProviderInterface;
 use MooMoo\Platform\Bundle\AssetBundle\Registrator\Assets\AssetsRegistratorInterface;
@@ -17,6 +19,11 @@ abstract class AbstractAssetsRegistratorChainElement implements
     protected $pathProvider;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    /**
      * @var string
      */
     protected $registrationFunction = 'wp_enqueue_scripts';
@@ -28,10 +35,12 @@ abstract class AbstractAssetsRegistratorChainElement implements
 
     /**
      * @param AssetPathProviderInterface $pathProvider
+     * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(AssetPathProviderInterface $pathProvider)
+    public function __construct(AssetPathProviderInterface $pathProvider, EventDispatcherInterface $eventDispatcher)
     {
         $this->pathProvider = $pathProvider;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -48,7 +57,9 @@ abstract class AbstractAssetsRegistratorChainElement implements
     public function registerAssets(array $assets)
     {
         add_action($this->registrationFunction, function () use ($assets) {
-            foreach ($assets as $asset) {
+            $event = new AssetsContainingEvent($assets);
+            $this->eventDispatcher->dispatch($event, 'moomoo_assets_before_registration');
+            foreach ($event->getAssets() as $asset) {
                 if ($asset instanceof ConditionAwareInterface && $asset->hasConditions()) {
                     $evaluated = true;
                     foreach ($asset->getConditions() as $condition) {
