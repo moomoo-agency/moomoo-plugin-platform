@@ -70,8 +70,8 @@ abstract class AbstractInlineAssetsRegistratorChainElement implements
         foreach ($assetsByTypes as $type => $assets) {
             if ($this->isApplicable($type)) {
                 $this->registerAssetsByType($type, $assets);
-            } elseif ($this->getSuccessor() && $this->getSuccessor()->isApplicable($asset)) {
-                $this->registerAssetsByType($type, $assets);
+            } elseif ($this->getSuccessor() && $this->getSuccessor()->isApplicable($type)) {
+                $this->getSuccessor()->registerAssetsByType($type, $assets);
             }
         }
 
