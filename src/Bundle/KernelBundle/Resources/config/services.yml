@@ -50,4 +50,4 @@ services:
             - '@service_container'
 
     event_dispatcher:
-        class: 'Symfony\Component\EventDispatcher\EventDispatcher'
+        class: 'MooMoo\Platform\Bundle\KernelBundle\EventDispatcher\EventDispatcher'
