@@ -16,9 +16,10 @@ class EventDispatcher extends BaseEventDispatcher
         $stoppable = $event instanceof StoppableEventInterface;
 
         foreach ($listeners as $listener) {
-            if ($listener instanceof ConditionAwareInterface && $listener->hasConditions()) {
+            $listenerObject = $listener[0];
+            if ($listenerObject instanceof ConditionAwareInterface && $listenerObject->hasConditions()) {
                 $evaluated = true;
-                foreach ($listener->getConditions() as $condition) {
+                foreach ($listenerObject->getConditions() as $condition) {
                     if ($condition->evaluate() === false) {
                         $evaluated = false;
                         break;
