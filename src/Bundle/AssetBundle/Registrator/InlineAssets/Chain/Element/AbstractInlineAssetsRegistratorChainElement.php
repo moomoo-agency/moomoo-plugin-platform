@@ -39,7 +39,7 @@ abstract class AbstractInlineAssetsRegistratorChainElement implements
     {
         add_action('wp_enqueue_scripts', function () use ($assets) {
             $event = new InlineAssetsContainingEvent($assets);
-            $this->eventDispatcher->dispatch($event, 'moomoo_inline_assets_before_registration');
+            $this->eventDispatcher->dispatch($event, 'moomoo_inline_assets_before_dependencies_registration');
             foreach ($event->getAssets() as $asset) {
                 if (!empty($asset->getDependencies())) {
                     if ($asset instanceof ConditionAwareInterface && $asset->hasConditions()) {
@@ -61,6 +61,9 @@ abstract class AbstractInlineAssetsRegistratorChainElement implements
             }
         });
         $assetsByTypes = [];
+        foreach (static::ASSETS_TYPES as $possibleAssetType) {
+            $assetsByTypes[$possibleAssetType] = [];
+        }
         foreach ($assets as $asset) {
             $assetsByTypes[$asset->getType()][] = $asset;
         }
@@ -83,7 +86,7 @@ abstract class AbstractInlineAssetsRegistratorChainElement implements
         if ($this->isApplicable($type)) {
             add_action(static::ASSET_REGISTRATION_FUNCTION, function () use ($type, $assets) {
                 $event = new InlineAssetsContainingEvent($assets);
-                $this->eventDispatcher->dispatch($event, sprintf('moomoo_inline_assets_before_registration_%s', $type));
+                $this->eventDispatcher->dispatch($event, sprintf('moomoo_inline_assets_before_%ss_registration', $type));
                 foreach ($event->getAssets() as $asset) {
                     if ($asset instanceof ConditionAwareInterface && $asset->hasConditions()) {
                         $evaluated = true;

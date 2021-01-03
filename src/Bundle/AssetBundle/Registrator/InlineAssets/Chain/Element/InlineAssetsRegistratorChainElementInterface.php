@@ -6,6 +6,8 @@ use MooMoo\Platform\Bundle\AssetBundle\Model\InlineAssetInterface;
 
 interface InlineAssetsRegistratorChainElementInterface
 {
+    const ASSETS_TYPES = ['script', 'style'];
+
     /**
      * @param string $assetType
      * @return bool
