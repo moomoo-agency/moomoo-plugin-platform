@@ -60,38 +60,50 @@ abstract class AbstractInlineAssetsRegistratorChainElement implements
                 }
             }
         });
-        add_action(static::ASSET_REGISTRATION_FUNCTION, function () use ($assets) {
-            $event = new InlineAssetsContainingEvent($assets);
-            $this->eventDispatcher->dispatch($event, 'moomoo_inline_assets_before_registration');
-            foreach ($event->getAssets() as $asset) {
-                if ($asset instanceof ConditionAwareInterface && $asset->hasConditions()) {
-                    $evaluated = true;
-                    foreach ($asset->getConditions() as $condition) {
-                        if ($condition->evaluate() === false) {
-                            $evaluated = false;
-                            break;
-                        }
-                    }
-                    if (!$evaluated) {
-                        continue;
-                    }
-                    $this->registerAsset($asset);
-                } else {
-                    $this->registerAsset($asset);
-                }
+        $assetsByTypes = [];
+        foreach ($assets as $asset) {
+            $assetsByTypes[$asset->getType()][] = $asset;
+        }
+        foreach ($assetsByTypes as $type => $assets) {
+            if ($this->isApplicable($type)) {
+                $this->registerAssetsByType($type, $assets);
+            } elseif ($this->getSuccessor() && $this->getSuccessor()->isApplicable($asset)) {
+                $this->registerAssetsByType($type, $assets);
             }
-        });
+        }
+
     }
 
     /**
-     * @param InlineAssetInterface $asset
+     * @param $type
+     * @param $assets
      */
-    public function registerAsset(InlineAssetInterface $asset)
+    public function registerAssetsByType($type, $assets)
     {
-        if ($this->isApplicable($asset)) {
-            $this->register($asset);
-        } elseif ($this->getSuccessor() && $this->getSuccessor()->isApplicable($asset)) {
-            $this->getSuccessor()->register($asset);
+        if ($this->isApplicable($type)) {
+            add_action(static::ASSET_REGISTRATION_FUNCTION, function () use ($type, $assets) {
+                $event = new InlineAssetsContainingEvent($assets);
+                $this->eventDispatcher->dispatch($event, sprintf('moomoo_inline_assets_before_registration_%s', $type));
+                foreach ($event->getAssets() as $asset) {
+                    if ($asset instanceof ConditionAwareInterface && $asset->hasConditions()) {
+                        $evaluated = true;
+                        foreach ($asset->getConditions() as $condition) {
+                            if ($condition->evaluate() === false) {
+                                $evaluated = false;
+                                break;
+                            }
+                        }
+                        if (!$evaluated) {
+                            continue;
+                        }
+                        $this->registerAsset($asset);
+                    } else {
+                        $this->registerAsset($asset);
+                    }
+                }
+            });
+        } elseif ($this->getSuccessor() && $this->getSuccessor()->isApplicable($type)) {
+            $this->registerAssetsByType($type, $assets);
         }
     }
 

@@ -11,9 +11,9 @@ class ScriptInlineAssetsRegistratorChainElement extends AbstractInlineAssetsRegi
     /**
      * @inheritDoc
      */
-    public function isApplicable(InlineAssetInterface $asset)
+    public function isApplicable($assetType)
     {
-        return 'script' === $asset->getType();
+        return 'script' === $assetType;
     }
 
     /**
@@ -34,7 +34,7 @@ class ScriptInlineAssetsRegistratorChainElement extends AbstractInlineAssetsRegi
     /**
      * @inheritDoc
      */
-    public function register(InlineAssetInterface $asset)
+    public function registerAsset(InlineAssetInterface $asset)
     {
         echo $this->getFinalContent(
             $asset->getId(),

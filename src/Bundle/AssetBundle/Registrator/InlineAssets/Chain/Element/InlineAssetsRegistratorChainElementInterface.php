@@ -7,10 +7,10 @@ use MooMoo\Platform\Bundle\AssetBundle\Model\InlineAssetInterface;
 interface InlineAssetsRegistratorChainElementInterface
 {
     /**
-     * @param InlineAssetInterface $asset
+     * @param string $assetType
      * @return bool
      */
-    public function isApplicable(InlineAssetInterface $asset);
+    public function isApplicable($assetType);
 
     /**
      * @param InlineAssetInterface $asset
@@ -20,5 +20,5 @@ interface InlineAssetsRegistratorChainElementInterface
     /**
      * @param InlineAssetInterface $asset
      */
-    public function register(InlineAssetInterface $asset);
+    public function registerAsset(InlineAssetInterface $asset);
 }

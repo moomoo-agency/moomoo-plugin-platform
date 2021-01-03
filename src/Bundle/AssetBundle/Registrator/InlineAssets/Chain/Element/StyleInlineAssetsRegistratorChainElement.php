@@ -11,9 +11,9 @@ class StyleInlineAssetsRegistratorChainElement extends AbstractInlineAssetsRegis
     /**
      * @inheritDoc
      */
-    public function isApplicable(InlineAssetInterface $asset)
+    public function isApplicable($assetType)
     {
-        return 'style' === $asset->getType();
+        return 'style' === $assetType;
     }
 
     /**
@@ -34,7 +34,7 @@ class StyleInlineAssetsRegistratorChainElement extends AbstractInlineAssetsRegis
     /**
      * @inheritDoc
      */
-    public function register(InlineAssetInterface $asset)
+    public function registerAsset(InlineAssetInterface $asset)
     {
         echo $this->getFinalContent(
             $asset->getId(),

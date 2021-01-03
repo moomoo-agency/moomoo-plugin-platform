@@ -40,7 +40,7 @@ class InlineAsset extends ParameterBag implements InlineAssetInterface, Conditio
      */
     public function getTagType()
     {
-        return $this->get(self::TAG_TYPE_FIELD, 'text/javascript');
+        return $this->get(self::TAG_TYPE_FIELD);
     }
 
     /**
