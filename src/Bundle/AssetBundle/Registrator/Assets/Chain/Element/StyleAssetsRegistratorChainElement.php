@@ -3,6 +3,7 @@
 namespace MooMoo\Platform\Bundle\AssetBundle\Registrator\Assets\Chain\Element;
 
 use MooMoo\Platform\Bundle\AssetBundle\Model\AssetInterface;
+use MooMoo\Platform\Bundle\AssetBundle\Model\StyleInterface;
 
 class StyleAssetsRegistratorChainElement extends AbstractAssetsRegistratorChainElement
 {
@@ -11,7 +12,7 @@ class StyleAssetsRegistratorChainElement extends AbstractAssetsRegistratorChainE
      */
     public function isApplicable(AssetInterface $asset)
     {
-        return $asset->getType() === AssetInterface::STYLE_TYPE;
+        return $asset instanceof StyleInterface;
     }
 
     /**
@@ -19,12 +20,13 @@ class StyleAssetsRegistratorChainElement extends AbstractAssetsRegistratorChainE
      */
     public function register(AssetInterface $asset)
     {
+        /** @var StyleInterface $asset */
         wp_enqueue_style(
             $asset->getHandle(),
             $this->pathProvider->getAssetPath($asset),
             $asset->getDependencies(),
-            $asset->getVersion() ?: '1.0.0',
-            $asset->getExtra() ?: 'all'
+            $asset->getVersion() ?: false,
+            $asset->getMedia() ?: 'all'
         );
         if (!empty($asset->getAssetData())) {
             foreach ($asset->getAssetData() as $dataItem) {

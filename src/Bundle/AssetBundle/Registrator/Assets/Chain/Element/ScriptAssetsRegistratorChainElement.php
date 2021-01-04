@@ -3,7 +3,8 @@
 namespace MooMoo\Platform\Bundle\AssetBundle\Registrator\Assets\Chain\Element;
 
 use MooMoo\Platform\Bundle\AssetBundle\Model\AssetInterface;
-use MooMoo\Platform\Bundle\AssetBundle\Model\AssetLocalizationInterface;
+use MooMoo\Platform\Bundle\AssetBundle\Model\ScriptInterface;
+use MooMoo\Platform\Bundle\AssetBundle\Model\ScriptLocalizationInterface;
 use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareInterface;
 
 class ScriptAssetsRegistratorChainElement extends AbstractAssetsRegistratorChainElement
@@ -13,7 +14,7 @@ class ScriptAssetsRegistratorChainElement extends AbstractAssetsRegistratorChain
      */
     public function isApplicable(AssetInterface $asset)
     {
-        return $asset->getType() === AssetInterface::SCRIPT_TYPE;
+        return $asset instanceof ScriptInterface;
     }
 
     /**
@@ -21,12 +22,13 @@ class ScriptAssetsRegistratorChainElement extends AbstractAssetsRegistratorChain
      */
     public function register(AssetInterface $asset)
     {
+        /** @var ScriptInterface $asset */
         wp_enqueue_script(
             $asset->getHandle(),
             $this->pathProvider->getAssetPath($asset),
             $asset->getDependencies(),
-            $asset->getVersion() ?: '1.0.0',
-            $asset->getExtra() ?: true
+            $asset->getVersion() ?: false,
+            $asset->isInFooter() ?: false
         );
         if (!empty($asset->getLocalizations())) {
             $params = $this->transformLocalizations($asset->getLocalizations());
@@ -42,12 +44,13 @@ class ScriptAssetsRegistratorChainElement extends AbstractAssetsRegistratorChain
     }
 
     /**
-     * @param AssetLocalizationInterface[] $localizations
+     * @param ScriptLocalizationInterface[] $localizations
      * @return array
      */
     private function transformLocalizations(array $localizations)
     {
         $params = [];
+        /** @var ScriptLocalizationInterface $localization */
         foreach ($localizations as $localization) {
             if ($localization instanceof ConditionAwareInterface && $localization->hasConditions()) {
                 $evaluated = true;

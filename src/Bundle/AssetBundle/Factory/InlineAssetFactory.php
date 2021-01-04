@@ -4,7 +4,7 @@ namespace MooMoo\Platform\Bundle\AssetBundle\Factory;
 
 use MooMoo\Platform\Bundle\AssetBundle\Model\InlineAsset;
 
-class FooterScriptFactory implements FooterScriptFactoryInterface
+class InlineAssetFactory implements InlineAssetFactoryInterface
 {
     /**
      * {@inheritdoc}

@@ -7,9 +7,9 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-class AssetLocalizationsCompilerPass implements CompilerPassInterface
+class ScriptLocalizationsCompilerPass implements CompilerPassInterface
 {
-    const LOCALIZATION_TAG = 'moomoo_asset_localization';
+    const LOCALIZATION_TAG = 'moomoo_script_localization';
     const ASSET_TAG = 'moomoo_asset';
 
     /**
@@ -28,9 +28,20 @@ class AssetLocalizationsCompilerPass implements CompilerPassInterface
         }
         foreach ($assets as $asset => $attributes) {
             $definition = $container->getDefinition($asset);
-            if ('script' === $definition->getArgument(1)) {
-                $this->assets[$definition->getArgument(2)] = $asset;
+            $arguments = $definition->getArgument(1);
+            $handle = null;
+            if (isset($arguments['handle'])) {
+                $handle = $arguments['handle'];
             }
+            if ($handle === null) {
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'Service "%s" does not have required param "handle"',
+                        $asset
+                    )
+                );
+            }
+            $this->assets[$handle] = $asset;
         }
 
         $localizations = $container->findTaggedServiceIds(self::LOCALIZATION_TAG);

@@ -2,15 +2,15 @@
 
 namespace MooMoo\Platform\Bundle\AssetBundle\Factory;
 
-use MooMoo\Platform\Bundle\AssetBundle\Model\AssetLocalizationInterface;
+use MooMoo\Platform\Bundle\AssetBundle\Model\ScriptLocalizationInterface;
 
-interface AssetLocalizationFactoryInterface
+interface ScriptLocalizationFactoryInterface
 {
     /**
      * @param string $object
      * @param string $property
      * @param array $data
-     * @return AssetLocalizationInterface
+     * @return ScriptLocalizationInterface
      */
     public static function create($object, $property, $data);
 }

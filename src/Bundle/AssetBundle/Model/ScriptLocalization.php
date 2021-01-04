@@ -4,7 +4,7 @@ namespace MooMoo\Platform\Bundle\AssetBundle\Model;
 
 use MooMoo\Platform\Bundle\KernelBundle\ParameterBag\ParameterBag;
 
-class AssetLocalization extends ParameterBag implements AssetLocalizationInterface
+class ScriptLocalization extends ParameterBag implements ScriptLocalizationInterface
 {
     const OBJECT_NAME_FIELD = 'object_name';
     const PROPERTY_NAME_FIELD = 'property_name';

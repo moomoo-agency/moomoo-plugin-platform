@@ -2,7 +2,7 @@
 
 namespace MooMoo\Platform\Bundle\AssetBundle\Model;
 
-interface AssetLocalizationInterface
+interface ScriptLocalizationInterface
 {
     /**
      * @return string
