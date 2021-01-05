@@ -3,6 +3,7 @@
 namespace MooMoo\Platform\Bundle\AssetBundle\Registrator\InlineAssets\Chain\Element;
 
 use MooMoo\Platform\Bundle\AssetBundle\Event\InlineAssetsContainingEvent;
+use MooMoo\Platform\Bundle\AssetBundle\Formatter\HtmlAttributesFormatter;
 use MooMoo\Platform\Bundle\AssetBundle\Model\InlineAssetInterface;
 use MooMoo\Platform\Bundle\AssetBundle\Registrator\InlineAssets\InlineAssetsRegistratorInterface;
 use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareInterface;
@@ -108,6 +109,23 @@ abstract class AbstractInlineAssetsRegistratorChainElement implements
         } elseif ($this->getSuccessor() && $this->getSuccessor()->isApplicable($type)) {
             $this->registerAssetsByType($type, $assets);
         }
+    }
+
+    /**
+     * @param array $htmlAttributes
+     * @return string
+     */
+    protected function generateHtmlAttributes(array $htmlAttributes)
+    {
+        $formattedAttributes = [];
+        foreach ($htmlAttributes as $key => $value) {
+            $formattedAttributes[] = HtmlAttributesFormatter::format($key, $value);
+        }
+        if (!empty($formattedAttributes)) {
+            return implode(' ', $formattedAttributes);
+        }
+
+        return '';
     }
 
     /**

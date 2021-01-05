@@ -36,26 +36,32 @@ class ScriptInlineAssetsRegistratorChainElement extends AbstractInlineAssetsRegi
      */
     public function registerAsset(InlineAssetInterface $asset)
     {
-        echo $this->getFinalContent(
-            $asset->getId(),
-            $asset->getTagType(),
-            $asset->getContent()
-        );
+        echo $this->getFinalContent($asset);
     }
 
     /**
-     * @param string $id
-     * @param string $type
-     * @param string $content
+     * @param InlineAssetInterface $asset
      * @return string
      */
-    private function getFinalContent($id, $type, $content)
+    private function getFinalContent(InlineAssetInterface $asset)
     {
+        $htmlAttributes = '';
+        if (!empty($asset->getAssetData())) {
+            $groupedData = [];
+            foreach ($asset->getAssetData() as $dataItem) {
+                $groupedData[$dataItem->getGroup()][$dataItem->getKey()] = $dataItem->getValue();
+            }
+            if (isset($groupedData['htmlAttributes'])) {
+                $htmlAttributes = $this->generateHtmlAttributes($groupedData['htmlAttributes']);
+            }
+        }
+
         return sprintf(
-            '<script%s%s>%s</script>',
-            $type ? sprintf(' type="%s"', $type) : '',
-            $id ? sprintf(' id="%s"', $id) : '',
-            $content
+            '<script%s%s%s>%s</script>',
+            $asset->getTagType() ? sprintf(' type="%s"', $asset->getTagType()) : '',
+            $asset->getId() ? sprintf(' id="%s"', $asset->getId()) : '',
+            $htmlAttributes === '' ? '' : sprintf(' %s', $htmlAttributes),
+            $asset->getContent()
         );
     }
 }

@@ -34,7 +34,7 @@ class StyleAssetsRegistratorChainElement extends AbstractAssetsRegistratorChainE
                 $groupedData[$dataItem->getGroup()][$dataItem->getKey()] = $dataItem->getValue();
             }
             foreach ($groupedData as $group => $values) {
-                wp_script_add_data($asset->getHandle(), $group, $values);
+                wp_style_add_data($asset->getHandle(), $group, $values);
             }
         }
     }
