@@ -22,7 +22,7 @@ class StyleLoaderTagFilter extends AbstractFilter
                 }
                 if (!empty($formattedAttributes)) {
                     $formattedAttributes = implode(' ', $formattedAttributes);
-                    $tag = preg_replace( ':(?=>):', " $$formattedAttributes", $tag, 1 );
+                    $tag = preg_replace( ':(?=>):', " $formattedAttributes", $tag, 1 );
                 }
             }
         }

@@ -22,7 +22,7 @@ class ScriptLoaderTagFilter extends AbstractFilter
                 }
                 if (!empty($formattedAttributes)) {
                     $formattedAttributes = implode(' ', $formattedAttributes);
-                    $tag = preg_replace( ':(?=></script>):', " $$formattedAttributes", $tag, 1 );
+                    $tag = preg_replace( ':(?=></script>):', " $formattedAttributes", $tag, 1 );
                 }
             }
         }
