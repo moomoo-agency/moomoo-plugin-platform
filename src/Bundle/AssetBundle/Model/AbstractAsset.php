@@ -62,7 +62,7 @@ abstract class AbstractAsset extends ParameterBag  implements AssetInterface, Co
      */
     public function getAssetData()
     {
-        return $this->get(self::ASSET_DATA_FIELD);
+        return $this->get(self::ASSET_DATA_FIELD, []);
     }
 
     /**

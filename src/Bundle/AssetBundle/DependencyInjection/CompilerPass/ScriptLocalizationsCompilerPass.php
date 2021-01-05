@@ -28,20 +28,18 @@ class ScriptLocalizationsCompilerPass implements CompilerPassInterface
         }
         foreach ($assets as $asset => $attributes) {
             $definition = $container->getDefinition($asset);
-            $arguments = $definition->getArgument(1);
-            $handle = null;
-            if (isset($arguments['handle'])) {
-                $handle = $arguments['handle'];
+            $class = $definition->getClass();
+            if (strpos($class, 'Script') !== false) {
+                $arguments = $definition->getArgument(0);
+                $handle = null;
+                if (isset($arguments['handle'])) {
+                    $handle = $arguments['handle'];
+                }
+                if ($handle === null) {
+                    throw new InvalidArgumentException(sprintf('Service "%s" does not have required param "handle"', $asset));
+                }
+                $this->assets[$handle] = $asset;
             }
-            if ($handle === null) {
-                throw new InvalidArgumentException(
-                    sprintf(
-                        'Service "%s" does not have required param "handle"',
-                        $asset
-                    )
-                );
-            }
-            $this->assets[$handle] = $asset;
         }
 
         $localizations = $container->findTaggedServiceIds(self::LOCALIZATION_TAG);
