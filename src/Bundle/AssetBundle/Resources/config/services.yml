@@ -91,7 +91,7 @@ services:
     public: true
 
   moomoo_asset.hook.style_loader_tag:
-    class: 'MooMoo\Platform\Bundle\AssetBundle\Hooks\StyleLoaderTagFilter'
+    class: 'MooMoo\Platform\Bundle\AssetBundle\Hook\StyleLoaderTagFilter'
     arguments:
       - tag: 'style_loader_tag'
         priority: 999
@@ -100,7 +100,7 @@ services:
       - { name: moomoo_hook }
 
   moomoo_asset.hook.script_loader_tag:
-    class: 'MooMoo\Platform\Bundle\AssetBundle\Hooks\ScriptLoaderTagFilter'
+    class: 'MooMoo\Platform\Bundle\AssetBundle\Hook\ScriptLoaderTagFilter'
     arguments:
       - tag: 'script_loader_tag'
         priority: 999
