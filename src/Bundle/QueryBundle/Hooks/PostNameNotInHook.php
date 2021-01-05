@@ -2,19 +2,11 @@
 
 namespace MooMoo\Platform\Bundle\QueryBundle\Hooks;
 
-use MooMoo\Platform\Bundle\HookBundle\Model\AbstractHook;
+use MooMoo\Platform\Bundle\HookBundle\Model\AbstractFilter;
 
-class PostNameNotInHook extends AbstractHook
+class PostNameNotInHook extends AbstractFilter
 {
     const QUERY_ARGUMENT = 'post_name__not_in';
-
-    /**
-     * @inheritDoc
-     */
-    public function getType()
-    {
-        return AbstractHook::FILTER_TYPE;
-    }
 
     /**
      * @inheritDoc

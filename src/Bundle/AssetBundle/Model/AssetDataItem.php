@@ -8,6 +8,7 @@ class AssetDataItem extends ParameterBag implements AssetDataItemInterface
 {
     const KEY_FIELD = 'key';
     const VALUE_FIELD = 'value';
+    const GROUP_FIELD = 'group';
 
     /**
      * @inheritDoc
@@ -23,5 +24,13 @@ class AssetDataItem extends ParameterBag implements AssetDataItemInterface
     public function getValue()
     {
         return $this->get(self::VALUE_FIELD);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getGroup()
+    {
+        return $this->get(self::GROUP_FIELD);
     }
 }

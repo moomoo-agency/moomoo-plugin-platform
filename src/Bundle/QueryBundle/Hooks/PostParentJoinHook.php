@@ -2,19 +2,11 @@
 
 namespace MooMoo\Platform\Bundle\QueryBundle\Hooks;
 
-use MooMoo\Platform\Bundle\HookBundle\Model\AbstractHook;
+use MooMoo\Platform\Bundle\HookBundle\Model\AbstractFilter;
 
-class PostParentJoinHook extends AbstractHook
+class PostParentJoinHook extends AbstractFilter
 {
     const PARENT_TABLE = 'parent_post';
-
-    /**
-     * @inheritDoc
-     */
-    public function getType()
-    {
-        return AbstractHook::FILTER_TYPE;
-    }
 
     /**
      * @inheritDoc

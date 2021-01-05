@@ -37,8 +37,12 @@ class ScriptAssetsRegistratorChainElement extends AbstractAssetsRegistratorChain
             }
         }
         if (!empty($asset->getAssetData())) {
+            $groupedData = [];
             foreach ($asset->getAssetData() as $dataItem) {
-                wp_script_add_data($asset->getHandle(), $dataItem->getKey(), $dataItem->getValue());
+                $groupedData[$dataItem->getGroup()][$dataItem->getKey()] = $dataItem->getValue();
+            }
+            foreach ($groupedData as $group => $values) {
+                wp_script_add_data($asset->getHandle(), $group, $values);
             }
         }
     }

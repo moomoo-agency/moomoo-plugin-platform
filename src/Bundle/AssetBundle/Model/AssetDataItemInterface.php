@@ -13,4 +13,9 @@ interface AssetDataItemInterface
      * @return mixed
      */
     public function getValue();
+
+    /**
+     * @return string
+     */
+    public function getGroup();
 }
