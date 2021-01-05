@@ -4,6 +4,8 @@ namespace MooMoo\Platform\Bundle\AssetBundle\Path\Chain\Element;
 
 use InvalidArgumentException;
 use MooMoo\Platform\Bundle\AssetBundle\Model\AssetInterface;
+use MooMoo\Platform\Bundle\AssetBundle\Model\ScriptInterface;
+use MooMoo\Platform\Bundle\AssetBundle\Model\StyleInterface;
 
 class PluginAssetPathProvider extends AbstractAssetPathProviderChainElement
 {
@@ -14,11 +16,10 @@ class PluginAssetPathProvider extends AbstractAssetPathProviderChainElement
      */
     public function getAssetPath(AssetInterface $asset)
     {
-        $assetType = $asset->getType();
         $subFolder = null;
-        if ($assetType === AssetInterface::SCRIPT_TYPE) {
+        if ($asset instanceof ScriptInterface) {
             $subFolder = 'js';
-        } elseif ($assetType === AssetInterface::STYLE_TYPE) {
+        } elseif ($asset instanceof StyleInterface) {
             $subFolder = 'css';
         }
 
