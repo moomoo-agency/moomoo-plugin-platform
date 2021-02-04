@@ -123,7 +123,7 @@ abstract class AbstractCondition extends ParameterBag implements ConditionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function evaluate()
     {

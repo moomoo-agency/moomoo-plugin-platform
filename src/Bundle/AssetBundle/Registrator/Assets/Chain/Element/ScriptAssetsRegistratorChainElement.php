@@ -23,13 +23,23 @@ class ScriptAssetsRegistratorChainElement extends AbstractAssetsRegistratorChain
     public function register(AssetInterface $asset)
     {
         /** @var ScriptInterface $asset */
-        wp_enqueue_script(
-            $asset->getHandle(),
-            $this->pathProvider->getAssetPath($asset),
-            $asset->getDependencies(),
-            $asset->getVersion() ?: false,
-            $asset->isInFooter() ?: false
-        );
+        if ($asset->registerOnly()) {
+            wp_register_script(
+                $asset->getHandle(),
+                $this->pathProvider->getAssetPath($asset),
+                $asset->getDependencies(),
+                $asset->getVersion() ?: false,
+                $asset->isInFooter() ?: false
+            );
+        } else {
+            wp_enqueue_script(
+                $asset->getHandle(),
+                $this->pathProvider->getAssetPath($asset),
+                $asset->getDependencies(),
+                $asset->getVersion() ?: false,
+                $asset->isInFooter() ?: false
+            );
+        }
         if (!empty($asset->getLocalizations())) {
             $params = $this->transformLocalizations($asset->getLocalizations());
             foreach ($params as $objectName => $data) {

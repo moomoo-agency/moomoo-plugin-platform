@@ -24,7 +24,7 @@ class ShortcodesRegistrator implements ShortcodesRegistratorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function registerShortcodes()
     {

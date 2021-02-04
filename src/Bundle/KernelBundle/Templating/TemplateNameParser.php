@@ -24,7 +24,7 @@ class TemplateNameParser implements TemplateNameParserInterface
     }
     
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function parse($name)
     {

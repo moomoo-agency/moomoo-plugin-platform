@@ -12,7 +12,7 @@ class AdminBarNodesRegistrator implements MenuElementsRegistratorInterface
 {
     /**
      * @param AdminBarNodeInterface[]|MenuElementInterface[] $menuElements
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function register(array $menuElements)
     {

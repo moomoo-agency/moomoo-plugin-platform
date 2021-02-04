@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class ConditionBundle extends Bundle
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function build(ContainerBuilder $container)
     {

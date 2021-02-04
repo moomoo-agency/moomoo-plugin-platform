@@ -22,7 +22,7 @@ class CompositeBootService implements BootServiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function boot(ContainerInterface $container)
     {

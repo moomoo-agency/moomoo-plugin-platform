@@ -20,7 +20,7 @@ class PagesRegistry implements PagesRegistryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getPages()
     {
@@ -28,7 +28,7 @@ class PagesRegistry implements PagesRegistryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getPage($slug)
     {
@@ -40,7 +40,7 @@ class PagesRegistry implements PagesRegistryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function hasPage($slug)
     {

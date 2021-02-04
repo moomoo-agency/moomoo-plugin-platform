@@ -18,7 +18,7 @@ class ScriptLocalizationsCompilerPass implements CompilerPassInterface
     private $assets;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function process(ContainerBuilder $container)
     {

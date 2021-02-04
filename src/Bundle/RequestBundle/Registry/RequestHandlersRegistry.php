@@ -20,7 +20,7 @@ class RequestHandlersRegistry implements RequestHandlersRegistryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getHandlers()
     {
@@ -28,7 +28,7 @@ class RequestHandlersRegistry implements RequestHandlersRegistryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getHandler($actionName)
     {
@@ -40,7 +40,7 @@ class RequestHandlersRegistry implements RequestHandlersRegistryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function hasHandler($name)
     {

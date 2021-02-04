@@ -8,6 +8,11 @@ interface AssetInterface
     const ADMIN_CATEGORY = 'admin';
 
     /**
+     * @return bool
+     */
+    public function registerOnly();
+
+    /**
      * @return string
      */
     public function getHandle();

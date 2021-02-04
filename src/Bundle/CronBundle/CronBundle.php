@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class CronBundle extends Bundle
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function build(ContainerBuilder $container)
     {

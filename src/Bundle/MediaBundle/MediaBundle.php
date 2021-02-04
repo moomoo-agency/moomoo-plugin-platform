@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class MediaBundle extends Bundle
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function build(ContainerBuilder $container)
     {

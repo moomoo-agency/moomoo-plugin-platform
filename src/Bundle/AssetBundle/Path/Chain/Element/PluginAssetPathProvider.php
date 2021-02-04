@@ -12,7 +12,7 @@ class PluginAssetPathProvider extends AbstractAssetPathProviderChainElement
     const BASE_FOLDER = 'plugins';
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getAssetPath(AssetInterface $asset)
     {

@@ -12,7 +12,7 @@ use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
 class KernelBundle extends Bundle
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function build(ContainerBuilder $container)
     {
@@ -42,7 +42,7 @@ class KernelBundle extends Bundle
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function boot()
     {

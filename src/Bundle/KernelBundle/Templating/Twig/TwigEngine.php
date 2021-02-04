@@ -24,7 +24,7 @@ class TwigEngine implements EngineInterface, StreamingEngineInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function render($name, array $parameters = array())
     {
@@ -37,7 +37,7 @@ class TwigEngine implements EngineInterface, StreamingEngineInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      *
      * It also supports Template as name parameter.
      *
@@ -49,7 +49,7 @@ class TwigEngine implements EngineInterface, StreamingEngineInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      *
      * It also supports Template as name parameter.
      */
@@ -77,7 +77,7 @@ class TwigEngine implements EngineInterface, StreamingEngineInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      *
      * It also supports Template as name parameter.
      */

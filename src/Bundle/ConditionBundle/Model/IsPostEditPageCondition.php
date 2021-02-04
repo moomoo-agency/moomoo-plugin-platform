@@ -29,7 +29,7 @@ class IsPostEditPageCondition extends AbstractCondition
     ];
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function __construct(array $parameters = [])
     {

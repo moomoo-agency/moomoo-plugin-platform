@@ -235,7 +235,7 @@ class Kernel
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getBundle($name)
     {
@@ -482,7 +482,7 @@ class Kernel
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function dumpContainer(ConfigCache $cache, ContainerBuilder $container, $class, $baseClass)
     {

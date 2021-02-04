@@ -18,7 +18,7 @@ class ConditionsNamesServicesCompilerPass implements CompilerPassInterface
     private $conditions;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function process(ContainerBuilder $container)
     {

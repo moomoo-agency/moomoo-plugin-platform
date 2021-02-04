@@ -123,7 +123,7 @@ class InlineAsset extends ParameterBag implements InlineAssetInterface, Conditio
         $assetData = $this->getAssetData();
         if (!in_array($dataItem, $assetData)) {
             $assetData[$dataItem->getKey()] = $dataItem;
-            $this->set(self::ASSET_DATA_FIELD, $dataItem);
+            $this->set(self::ASSET_DATA_FIELD, $assetData);
         }
 
         return $this;

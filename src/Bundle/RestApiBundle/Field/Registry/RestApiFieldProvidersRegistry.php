@@ -22,7 +22,7 @@ class RestApiFieldProvidersRegistry implements RestApiFieldProvidersRegistryInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getRestApiFieldProviders()
     {

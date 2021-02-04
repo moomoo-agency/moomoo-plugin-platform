@@ -15,7 +15,7 @@ abstract class AbstractTaxonomy implements TaxonomyInterface, ConditionAwareInte
     protected $terms = [];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function addTerm(TermInterface $term)
     {
@@ -25,7 +25,7 @@ abstract class AbstractTaxonomy implements TaxonomyInterface, ConditionAwareInte
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getTerms()
     {

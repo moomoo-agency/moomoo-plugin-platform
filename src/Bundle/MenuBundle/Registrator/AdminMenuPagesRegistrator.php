@@ -25,7 +25,7 @@ class AdminMenuPagesRegistrator implements MenuElementsRegistratorInterface
 
     /**
      * @param AdminMenuPageInterface[]|MenuElementInterface[] $menuElements
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function register(array $menuElements)
     {

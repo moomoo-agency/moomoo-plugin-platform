@@ -41,7 +41,7 @@ class CronCommandsRegistry implements CronCommandsRegistryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCronCommands()
     {
@@ -49,7 +49,7 @@ class CronCommandsRegistry implements CronCommandsRegistryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCronCommand($name)
     {
@@ -61,7 +61,7 @@ class CronCommandsRegistry implements CronCommandsRegistryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function hasCronCommand($name)
     {

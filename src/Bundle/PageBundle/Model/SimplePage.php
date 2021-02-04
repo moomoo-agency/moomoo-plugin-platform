@@ -25,7 +25,7 @@ class SimplePage extends AbstractPage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getSlug()
     {
@@ -33,7 +33,7 @@ class SimplePage extends AbstractPage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function render()
     {

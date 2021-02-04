@@ -24,7 +24,7 @@ class BundleAssetPathProvider extends AbstractAssetPathProviderChainElement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getAssetPath(AssetInterface $asset)
     {

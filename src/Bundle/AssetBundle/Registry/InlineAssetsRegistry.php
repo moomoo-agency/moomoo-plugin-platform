@@ -20,7 +20,7 @@ class InlineAssetsRegistry implements InlineAssetsRegistryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getAssets()
     {

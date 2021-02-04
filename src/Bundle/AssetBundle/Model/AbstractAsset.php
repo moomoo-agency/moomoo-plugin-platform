@@ -10,6 +10,7 @@ abstract class AbstractAsset extends ParameterBag  implements AssetInterface, Co
 {
     use ConditionAwareTrait;
 
+    const REGISTER_ONLY = 'registerOnly';
     const HANDLE_FIELD = 'handle';
     const SOURCE_FIELD = 'source';
     const VERSION_FIELD = 'version';
@@ -18,7 +19,15 @@ abstract class AbstractAsset extends ParameterBag  implements AssetInterface, Co
     const ASSET_DATA_FIELD = 'data';
 
     /**
-     * @return string
+     * @inheritDoc
+     */
+    public function registerOnly()
+    {
+        return $this->get(self::REGISTER_ONLY, false);
+    }
+
+    /**
+     * @inheritDoc
      */
     public function getHandle()
     {
@@ -26,7 +35,7 @@ abstract class AbstractAsset extends ParameterBag  implements AssetInterface, Co
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
     public function getSource()
     {
@@ -34,7 +43,7 @@ abstract class AbstractAsset extends ParameterBag  implements AssetInterface, Co
     }
 
     /**
-     * @return array
+     * @inheritDoc
      */
     public function getDependencies()
     {
@@ -42,7 +51,7 @@ abstract class AbstractAsset extends ParameterBag  implements AssetInterface, Co
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
     public function getVersion()
     {
@@ -50,7 +59,7 @@ abstract class AbstractAsset extends ParameterBag  implements AssetInterface, Co
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
     public function getCategory()
     {

@@ -40,7 +40,7 @@ class KernelCompilerPass implements CompilerPassInterface
     }
     
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function process(ContainerBuilder $container)
     {

@@ -7,7 +7,7 @@ use MooMoo\Platform\Bundle\WpCliBundle\Model\WpCliCommandInterface;
 class WpCliCommandsRegistrator implements WpCliCommandsRegistratorInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function registerCommands(array $commands)
     {

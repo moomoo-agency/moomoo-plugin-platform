@@ -45,28 +45,28 @@ abstract class Bundle implements BundleInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function boot()
     {
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function shutdown()
     {
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function build(ContainerBuilder $container)
     {
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getContainerExtension()
     {
@@ -108,7 +108,7 @@ abstract class Bundle implements BundleInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getNamespace()
     {
@@ -119,7 +119,7 @@ abstract class Bundle implements BundleInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getPath()
     {
@@ -131,7 +131,7 @@ abstract class Bundle implements BundleInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getPluginName()
     {
@@ -139,7 +139,7 @@ abstract class Bundle implements BundleInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     final public function getName()
     {

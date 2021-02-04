@@ -24,7 +24,7 @@ class ConditionsRegistry implements ConditionsRegistryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getConditions()
     {
@@ -32,7 +32,7 @@ class ConditionsRegistry implements ConditionsRegistryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCondition($name)
     {
@@ -44,7 +44,7 @@ class ConditionsRegistry implements ConditionsRegistryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function hasCondition($name)
     {

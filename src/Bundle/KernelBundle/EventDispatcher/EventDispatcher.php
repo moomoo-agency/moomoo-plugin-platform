@@ -9,7 +9,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher as BaseEventDispatcher;
 class EventDispatcher extends BaseEventDispatcher
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected function callListeners(iterable $listeners, string $eventName, object $event)
     {

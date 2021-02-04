@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\Loader;
 class WpCliExtension extends Extension
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function load(array $configs, ContainerBuilder $container)
     {

@@ -7,7 +7,7 @@ use MooMoo\Platform\Bundle\AssetBundle\Model\InlineAsset;
 class InlineAssetFactory implements InlineAssetFactoryInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public static function create(array $arguments, array $conditions = [])
     {

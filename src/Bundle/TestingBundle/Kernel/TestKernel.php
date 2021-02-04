@@ -8,7 +8,7 @@ class TestKernel extends Kernel
 {
     /**
      * @param string $pluginBaseName
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function __construct($pluginBaseName, $debug = false)
     {

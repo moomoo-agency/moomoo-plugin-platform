@@ -21,13 +21,23 @@ class StyleAssetsRegistratorChainElement extends AbstractAssetsRegistratorChainE
     public function register(AssetInterface $asset)
     {
         /** @var StyleInterface $asset */
-        wp_enqueue_style(
-            $asset->getHandle(),
-            $this->pathProvider->getAssetPath($asset),
-            $asset->getDependencies(),
-            $asset->getVersion() ?: false,
-            $asset->getMedia() ?: 'all'
-        );
+        if ($asset->registerOnly()) {
+            wp_register_style(
+                $asset->getHandle(),
+                $this->pathProvider->getAssetPath($asset),
+                $asset->getDependencies(),
+                $asset->getVersion() ?: false,
+                $asset->getMedia() ?: 'all'
+            );
+        } else {
+            wp_enqueue_style(
+                $asset->getHandle(),
+                $this->pathProvider->getAssetPath($asset),
+                $asset->getDependencies(),
+                $asset->getVersion() ?: false,
+                $asset->getMedia() ?: 'all'
+            );
+        }
         if (!empty($asset->getAssetData())) {
             $groupedData = [];
             foreach ($asset->getAssetData() as $dataItem) {

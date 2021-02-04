@@ -29,7 +29,7 @@ class IsRequestHasParameterCondition extends AbstractCondition
     protected $requestTypes = [];
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function __construct(array $parameters = [])
     {
@@ -47,7 +47,7 @@ class IsRequestHasParameterCondition extends AbstractCondition
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function getResult()
     {

@@ -7,7 +7,7 @@ use MooMoo\Platform\Bundle\AssetBundle\Model\AssetInterface;
 class AbsoluteAssetPathProvider extends AbstractAssetPathProviderChainElement
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getAssetPath(AssetInterface $asset)
     {
