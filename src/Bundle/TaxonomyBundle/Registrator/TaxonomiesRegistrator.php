@@ -3,11 +3,25 @@
 namespace MooMoo\Platform\Bundle\TaxonomyBundle\Registrator;
 
 use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareInterface;
+use MooMoo\Platform\Bundle\KernelBundle\Cache\RuntimeObjectCache;
 use MooMoo\Platform\Bundle\TaxonomyBundle\Model\TaxonomyInterface;
 use MooMoo\Platform\Bundle\TaxonomyBundle\Model\Term;
 
 class TaxonomiesRegistrator implements TaxonomiesRegistratorInterface
 {
+    /**
+     * @var RuntimeObjectCache
+     */
+    private $runtimeObjectCache;
+
+    /**
+     * @param RuntimeObjectCache $runtimeObjectCache
+     */
+    public function __construct(RuntimeObjectCache $runtimeObjectCache)
+    {
+        $this->runtimeObjectCache = $runtimeObjectCache;
+    }
+
     /**
      * @inheritDoc
      */
@@ -45,7 +59,24 @@ class TaxonomiesRegistrator implements TaxonomiesRegistratorInterface
         }
         if (!empty($taxonomy->getTerms())) {
             foreach ($taxonomy->getTerms() as $term) {
-                if (!term_exists($term->getName(), $term->getTaxonomy(), $term->getParent())) {
+                $termChecked = $this->runtimeObjectCache->get(
+                    sprintf('%s_%s_%s_term_existence_cached', $term->getName(), $term->getTaxonomy(), $term->getParent())
+                );
+                $termExists = $this->runtimeObjectCache->get(
+                    sprintf('%s_%s_%s_term_exists', $term->getName(), $term->getTaxonomy(), $term->getParent())
+                );
+                if (false === $termChecked) {
+                    $termExists = term_exists($term->getName(), $term->getTaxonomy(), $term->getParent());
+                    $this->runtimeObjectCache->set(
+                        sprintf('%s_%s_%s_term_exists', $term->getName(), $term->getTaxonomy(), $term->getParent()),
+                        $termExists
+                    );
+                    $this->runtimeObjectCache->set(
+                        sprintf('%s_%s_%s_term_existence_cached', $term->getName(), $term->getTaxonomy(), $term->getParent()),
+                        true
+                    );
+                }
+                if (!$termExists) {
                     $termResult = wp_insert_term(
                         $term->getName(),
                         $term->getTaxonomy(),
