@@ -10,19 +10,6 @@ use MooMoo\Platform\Bundle\TaxonomyBundle\Model\Term;
 class TaxonomiesRegistrator implements TaxonomiesRegistratorInterface
 {
     /**
-     * @var RuntimeObjectCache
-     */
-    private $runtimeObjectCache;
-
-    /**
-     * @param RuntimeObjectCache $runtimeObjectCache
-     */
-    public function __construct(RuntimeObjectCache $runtimeObjectCache)
-    {
-        $this->runtimeObjectCache = $runtimeObjectCache;
-    }
-
-    /**
      * @inheritDoc
      */
     public function registerTaxonomies(array $taxonomies)
@@ -59,19 +46,19 @@ class TaxonomiesRegistrator implements TaxonomiesRegistratorInterface
         }
         if (!empty($taxonomy->getTerms())) {
             foreach ($taxonomy->getTerms() as $term) {
-                $termChecked = $this->runtimeObjectCache->get(
+                $termChecked = wp_cache_get(
                     sprintf('%s_%s_%s_term_existence_cached', $term->getName(), $term->getTaxonomy(), $term->getParent())
                 );
-                $termExists = $this->runtimeObjectCache->get(
+                $termExists = wp_cache_get(
                     sprintf('%s_%s_%s_term_exists', $term->getName(), $term->getTaxonomy(), $term->getParent())
                 );
                 if (false === $termChecked) {
                     $termExists = term_exists($term->getName(), $term->getTaxonomy(), $term->getParent());
-                    $this->runtimeObjectCache->set(
+                    wp_cache_set(
                         sprintf('%s_%s_%s_term_exists', $term->getName(), $term->getTaxonomy(), $term->getParent()),
                         $termExists
                     );
-                    $this->runtimeObjectCache->set(
+                    wp_cache_set(
                         sprintf('%s_%s_%s_term_existence_cached', $term->getName(), $term->getTaxonomy(), $term->getParent()),
                         true
                     );
