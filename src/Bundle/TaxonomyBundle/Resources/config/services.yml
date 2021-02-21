@@ -5,4 +5,6 @@ services:
 
     moomoo_taxonomy.registrator.taxonomies:
         class: 'MooMoo\Platform\Bundle\TaxonomyBundle\Registrator\TaxonomiesRegistrator'
+        arguments:
+            - '@runtime_object_cache'
         public: true
