@@ -51,7 +51,7 @@ class IsRequestHasParameterCondition extends AbstractCondition
      */
     protected function getResult()
     {
-        $request_method = $_SERVER['REQUEST_METHOD'];
+        $request_method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
         if ($this->requestType !== $request_method) {
             return false;
         }

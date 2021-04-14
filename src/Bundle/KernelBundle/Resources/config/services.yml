@@ -51,6 +51,7 @@ services:
 
     event_dispatcher:
         class: 'MooMoo\Platform\Bundle\KernelBundle\EventDispatcher\EventDispatcher'
+        public: true
 
     runtime_object_cache:
         class: 'MooMoo\Platform\Bundle\KernelBundle\Cache\RuntimeObjectCache'

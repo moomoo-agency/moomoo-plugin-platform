@@ -26,6 +26,26 @@ services:
         tags:
             - {name: moomoo_condition}
 
+    moomoo_condition.user_has_administrator_role:
+        class: 'MooMoo\Platform\Bundle\ConditionBundle\Model\SimpleCondition'
+        arguments:
+            - name: user_has_administrator_role
+              description: 'Condition to check whether the current user has administrator role'
+              function: current_user_can
+              arguments: ['administrator']
+        tags:
+            - {name: moomoo_condition}
+
+    moomoo_condition.user_has_editor_role:
+        class: 'MooMoo\Platform\Bundle\ConditionBundle\Model\SimpleCondition'
+        arguments:
+            - name: user_has_editor_role
+              description: 'Condition to check whether the current user has editor role'
+              function: current_user_can
+              arguments: ['editor']
+        tags:
+            - {name: moomoo_condition}
+
     moomoo_condition.is_user_not_logged_in:
         parent: moomoo_condition.is_user_logged_in
         calls:

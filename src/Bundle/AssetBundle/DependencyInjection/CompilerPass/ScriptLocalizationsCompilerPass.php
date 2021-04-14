@@ -48,14 +48,13 @@ class ScriptLocalizationsCompilerPass implements CompilerPassInterface
         }
 
         foreach ($localizations as $localization => $attributes) {
-            $handle = null;
+            $handles = [];
             foreach ($attributes as $attribute) {
                 if (isset($attribute['handle'])) {
-                    $handle = $attribute['handle'];
-                    break;
+                    $handles[] = $attribute['handle'];
                 }
             }
-            if ($handle === null) {
+            if (empty($handles)) {
                 throw new InvalidArgumentException(
                     sprintf(
                         'Tag "%s" for service "%s" does not have required param "handle"',
@@ -64,9 +63,11 @@ class ScriptLocalizationsCompilerPass implements CompilerPassInterface
                     )
                 );
             }
-            if (isset($this->assets[$handle])) {
-                $assetDefinition = $container->getDefinition($this->assets[$handle]);
-                $assetDefinition->addMethodCall('addLocalization', [new Reference($localization)]);
+            foreach ($handles as $handle) {
+                if (isset($this->assets[$handle])) {
+                    $assetDefinition = $container->getDefinition($this->assets[$handle]);
+                    $assetDefinition->addMethodCall('addLocalization', [new Reference($localization)]);
+                }
             }
         }
     }
