@@ -1,6 +1,6 @@
 {
   "name": "moomoo\/plugin-platform",
-  "description": "OOP based platform for creating Wordpress plugins",
+  "description": "OOP based platform for Wordpress plugins creation",
   "license": "MIT",
   "autoload": {
     "psr-4": {
