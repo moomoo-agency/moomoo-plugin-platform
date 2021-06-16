@@ -1,7 +1,7 @@
 {
   "name": "moomoo\/plugin-platform",
-  "description": "OOP based platform for creating Wordpress plugins",
-  "license": "GPL-3.0",
+  "description": "OOP based platform for Wordpress plugins creation",
+  "license": "MIT",
   "autoload": {
     "psr-4": {
       "MooMoo\\Platform\\Bundle\\": "src/Bundle/"
