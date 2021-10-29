@@ -10,9 +10,21 @@ interface TermInterface
     public function getName();
 
     /**
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name);
+
+    /**
      * @return string
      */
     public function getTaxonomy();
+
+    /**
+     * @param string $taxonomy
+     * @return $this
+     */
+    public function setTaxonomy($taxonomy);
 
     /**
      * @return string
@@ -20,9 +32,21 @@ interface TermInterface
     public function getAliasOf();
 
     /**
+     * @param string $aliasOf
+     * @return $this
+     */
+    public function setAliasOf($aliasOf);
+
+    /**
      * @return string
      */
     public function getDescription();
+
+    /**
+     * @param string $description
+     * @return $this
+     */
+    public function setDescription($description);
 
     /**
      * @return string
@@ -30,9 +54,21 @@ interface TermInterface
     public function getParent();
 
     /**
+     * @param string $parent
+     * @return $this
+     */
+    public function setParent($parent);
+
+    /**
      * @return string
      */
     public function getSlug();
+
+    /**
+     * @param string $slug
+     * @return $this
+     */
+    public function setSlug($slug);
 
     /**
      * @return TermMetaInterface[]

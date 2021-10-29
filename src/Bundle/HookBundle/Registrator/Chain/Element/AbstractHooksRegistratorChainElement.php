@@ -22,18 +22,21 @@ abstract class AbstractHooksRegistratorChainElement implements
     {
         $groupedHooks = [];
         foreach ($hooks as $hook) {
-            $groupedHooks[$hook->getInitHookName()][] = $hook;
+            $groupedHooks[$hook->getInitHookName()][$hook->getInitHookPriority()][] = $hook;
         }
-        foreach ($groupedHooks as $initHookName => $hooks) {
-            $this->registerHooksByInitHook($initHookName, $hooks);
+        foreach ($groupedHooks as $initHookName => $hooksByInitPriority) {
+            foreach ($hooksByInitPriority as $initHookPriority => $hooks) {
+                $this->registerHooksByInitHook($initHookName, $initHookPriority, $hooks);
+            }
         }
     }
 
     /**
      * @param string $initHookName
+     * @param int $initHookPriority
      * @param HookInterface[] $hooks
      */
-    private function registerHooksByInitHook($initHookName, array $hooks)
+    private function registerHooksByInitHook($initHookName, $initHookPriority, array $hooks)
     {
         add_action(
             $initHookName,
@@ -55,7 +58,8 @@ abstract class AbstractHooksRegistratorChainElement implements
                         $this->registerHook($hook);
                     }
                 }
-            }
+            },
+            $initHookPriority
         );
     }
 

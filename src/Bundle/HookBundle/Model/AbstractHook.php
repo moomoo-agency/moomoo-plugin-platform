@@ -12,6 +12,7 @@ abstract class AbstractHook extends ParameterBag implements HookInterface, Condi
     const PRIORITY_FIELD = 'priority';
     const ACCEPTED_ARGS_FIELD = 'accepted_args';
     const INIT_HOOK_NAME_FIELD = 'init_hook';
+    const INIT_HOOK_PRIORITY_FIELD = 'init_hook_priority';
 
     use ConditionAwareTrait;
 
@@ -21,6 +22,14 @@ abstract class AbstractHook extends ParameterBag implements HookInterface, Condi
     public function getInitHookName()
     {
         return $this->get(self::INIT_HOOK_NAME_FIELD, 'init');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getInitHookPriority()
+    {
+        return $this->get(self::INIT_HOOK_PRIORITY_FIELD, 10);
     }
 
     /**

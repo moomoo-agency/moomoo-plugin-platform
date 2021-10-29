@@ -19,6 +19,7 @@ abstract class AbstractTaxonomy implements TaxonomyInterface, ConditionAwareInte
      */
     public function addTerm(TermInterface $term)
     {
+        $term->setTaxonomy($this->getName());
         $this->terms[$term->getName()] = $term;
         
         return $this;

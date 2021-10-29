@@ -8,9 +8,14 @@ interface HookInterface
     const FILTER_TYPE = 'filter';
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getInitHookName();
+
+    /**
+     * @return int
+     */
+    public function getInitHookPriority();
 
     /**
      * @return string

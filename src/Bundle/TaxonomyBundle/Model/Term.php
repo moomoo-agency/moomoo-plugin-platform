@@ -26,9 +26,29 @@ class Term extends ParameterBag implements TermInterface
     /**
      * @inheritDoc
      */
+    public function setName($name)
+    {
+        $this->set(self::NAME_FIELD, $name);
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getTaxonomy()
     {
         return $this->get(self::TAXONOMY_FIELD);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setTaxonomy($taxonomy)
+    {
+        $this->set(self::TAXONOMY_FIELD, $taxonomy);
+
+        return $this;
     }
 
     /**
@@ -42,9 +62,29 @@ class Term extends ParameterBag implements TermInterface
     /**
      * @inheritDoc
      */
+    public function setAliasOf($aliasOf)
+    {
+        $this->set(self::ALIAS_OF_FIELD, $aliasOf);
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getDescription()
     {
         return $this->get(self::DESCRIPTION_FIELD);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setDescription($description)
+    {
+        $this->set(self::DESCRIPTION_FIELD, $description);
+
+        return $this;
     }
 
     /**
@@ -58,9 +98,29 @@ class Term extends ParameterBag implements TermInterface
     /**
      * @inheritDoc
      */
+    public function setParent($parent)
+    {
+        $this->set(self::PARENT_FIELD, $parent);
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getSlug()
     {
         return $this->get(self::SLUG_FIELD);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setSlug($slug)
+    {
+        $this->set(self::SLUG_FIELD, $slug);
+
+        return $this;
     }
 
     /**
