@@ -19,7 +19,7 @@
     "symfony/twig-bridge": "5.0.11",
     "symfony/polyfill-ctype": "<v1.22.0",
     "symfony/polyfill-mbstring": "<v1.22.0",
-    "laminas/laminas-zendframework-bridge" : "@stable",
+    "zendframework/zend-code" : "@stable",
     "dg/composer-cleaner": "2.2"
   }
 }
