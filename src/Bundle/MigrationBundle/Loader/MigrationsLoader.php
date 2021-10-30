@@ -386,8 +386,14 @@ class MigrationsLoader
                     : null;
                 if ($loadedVersion) {
                     foreach (array_keys($bundleMigrationDirectories) as $migrationVersion) {
-                        $formattedMigrationVersion = str_replace('v', '', $migrationVersion);
+                        $formattedMigrationVersion = str_replace('v', '', str_replace('_', '.', $migrationVersion));
                         if (empty($migrationVersion) || version_compare($formattedMigrationVersion, $loadedVersion) < 1) {
+                            unset($migrationDirectories[$bundleName][$migrationVersion]);
+                        }
+                    }
+                } else {
+                    foreach (array_keys($bundleMigrationDirectories) as $migrationVersion) {
+                        if (!empty($migrationVersion)) {
                             unset($migrationDirectories[$bundleName][$migrationVersion]);
                         }
                     }
