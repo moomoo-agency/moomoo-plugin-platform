@@ -3,7 +3,6 @@
 namespace MooMoo\Platform\Bundle\TaxonomyBundle\Registrator;
 
 use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareInterface;
-use MooMoo\Platform\Bundle\KernelBundle\Cache\RuntimeObjectCache;
 use MooMoo\Platform\Bundle\TaxonomyBundle\Model\TaxonomyInterface;
 use MooMoo\Platform\Bundle\TaxonomyBundle\Model\Term;
 
@@ -34,17 +33,38 @@ class TaxonomiesRegistrator implements TaxonomiesRegistratorInterface
                 }
             }
         });
+        add_action('admin_init', function () use($taxonomies) {
+            /** @var TaxonomyInterface $taxonomy */
+            foreach ($taxonomies as $taxonomy) {
+                if ($taxonomy instanceof ConditionAwareInterface && $taxonomy->hasConditions()) {
+                    $evaluated = true;
+                    foreach ($taxonomy->getConditions() as $condition) {
+                        if ($condition->evaluate() === false) {
+                            $evaluated = false;
+                            break;
+                        }
+                    }
+                    if (!$evaluated) {
+                        continue;
+                    }
+                    $this->registerTaxonomy($taxonomy, true);
+                } else {
+                    $this->registerTaxonomy($taxonomy, true);
+                }
+            }
+        });
     }
 
     /**
      * @param TaxonomyInterface $taxonomy
+     * @param bool $registerTerms
      */
-    private function registerTaxonomy(TaxonomyInterface $taxonomy)
+    private function registerTaxonomy(TaxonomyInterface $taxonomy, $registerTerms = false)
     {
         if (!taxonomy_exists($taxonomy->getName())) {
             register_taxonomy($taxonomy->getName(), $taxonomy->getObjectType(), $taxonomy->getArguments());
         }
-        if (!empty($taxonomy->getTerms())) {
+        if ($registerTerms && !empty($taxonomy->getTerms())) {
             foreach ($taxonomy->getTerms() as $term) {
                 $termChecked = wp_cache_get(
                     sprintf('%s_%s_%s_term_existence_cached', $term->getName(), $term->getTaxonomy(), $term->getParent())

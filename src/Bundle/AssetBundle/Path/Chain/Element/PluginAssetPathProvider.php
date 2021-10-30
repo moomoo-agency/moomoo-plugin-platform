@@ -29,20 +29,19 @@ class PluginAssetPathProvider extends AbstractAssetPathProviderChainElement
 
         $base_url = untrailingslashit(get_site_url(null, sprintf('/wp-content/%s/', static::BASE_FOLDER)));
         $plugins_path = sprintf('%swp-content/%s', ABSPATH, static::BASE_FOLDER);
-        $assetPathParts = explode(':', $asset->getSource());
-
-        $relativePath = sprintf(
-            '%s/assets/%s/%s',
-            $assetPathParts[0],
-            $subFolder,
-            $assetPathParts[1]
-        );
-
-        $absolutePath = sprintf(
-            '%s/%s',
-            $plugins_path,
-            $relativePath
-        );
+        if ($asset->getSource() &&
+            (
+                strpos($asset->getSource(), ':') !== false &&
+                strpos($asset->getSource(), 'http://') === false &&
+                strpos($asset->getSource(), 'https://') === false
+            )
+        ) {
+            $assetPathParts = explode(':', $asset->getSource());
+            $relativePath = sprintf('%s/assets/%s/%s', $assetPathParts[0], $subFolder, $assetPathParts[1]);
+            $absolutePath = sprintf('%s/%s', $plugins_path, $relativePath);
+        } else {
+            $absolutePath = '';
+        }
 
         if (file_exists($absolutePath)) {
             return sprintf('%s/%s', $base_url, $relativePath);

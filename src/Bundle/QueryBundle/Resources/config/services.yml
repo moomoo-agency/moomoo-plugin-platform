@@ -1,6 +1,7 @@
 services:
     moomoo_query.wp_query:
         class: '\WP_Query'
+        public: true
 
     moomoo_query.hook.post_name__not_in:
         class: 'MooMoo\Platform\Bundle\QueryBundle\Hooks\PostNameNotInHook'
