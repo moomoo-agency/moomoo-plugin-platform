@@ -8,6 +8,8 @@ use MooMoo\Platform\Bundle\MigrationBundle\Loader\MigrationsLoader;
 
 class MigrationsExecutionHook extends AbstractHook
 {
+    const TRANSIENT = 'moomoo_migrations_running';
+
     /**
      * @var MigrationsLoader
      */
@@ -53,7 +55,13 @@ class MigrationsExecutionHook extends AbstractHook
      */
     public function getFunction()
     {
-        $migrations = $this->migrationsLoader->getMigrations();
-        $this->migrationsExecutor->executeUp($migrations);
+        if (false === get_transient(self::TRANSIENT)) {
+            $migrations = $this->migrationsLoader->getMigrations();
+            if (!empty($migrations)) {
+                set_transient(self::TRANSIENT, true, 60*3);
+                $this->migrationsExecutor->executeUp($migrations);
+                delete_transient(self::TRANSIENT);
+            }
+        }
     }
 }
