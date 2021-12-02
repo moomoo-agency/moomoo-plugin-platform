@@ -55,7 +55,7 @@ abstract class AbstractAsset extends ParameterBag  implements AssetInterface, Co
      */
     public function getVersion()
     {
-        return $this->get(self::VERSION_FIELD, false);
+        return $this->get(self::VERSION_FIELD);
     }
 
     /**

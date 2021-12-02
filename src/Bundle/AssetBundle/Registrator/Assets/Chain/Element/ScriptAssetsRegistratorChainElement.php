@@ -28,7 +28,7 @@ class ScriptAssetsRegistratorChainElement extends AbstractAssetsRegistratorChain
                 $asset->getHandle(),
                 $this->pathProvider->getAssetPath($asset),
                 $asset->getDependencies(),
-                $asset->getVersion() ?: false,
+                $asset->getVersion(),
                 $asset->isInFooter() ?: false
             );
         } else {
@@ -36,7 +36,7 @@ class ScriptAssetsRegistratorChainElement extends AbstractAssetsRegistratorChain
                 $asset->getHandle(),
                 $this->pathProvider->getAssetPath($asset),
                 $asset->getDependencies(),
-                $asset->getVersion() ?: false,
+                $asset->getVersion(),
                 $asset->isInFooter() ?: false
             );
         }

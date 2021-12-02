@@ -26,7 +26,7 @@ class StyleAssetsRegistratorChainElement extends AbstractAssetsRegistratorChainE
                 $asset->getHandle(),
                 $this->pathProvider->getAssetPath($asset),
                 $asset->getDependencies(),
-                $asset->getVersion() ?: false,
+                $asset->getVersion(),
                 $asset->getMedia() ?: 'all'
             );
         } else {
@@ -34,7 +34,7 @@ class StyleAssetsRegistratorChainElement extends AbstractAssetsRegistratorChainE
                 $asset->getHandle(),
                 $this->pathProvider->getAssetPath($asset),
                 $asset->getDependencies(),
-                $asset->getVersion() ?: false,
+                $asset->getVersion(),
                 $asset->getMedia() ?: 'all'
             );
         }
