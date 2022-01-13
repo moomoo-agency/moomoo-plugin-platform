@@ -56,12 +56,3 @@ services:
               accepted_args: 2
         tags:
             - { name: moomoo_hook }
-
-    moomoo_query.hook.title:
-      class: 'MooMoo\Platform\Bundle\QueryBundle\Hooks\TitleHook'
-      arguments:
-        - tag: 'posts_where'
-          priority: 999
-          accepted_args: 2
-      tags:
-        - { name: moomoo_hook }

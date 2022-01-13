@@ -56,27 +56,31 @@ abstract class AbstractAssetsRegistratorChainElement implements
      */
     public function registerAssets(array $assets)
     {
-        add_action($this->registrationFunction, function () use ($assets) {
-            $event = new AssetsContainingEvent($assets);
-            $this->eventDispatcher->dispatch($event, 'moomoo_assets_before_registration');
-            foreach ($event->getAssets() as $asset) {
-                if ($asset instanceof ConditionAwareInterface && $asset->hasConditions()) {
-                    $evaluated = true;
-                    foreach ($asset->getConditions() as $condition) {
-                        if ($condition->evaluate() === false) {
-                            $evaluated = false;
-                            break;
+        add_action(
+            $this->registrationFunction,
+            function () use ($assets) {
+                $event = new AssetsContainingEvent($assets);
+                $this->eventDispatcher->dispatch($event, 'moomoo_assets_before_registration');
+                foreach ($event->getAssets() as $asset) {
+                    if ($asset instanceof ConditionAwareInterface && $asset->hasConditions()) {
+                        $evaluated = true;
+                        foreach ($asset->getConditions() as $condition) {
+                            if ($condition->evaluate() === false) {
+                                $evaluated = false;
+                                break;
+                            }
                         }
+                        if (!$evaluated) {
+                            continue;
+                        }
+                        $this->registerAsset($asset);
+                    } else {
+                        $this->registerAsset($asset);
                     }
-                    if (!$evaluated) {
-                        continue;
-                    }
-                    $this->registerAsset($asset);
-                } else {
-                    $this->registerAsset($asset);
                 }
-            }
-        });
+            },
+            20
+        );
     }
 
     /**

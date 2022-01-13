@@ -85,27 +85,31 @@ abstract class AbstractInlineAssetsRegistratorChainElement implements
     public function registerAssetsByType($type, $assets)
     {
         if ($this->isApplicable($type)) {
-            add_action(static::ASSET_REGISTRATION_FUNCTION, function () use ($type, $assets) {
-                $event = new InlineAssetsContainingEvent($assets);
-                $this->eventDispatcher->dispatch($event, sprintf('moomoo_inline_assets_before_%ss_registration', $type));
-                foreach ($event->getAssets() as $asset) {
-                    if ($asset instanceof ConditionAwareInterface && $asset->hasConditions()) {
-                        $evaluated = true;
-                        foreach ($asset->getConditions() as $condition) {
-                            if ($condition->evaluate() === false) {
-                                $evaluated = false;
-                                break;
+            add_action(
+                static::ASSET_REGISTRATION_FUNCTION,
+                function () use ($type, $assets) {
+                    $event = new InlineAssetsContainingEvent($assets);
+                    $this->eventDispatcher->dispatch($event, sprintf('moomoo_inline_assets_before_%ss_registration', $type));
+                    foreach ($event->getAssets() as $asset) {
+                        if ($asset instanceof ConditionAwareInterface && $asset->hasConditions()) {
+                            $evaluated = true;
+                            foreach ($asset->getConditions() as $condition) {
+                                if ($condition->evaluate() === false) {
+                                    $evaluated = false;
+                                    break;
+                                }
                             }
+                            if (!$evaluated) {
+                                continue;
+                            }
+                            $this->registerAsset($asset);
+                        } else {
+                            $this->registerAsset($asset);
                         }
-                        if (!$evaluated) {
-                            continue;
-                        }
-                        $this->registerAsset($asset);
-                    } else {
-                        $this->registerAsset($asset);
                     }
-                }
-            });
+                },
+                30
+            );
         } elseif ($this->getSuccessor() && $this->getSuccessor()->isApplicable($type)) {
             $this->registerAssetsByType($type, $assets);
         }
