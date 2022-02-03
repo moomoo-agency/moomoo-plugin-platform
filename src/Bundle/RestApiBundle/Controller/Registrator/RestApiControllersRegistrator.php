@@ -2,6 +2,8 @@
 
 namespace MooMoo\Platform\Bundle\RestApiBundle\Controller\Registrator;
 
+use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareInterface;
+
 class RestApiControllersRegistrator implements RestApiControllersRegistratorInterface
 {
     /**
@@ -11,7 +13,22 @@ class RestApiControllersRegistrator implements RestApiControllersRegistratorInte
     {
         add_action( 'rest_api_init', function () use ($restControllers) {
             foreach ($restControllers as $restController) {
-                $restController->register_routes();
+                if ($restController instanceof ConditionAwareInterface && $restController->hasConditions()) {
+                    $evaluated = true;
+                    foreach ($restController->getConditions() as $condition) {
+                        if ($condition->evaluate() === false) {
+                            $evaluated = false;
+                            break;
+                        }
+                    }
+                    if (!$evaluated) {
+                        continue;
+                    }
+                    $restController->register_routes();
+                } else {
+                    $restController->register_routes();
+                }
+
             }
         });
     }
