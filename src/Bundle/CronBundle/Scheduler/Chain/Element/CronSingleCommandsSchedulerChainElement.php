@@ -25,8 +25,14 @@ class CronSingleCommandsSchedulerChainElement extends AbstractCronCommandsSchedu
     public function schedule(CronCommandInterface $command, $pluginBaseName)
     {
         add_action($command->getName(), [$command, 'execute']);
-        add_action('activate_' . $pluginBaseName, function () use ($command) {
-            wp_schedule_single_event($command->getTimestamp(), $command->getName(), $command->getArguments());
+        add_action('init', function () use($command) {
+            if (!wp_next_scheduled($command->getName())) {
+                wp_schedule_single_event(
+                    $command->getTimestamp(),
+                    $command->getName(),
+                    $command->getArguments()
+                );
+            }
         });
     }
 }

@@ -24,7 +24,7 @@ class BaseCronCommandCheckerChainElement extends AbstractCronCommandCheckerChain
         if (!$command->getTimestamp()) {
             throw new Exception('timestamp property of cron_command should not be empty');
         }
-        if ((int)$command->getTimestamp() !== $command->getTimestamp()) {
+        if (!is_int($command->getTimestamp())) {
             throw new Exception('timestamp property of cron_command should be integer value');
         }
         if (!is_array($command->getArguments())) {

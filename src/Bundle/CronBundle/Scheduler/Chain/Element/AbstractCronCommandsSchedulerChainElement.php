@@ -2,6 +2,7 @@
 
 namespace MooMoo\Platform\Bundle\CronBundle\Scheduler\Chain\Element;
 
+use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareInterface;
 use MooMoo\Platform\Bundle\CronBundle\Model\CronCommandInterface;
 use MooMoo\Platform\Bundle\CronBundle\Scheduler\CronCommandsSchedulerInterface;
 use MooMoo\Platform\Bundle\HookBundle\Registry\HooksRegistryInterface;
@@ -54,7 +55,21 @@ abstract class AbstractCronCommandsSchedulerChainElement implements
                 });
                 /** @var BundleInterface $commandBundle */
                 $commandBundle = reset($filteredBundles);
-                $this->scheduleCommand($command, $commandBundle->getPluginName());
+                if ($command instanceof ConditionAwareInterface && $command->hasConditions()) {
+                    $evaluated = true;
+                    foreach ($command->getConditions() as $condition) {
+                        if ($condition->evaluate() === false) {
+                            $evaluated = false;
+                            break;
+                        }
+                    }
+                    if (!$evaluated) {
+                        continue;
+                    }
+                    $this->scheduleCommand($command, $commandBundle->getPluginName());
+                } else {
+                    $this->scheduleCommand($command, $commandBundle->getPluginName());
+                }
             }
         }
     }

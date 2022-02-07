@@ -26,13 +26,15 @@ class CronRecurrentCommandsSchedulerChainElement extends AbstractCronCommandsSch
     public function schedule(CronCommandInterface $command, $pluginBaseName)
     {
         add_action($command->getName(), [$command, 'execute']);
-        add_action('activate_' . $pluginBaseName, function () use ($command) {
-            wp_schedule_event(
-                $command->getTimestamp(),
-                $command->getRecurrence(),
-                $command->getName(),
-                $command->getArguments()
-            );
+        add_action('init', function () use ($command) {
+            if (!wp_next_scheduled($command->getName())){
+                wp_schedule_event(
+                    $command->getTimestamp(),
+                    $command->getRecurrence(),
+                    $command->getName(),
+                    $command->getArguments()
+                );
+            }
         });
         add_action('deactivate_' . $pluginBaseName, function () use ($command) {
             wp_clear_scheduled_hook($command->getName());
