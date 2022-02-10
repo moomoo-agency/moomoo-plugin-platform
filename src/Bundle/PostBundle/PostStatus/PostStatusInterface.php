@@ -12,10 +12,5 @@ interface PostStatusInterface
     /**
      * @return array
      */
-    public function getPostTypes();
-
-    /**
-     * @return array
-     */
     public function getArguments();
 }

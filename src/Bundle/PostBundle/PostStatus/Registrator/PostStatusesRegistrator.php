@@ -42,12 +42,6 @@ class PostStatusesRegistrator implements PostStatusesRegistratorInterface
      */
     private function registerPostStatus(PostStatusInterface $postStatus)
     {
-        foreach ($postStatus->getPostTypes() as $postType) {
-            if (in_array($postStatus->getStatus(), array_keys(get_available_post_statuses($postType)))) {
-                $arguments = $postStatus->getArguments();
-                $arguments['post_type'] = [$postType];
-                register_post_status($postStatus->getStatus(), $arguments);
-            }
-        }
+        register_post_status($postStatus->getStatus(), $postStatus->getArguments());
     }
 }
