@@ -28,7 +28,7 @@ class PostBundle extends Bundle
         );
         $container->addCompilerPass(
             new KernelCompilerPass(
-                'moomoo_post_statuses',
+                'moomoo_post_status',
                 'moomoo_post.registry.post_statuses',
                 'addPostStatus'
             )
