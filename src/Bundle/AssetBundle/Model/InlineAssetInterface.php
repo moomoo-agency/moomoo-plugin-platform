@@ -4,6 +4,9 @@ namespace MooMoo\Platform\Bundle\AssetBundle\Model;
 
 interface InlineAssetInterface
 {
+    const FRONTEND_CATEGORY = 'frontend';
+    const ADMIN_CATEGORY = 'admin';
+
     /**
      * @return string
      */
@@ -47,6 +50,17 @@ interface InlineAssetInterface
      * @return $this
      */
     public function setId($id);
+
+    /**
+     * @return string
+     */
+    public function getCategory();
+
+    /**
+     * @param string $category
+     * @return $this
+     */
+    public function setCategory($category);
 
     /**
      * @return array

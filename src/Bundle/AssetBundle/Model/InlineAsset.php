@@ -13,6 +13,7 @@ class InlineAsset extends ParameterBag implements InlineAssetInterface, Conditio
     const TYPE_FIELD = 'type';
     const TAG_TYPE_FIELD = 'tagType';
     const ID_FIELD = 'id';
+    const CATEGORY_FIELD = 'category';
     const CONTENT_FIELD = 'content';
     const DEPENDENCIES_FIELD = 'dependencies';
     const ASSET_DATA_FIELD = 'assetData';
@@ -86,6 +87,23 @@ class InlineAsset extends ParameterBag implements InlineAssetInterface, Conditio
     {
         $this->set(self::ID_FIELD, $id);
 
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCategory()
+    {
+        return $this->get(self::CATEGORY_FIELD, InlineAssetInterface::FRONTEND_CATEGORY);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setCategory($category)
+    {
+        $this->set(self::CATEGORY_FIELD, $category);
         return $this;
     }
 

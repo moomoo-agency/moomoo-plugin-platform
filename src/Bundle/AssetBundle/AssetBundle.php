@@ -4,6 +4,7 @@ namespace MooMoo\Platform\Bundle\AssetBundle;
 
 use MooMoo\Platform\Bundle\AssetBundle\DependencyInjection\CompilerPass\ScriptLocalizationsCompilerPass;
 use MooMoo\Platform\Bundle\AssetBundle\Model\AbstractAsset;
+use MooMoo\Platform\Bundle\AssetBundle\Model\InlineAssetInterface;
 use MooMoo\Platform\Bundle\AssetBundle\Registrator\Assets\AssetsRegistratorInterface;
 use MooMoo\Platform\Bundle\AssetBundle\Registrator\InlineAssets\InlineAssetsRegistratorInterface;
 use MooMoo\Platform\Bundle\AssetBundle\Registry\AssetsRegistryInterface;
@@ -60,9 +61,12 @@ class AssetBundle extends Bundle
 
         /** @var InlineAssetsRegistryInterface $inlineAssetsRegistry */
         $inlineAssetsRegistry = $this->container->get('moomoo_asset.registry.inline_assets');
-        /** @var InlineAssetsRegistratorInterface $inlineAssetsRegistrator */
-        $inlineAssetsRegistrator = $this->container->get('moomoo_asset.registrator.inline_assets');
-        $inlineAssetsRegistrator->registerAssets($inlineAssetsRegistry->getAssets());
+        /** @var InlineAssetsRegistratorInterface $frontendInlineAssetsRegistrator */
+        $frontendInlineAssetsRegistrator = $this->container->get('moomoo_asset.registrator.inline_assets.frontend');
+        $frontendInlineAssetsRegistrator->registerAssets($inlineAssetsRegistry->getAssets(InlineAssetInterface::FRONTEND_CATEGORY));
+        /** @var InlineAssetsRegistratorInterface $adminInlineAssetsRegistrator */
+        $adminInlineAssetsRegistrator = $this->container->get('moomoo_asset.registrator.inline_assets.admin');
+        $adminInlineAssetsRegistrator->registerAssets($inlineAssetsRegistry->getAssets(InlineAssetInterface::ADMIN_CATEGORY));
 
         parent::boot();
     }

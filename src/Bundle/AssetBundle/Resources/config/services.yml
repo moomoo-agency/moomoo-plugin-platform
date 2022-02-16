@@ -70,24 +70,36 @@ services:
     parent: moomoo_asset.registrator.admin.script
     public: true
 
-  moomoo_asset.registrator.inline_assets.abstract:
-    class: 'MooMoo\Platform\Bundle\AssetBundle\Registrator\InlineAssets\Chain\Element\AbstractInlineAssetsRegistratorChainElement'
-    abstract: true
+  moomoo_asset.registrator.inline_assets.frontend.style:
+    class: 'MooMoo\Platform\Bundle\AssetBundle\Registrator\InlineAssets\Chain\Element\FrontendStyleInlineAssetsRegistratorChainElement'
     arguments:
       - '@event_dispatcher'
 
-  moomoo_asset.registrator.inline_assets.style:
-    class: 'MooMoo\Platform\Bundle\AssetBundle\Registrator\InlineAssets\Chain\Element\StyleInlineAssetsRegistratorChainElement'
-    parent: moomoo_asset.registrator.inline_assets.abstract
-
-  moomoo_asset.registrator.inline_assets.script:
-    class: 'MooMoo\Platform\Bundle\AssetBundle\Registrator\InlineAssets\Chain\Element\ScriptInlineAssetsRegistratorChainElement'
-    parent: moomoo_asset.registrator.inline_assets.abstract
+  moomoo_asset.registrator.inline_assets.frontend.script:
+    class: 'MooMoo\Platform\Bundle\AssetBundle\Registrator\InlineAssets\Chain\Element\FrontendScriptInlineAssetsRegistratorChainElement'
+    arguments:
+      - '@event_dispatcher'
     calls:
-      - [ 'setSuccessor', [ '@moomoo_asset.registrator.inline_assets.style' ] ]
+      - [ 'setSuccessor', [ '@moomoo_asset.registrator.inline_assets.frontend.style' ] ]
 
-  moomoo_asset.registrator.inline_assets:
-    parent: moomoo_asset.registrator.inline_assets.script
+  moomoo_asset.registrator.inline_assets.frontend:
+    parent: moomoo_asset.registrator.inline_assets.frontend.script
+    public: true
+
+  moomoo_asset.registrator.inline_assets.admin.style:
+    class: 'MooMoo\Platform\Bundle\AssetBundle\Registrator\InlineAssets\Chain\Element\AdminStyleInlineAssetsRegistratorChainElement'
+    arguments:
+      - '@event_dispatcher'
+
+  moomoo_asset.registrator.inline_assets.admin.script:
+    class: 'MooMoo\Platform\Bundle\AssetBundle\Registrator\InlineAssets\Chain\Element\AdminScriptInlineAssetsRegistratorChainElement'
+    arguments:
+      - '@event_dispatcher'
+    calls:
+      - [ 'setSuccessor', [ '@moomoo_asset.registrator.inline_assets.admin.style' ] ]
+
+  moomoo_asset.registrator.inline_assets.admin:
+    parent: moomoo_asset.registrator.inline_assets.admin.script
     public: true
 
   moomoo_asset.hook.style_loader_tag:

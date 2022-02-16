@@ -22,8 +22,8 @@ class InlineAssetsRegistry implements InlineAssetsRegistryInterface
     /**
      * @inheritDoc
      */
-    public function getAssets()
+    public function getAssets($category)
     {
-        return $this->assets;
+        return isset($this->assets[$category]) ? $this->assets[$category] : [];
     }
 }

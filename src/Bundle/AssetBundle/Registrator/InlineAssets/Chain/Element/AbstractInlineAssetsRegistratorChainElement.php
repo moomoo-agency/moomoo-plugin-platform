@@ -4,7 +4,6 @@ namespace MooMoo\Platform\Bundle\AssetBundle\Registrator\InlineAssets\Chain\Elem
 
 use MooMoo\Platform\Bundle\AssetBundle\Event\InlineAssetsContainingEvent;
 use MooMoo\Platform\Bundle\AssetBundle\Formatter\HtmlAttributesFormatter;
-use MooMoo\Platform\Bundle\AssetBundle\Model\InlineAssetInterface;
 use MooMoo\Platform\Bundle\AssetBundle\Registrator\InlineAssets\InlineAssetsRegistratorInterface;
 use MooMoo\Platform\Bundle\ConditionBundle\Model\ConditionAwareInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -13,12 +12,20 @@ abstract class AbstractInlineAssetsRegistratorChainElement implements
     InlineAssetsRegistratorInterface,
     InlineAssetsRegistratorChainElementInterface
 {
-    const ASSET_REGISTRATION_FUNCTION = null;
-
     /**
      * @var EventDispatcherInterface
      */
     protected $eventDispatcher;
+
+    /**
+     * @var string
+     */
+    protected $assetRegistrationFunction = null;
+
+    /**
+     * @var string
+     */
+    protected $registrationFunction = null;
 
     /**
      * @var InlineAssetsRegistratorChainElementInterface|null
@@ -38,7 +45,7 @@ abstract class AbstractInlineAssetsRegistratorChainElement implements
      */
     public function registerAssets(array $assets)
     {
-        add_action('wp_enqueue_scripts', function () use ($assets) {
+        add_action($this->registrationFunction, function () use ($assets) {
             $event = new InlineAssetsContainingEvent($assets);
             $this->eventDispatcher->dispatch($event, 'moomoo_inline_assets_before_dependencies_registration');
             foreach ($event->getAssets() as $asset) {
@@ -86,7 +93,7 @@ abstract class AbstractInlineAssetsRegistratorChainElement implements
     {
         if ($this->isApplicable($type)) {
             add_action(
-                static::ASSET_REGISTRATION_FUNCTION,
+                $this->assetRegistrationFunction,
                 function () use ($type, $assets) {
                     $event = new InlineAssetsContainingEvent($assets);
                     $this->eventDispatcher->dispatch($event, sprintf('moomoo_inline_assets_before_%ss_registration', $type));

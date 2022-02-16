@@ -4,9 +4,17 @@ namespace MooMoo\Platform\Bundle\AssetBundle\Registrator\InlineAssets\Chain\Elem
 
 use MooMoo\Platform\Bundle\AssetBundle\Model\InlineAssetInterface;
 
-class StyleInlineAssetsRegistratorChainElement extends AbstractInlineAssetsRegistratorChainElement
+class FrontendStyleInlineAssetsRegistratorChainElement extends AbstractInlineAssetsRegistratorChainElement
 {
-    const ASSET_REGISTRATION_FUNCTION = 'wp_head';
+    /**
+     * @var string
+     */
+    protected $assetRegistrationFunction = 'wp_head';
+
+    /**
+     * @var string
+     */
+    protected $registrationFunction = 'wp_enqueue_scripts';
 
     /**
      * @inheritDoc
@@ -43,7 +51,7 @@ class StyleInlineAssetsRegistratorChainElement extends AbstractInlineAssetsRegis
      * @param InlineAssetInterface $asset
      * @return string
      */
-    private function getFinalContent(InlineAssetInterface $asset)
+    protected function getFinalContent(InlineAssetInterface $asset)
     {
         $htmlAttributes = '';
         if (!empty($asset->getAssetData())) {
