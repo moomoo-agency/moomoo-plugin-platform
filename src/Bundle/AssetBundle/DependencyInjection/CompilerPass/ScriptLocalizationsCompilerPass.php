@@ -29,7 +29,7 @@ class ScriptLocalizationsCompilerPass implements CompilerPassInterface
         foreach ($assets as $asset => $attributes) {
             $definition = $container->getDefinition($asset);
             $class = $definition->getClass();
-            if (strpos($class, 'Script') !== false) {
+            if (strpos($class, 'Script') !== false && $definition->getArguments()) {
                 $arguments = $definition->getArgument(0);
                 $handle = null;
                 if (isset($arguments['handle'])) {

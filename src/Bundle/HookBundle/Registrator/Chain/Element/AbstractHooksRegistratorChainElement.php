@@ -20,13 +20,43 @@ abstract class AbstractHooksRegistratorChainElement implements
      */
     public function registerHooks(array $hooks)
     {
-        $groupedHooks = [];
+        $groupedHooksWithoutInitHook = [];
+        $groupedHooksWithInitHook = [];
         foreach ($hooks as $hook) {
-            $groupedHooks[$hook->getInitHookName()][$hook->getInitHookPriority()][] = $hook;
+            if ($hook->getInitHookName()) {
+                $groupedHooksWithInitHook[$hook->getInitHookName()][$hook->getInitHookPriority()][] = $hook;
+            } else {
+                $groupedHooksWithoutInitHook[] = $hook;
+            }
         }
-        foreach ($groupedHooks as $initHookName => $hooksByInitPriority) {
-            foreach ($hooksByInitPriority as $initHookPriority => $hooks) {
-                $this->registerHooksByInitHook($initHookName, $initHookPriority, $hooks);
+        $this->registerHooksWithoutInitHook($groupedHooksWithoutInitHook);
+        foreach ($groupedHooksWithInitHook as $initHookName => $hooksByInitPriority) {
+            foreach ($hooksByInitPriority as $initHookPriority => $hooksWithoutInitHook) {
+                $this->registerHooksWithInitHook($initHookName, $initHookPriority, $hooksWithoutInitHook);
+            }
+        }
+    }
+
+    /**
+     * @param HookInterface[] $hooks
+     */
+    private function registerHooksWithoutInitHook(array $hooks)
+    {
+        foreach ($hooks as $hook) {
+            if ($hook instanceof ConditionAwareInterface && $hook->hasConditions()) {
+                $evaluated = true;
+                foreach ($hook->getNotLazyConditions() as $condition) {
+                    if ($condition->evaluate() === false) {
+                        $evaluated = false;
+                        break;
+                    }
+                }
+                if (!$evaluated) {
+                    continue;
+                }
+                $this->registerHook($hook);
+            } else {
+                $this->registerHook($hook);
             }
         }
     }
@@ -36,7 +66,7 @@ abstract class AbstractHooksRegistratorChainElement implements
      * @param int $initHookPriority
      * @param HookInterface[] $hooks
      */
-    private function registerHooksByInitHook($initHookName, $initHookPriority, array $hooks)
+    private function registerHooksWithInitHook($initHookName, $initHookPriority, array $hooks)
     {
         add_action(
             $initHookName,
