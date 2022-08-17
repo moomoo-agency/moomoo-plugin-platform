@@ -32,7 +32,7 @@ class AdminBarNodesRegistrator implements MenuElementsRegistratorInterface
                             }
                         }
                         if (!$evaluated) {
-                            return;
+                            continue;
                         }
                         $this->addNode($menuElement);
                     } else {

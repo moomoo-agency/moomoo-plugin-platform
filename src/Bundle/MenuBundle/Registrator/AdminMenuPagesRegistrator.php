@@ -82,7 +82,8 @@ class AdminMenuPagesRegistrator implements MenuElementsRegistratorInterface
                     $menuElement->getTitle(),
                     $menuElement->getCapability(),
                     $menuElement->getMenuSlug(),
-                    $function
+                    $function,
+                    $menuElement->getPosition()
                 );
             }
         });

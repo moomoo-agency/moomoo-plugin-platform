@@ -17,7 +17,7 @@ class MenuElementsRegistry implements MenuElementsRegistryInterface
      */
     public function addMenuElement(MenuElementInterface $menuElement)
     {
-        $this->menuElements[$menuElement->getIdentifier()] = $menuElement;
+        $this->menuElements[] = $menuElement;
     }
 
     /**

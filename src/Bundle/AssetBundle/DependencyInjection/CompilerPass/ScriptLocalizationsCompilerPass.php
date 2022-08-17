@@ -38,7 +38,7 @@ class ScriptLocalizationsCompilerPass implements CompilerPassInterface
                 if ($handle === null) {
                     throw new InvalidArgumentException(sprintf('Service "%s" does not have required param "handle"', $asset));
                 }
-                $this->assets[$handle] = $asset;
+                $this->assets[$handle][] = $asset;
             }
         }
 
@@ -65,8 +65,10 @@ class ScriptLocalizationsCompilerPass implements CompilerPassInterface
             }
             foreach ($handles as $handle) {
                 if (isset($this->assets[$handle])) {
-                    $assetDefinition = $container->getDefinition($this->assets[$handle]);
-                    $assetDefinition->addMethodCall('addLocalization', [new Reference($localization)]);
+                    foreach ($this->assets[$handle] as $k => $asset) {
+                        $assetDefinition = $container->getDefinition($this->assets[$handle][$k]);
+                        $assetDefinition->addMethodCall('addLocalization', [new Reference($localization)]);
+                    }
                 }
             }
         }

@@ -16,7 +16,7 @@ class InlineAssetsRegistry implements InlineAssetsRegistryInterface
      */
     public function addAsset(InlineAssetInterface $asset)
     {
-        $this->assets[] = $asset;
+        $this->assets[$asset->getCategory()][] = $asset;
     }
 
     /**
