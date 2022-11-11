@@ -30,7 +30,7 @@ class Script extends AbstractAsset implements ScriptInterface
     {
         $localizations = $this->getLocalizations();
         if (!in_array($localization, $localizations)) {
-            $localizations[$localization->getPropertyName()] = $localization;
+            $localizations[] = $localization;
             $this->set(self::LOCALIZATIONS, $localizations);
         }
 
