@@ -44,7 +44,7 @@ class AdminMenuPage extends ParameterBag implements AdminMenuPageInterface
      */
     public function getTitle()
     {
-        return $this->get(self::TITLE_FIELD);
+        return __($this->get(self::TITLE_FIELD), $this->getTranslationDomain());
     }
 
     /**
@@ -60,7 +60,7 @@ class AdminMenuPage extends ParameterBag implements AdminMenuPageInterface
      */
     public function getPageTitle()
     {
-        return $this->get(self::PAGE_TITLE_FIELD);
+        return __($this->get(self::PAGE_TITLE_FIELD), $this->getTranslationDomain());
     }
 
     /**
