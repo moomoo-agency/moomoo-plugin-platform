@@ -331,6 +331,8 @@ class Kernel
         $cachedPluginsVersions = json_decode(get_option($prefix . 'cached-plugin-versions'), true);
         if ($currentPluginsVersions === $cachedPluginsVersions) {
             $cacheValidForPluginsVersions = true;
+        } else {
+            $fs->remove(\sprintf('%s/%s/cache', wp_upload_dir()['basedir'], $prefix));
         }
 
         $class = 'MooMooCachedContainer';
