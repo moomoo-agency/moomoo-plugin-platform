@@ -33,4 +33,9 @@ interface AdminMenuPageInterface extends MenuElementInterface
      * @return int
      */
     public function getPosition();
+
+    /**
+     * @return string
+     */
+    public function getTranslationDomain();
 }

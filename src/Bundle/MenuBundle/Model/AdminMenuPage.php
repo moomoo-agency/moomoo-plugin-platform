@@ -15,6 +15,7 @@ class AdminMenuPage extends ParameterBag implements AdminMenuPageInterface
     const ICON_URL_FIELD = 'icon_url';
     const POSITION_FIELD = 'position';
     const PAGE_FIELD = 'page';
+    const TRANSLATION_DOMAIN = 'translation_domain';
 
     use ConditionAwareTrait;
 
@@ -92,5 +93,13 @@ class AdminMenuPage extends ParameterBag implements AdminMenuPageInterface
     public function getPosition()
     {
         return $this->get(self::POSITION_FIELD);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTranslationDomain()
+    {
+        return $this->get(self::TRANSLATION_DOMAIN, 'default');
     }
 }
