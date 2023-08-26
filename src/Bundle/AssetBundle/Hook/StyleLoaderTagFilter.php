@@ -27,7 +27,7 @@ class StyleLoaderTagFilter extends AbstractFilter
                 }
                 if (isset($htmlAttributes['type'])) {
                     $formattedType = HtmlAttributesFormatter::format('type', $htmlAttributes['type']);
-                    $tag = preg_replace('/ type=\'text\/css\'/', " {$formattedType}", $tag, 1);
+                    $tag = preg_replace('/ type=\'text/css\'/', " {$formattedType}", $tag, 1);
                 }
                 if (isset($htmlAttributes['id'])) {
                     $formattedId = HtmlAttributesFormatter::format('id', $htmlAttributes['type']);
