@@ -4,7 +4,6 @@ namespace MooMoo\Platform\Bundle\AssetBundle\Hook;
 
 use MooMoo\Platform\Bundle\AssetBundle\Formatter\HtmlAttributesFormatter;
 use MooMoo\Platform\Bundle\HookBundle\Model\AbstractFilter;
-
 class StyleLoaderTagFilter extends AbstractFilter
 {
     /**
@@ -18,15 +17,24 @@ class StyleLoaderTagFilter extends AbstractFilter
             if (is_array($htmlAttributes) && !empty($htmlAttributes)) {
                 $formattedAttributes = [];
                 foreach ($htmlAttributes as $key => $value) {
-                    $formattedAttributes[] = HtmlAttributesFormatter::format($key, $value);
+                    if (in_array($key, ['type', 'id'])) {
+                        $formattedAttributes[] = HtmlAttributesFormatter::format($key, $value);
+                    }
                 }
                 if (!empty($formattedAttributes)) {
                     $formattedAttributes = implode(' ', $formattedAttributes);
-                    $tag = preg_replace( ':(?=>):', " $formattedAttributes", $tag, 1 );
+                    $tag = preg_replace(':(?=>):', " {$formattedAttributes}", $tag, 1);
+                }
+                if (isset($htmlAttributes['type'])) {
+                    $formattedType = HtmlAttributesFormatter::format('type', $htmlAttributes['type']);
+                    $tag = preg_replace('/ type=\'text\/css\'/', " {$formattedType}", $tag, 1);
+                }
+                if (isset($htmlAttributes['id'])) {
+                    $formattedId = HtmlAttributesFormatter::format('id', $htmlAttributes['type']);
+                    $tag = preg_replace('/ id=\'[A-Za-z]+[\w\-:.]*\'/', " {$formattedId}", $tag, 1);
                 }
             }
         }
-
         return $tag;
     }
 }

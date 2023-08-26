@@ -50,24 +50,24 @@ class AssetBundle extends Bundle
     {
         /** @var AssetsRegistryInterface $assetsRegistry */
         $assetsRegistry = $this->container->get('moomoo_asset.registry.assets');
-
-        /** @var AssetsRegistratorInterface $frontendAssetsRegistrator */
-        $frontendAssetsRegistrator = $this->container->get('moomoo_asset.registrator.frontend');
-        $frontendAssetsRegistrator->registerAssets($assetsRegistry->getAssets(AbstractAsset::FRONTEND_CATEGORY));
-
-        /** @var AssetsRegistratorInterface $adminAssetsRegistrator */
-        $adminAssetsRegistrator = $this->container->get('moomoo_asset.registrator.admin');
-        $adminAssetsRegistrator->registerAssets($assetsRegistry->getAssets(AbstractAsset::ADMIN_CATEGORY));
-
         /** @var InlineAssetsRegistryInterface $inlineAssetsRegistry */
         $inlineAssetsRegistry = $this->container->get('moomoo_asset.registry.inline_assets');
-        /** @var InlineAssetsRegistratorInterface $frontendInlineAssetsRegistrator */
-        $frontendInlineAssetsRegistrator = $this->container->get('moomoo_asset.registrator.inline_assets.frontend');
-        $frontendInlineAssetsRegistrator->registerAssets($inlineAssetsRegistry->getAssets(InlineAssetInterface::FRONTEND_CATEGORY));
-        /** @var InlineAssetsRegistratorInterface $adminInlineAssetsRegistrator */
-        $adminInlineAssetsRegistrator = $this->container->get('moomoo_asset.registrator.inline_assets.admin');
-        $adminInlineAssetsRegistrator->registerAssets($inlineAssetsRegistry->getAssets(InlineAssetInterface::ADMIN_CATEGORY));
+        if (is_admin()) {
+            /** @var AssetsRegistratorInterface $adminAssetsRegistrator */
+            $adminAssetsRegistrator = $this->container->get('moomoo_asset.registrator.admin');
+            $adminAssetsRegistrator->registerAssets($assetsRegistry->getAssets(AbstractAsset::ADMIN_CATEGORY));
+            /** @var InlineAssetsRegistratorInterface $adminInlineAssetsRegistrator */
+            $adminInlineAssetsRegistrator = $this->container->get('moomoo_asset.registrator.inline_assets.admin');
+            $adminInlineAssetsRegistrator->registerAssets($inlineAssetsRegistry->getAssets(InlineAssetInterface::ADMIN_CATEGORY));
+        } else {
+            /** @var AssetsRegistratorInterface $frontendAssetsRegistrator */
+            $frontendAssetsRegistrator = $this->container->get('moomoo_asset.registrator.frontend');
+            $frontendAssetsRegistrator->registerAssets($assetsRegistry->getAssets(AbstractAsset::FRONTEND_CATEGORY));
 
+            /** @var InlineAssetsRegistratorInterface $frontendInlineAssetsRegistrator */
+            $frontendInlineAssetsRegistrator = $this->container->get('moomoo_asset.registrator.inline_assets.frontend');
+            $frontendInlineAssetsRegistrator->registerAssets($inlineAssetsRegistry->getAssets(InlineAssetInterface::FRONTEND_CATEGORY));
+        }
         parent::boot();
     }
 }

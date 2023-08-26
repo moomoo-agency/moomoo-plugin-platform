@@ -312,39 +312,48 @@ class Kernel
         $prefix = strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', explode('\\', get_class($this)))[0]);
         $fs = new Filesystem();
         $currentPluginsVersions = (new PluginsVersionsProvider($this->plugins))->getPluginsVersions();
+        $cacheDir = sprintf('%s/%s/cache', wp_upload_dir()['basedir'], $prefix);
+        $class = 'MooMooCachedContainer';
+        $cache = new ConfigCache($cacheDir . '/' . $class . '.php', $this->debug);
+        $cachePath = $cache->getPath();
         foreach ($currentPluginsVersions as $plugin => $version) {
             if (strpos($plugin, '/') !== false) {
-                register_activation_hook(
-                    sprintf('%s/%s', wp_normalize_path( WP_PLUGIN_DIR ), $plugin),
-                    function () use ($prefix, $fs){
-                        $fs->remove(sprintf('%s/%s/cache', wp_upload_dir()['basedir'], $prefix));
+                register_activation_hook(sprintf('%s/%s', wp_normalize_path(WP_PLUGIN_DIR), $plugin), function () use($cacheDir, $fs) {
+                    try {
+                        if(is_dir($cacheDir)){
+                            $fs->remove($cacheDir);
+                        }
+                        wp_clean_plugins_cache();
+                        delete_option('builderius_pro_version_info');
+                    } catch (\Throwable $e) {
                     }
-                );
-                register_deactivation_hook(
-                    sprintf('%s/%s', wp_normalize_path( WP_PLUGIN_DIR ), $plugin),
-                    function () use ($prefix, $fs){
-                        $fs->remove(sprintf('%s/%s/cache', wp_upload_dir()['basedir'], $prefix));
+                });
+                register_deactivation_hook(sprintf('%s/%s', wp_normalize_path(WP_PLUGIN_DIR), $plugin), function () use($cacheDir, $fs) {
+                    try {
+                        if(is_dir($cacheDir)){
+                            $fs->remove($cacheDir);
+                        }
+                    } catch (\Throwable $e) {
                     }
-                );
+                });
             }
         }
         $cachedPluginsVersions = json_decode(get_option($prefix . 'cached-plugin-versions'), true);
         if ($currentPluginsVersions === $cachedPluginsVersions) {
             $cacheValidForPluginsVersions = true;
         } else {
-            $fs->remove(\sprintf('%s/%s/cache', wp_upload_dir()['basedir'], $prefix));
+            try {
+                if(is_dir($cacheDir)){
+                    $fs->remove($cacheDir);
+                }
+            } catch (\Throwable $e) {
+            }
         }
-
-        $class = 'MooMooCachedContainer';
-        $cacheDir = sprintf('%s/%s/cache', wp_upload_dir()['basedir'], $prefix);
-        $cache = new ConfigCache($cacheDir.'/'.$class.'.php', $this->debug);
-        $cachePath = $cache->getPath();
-
         // Silence E_WARNING to ignore "include" failures - don't use "@" to prevent silencing fatal errors
-        $errorLevel = error_reporting(\E_ALL ^ \E_WARNING);
+        $errorLevel = error_reporting(E_ALL ^ E_WARNING);
 
         try {
-            if (file_exists($cachePath) && \is_object($this->container = include $cachePath)
+            if (file_exists($cachePath) && is_object($this->container = include $cachePath)
                 && (!$this->debug || (self::$freshCache[$cachePath] ?? $cache->isFresh()))
                 && $cacheValidForPluginsVersions === true
             ) {
@@ -357,7 +366,7 @@ class Kernel
         } catch (\Throwable $e) {
         }
 
-        $oldContainer = \is_object($this->container) ? new \ReflectionClass($this->container) : $this->container = null;
+        $oldContainer = is_object($this->container) ? new \ReflectionClass($this->container) : $this->container = null;
 
         try {
             is_dir($cacheDir) ?: mkdir($cacheDir, 0777, true);
@@ -368,9 +377,9 @@ class Kernel
                 if (!flock($lock, $wouldBlock ? LOCK_SH : LOCK_EX)) {
                     fclose($lock);
                     $lock = null;
-                } elseif (!\is_object($this->container = include $cachePath)) {
+                } elseif (!file_exists($cachePath) || !is_object($this->container = (include $cachePath))) {
                     $this->container = null;
-                } elseif (!$oldContainer || \get_class($this->container) !== $oldContainer->name) {
+                } elseif (!$oldContainer || get_class($this->container) !== $oldContainer->name) {
                     flock($lock, LOCK_UN);
                     fclose($lock);
                     $this->container->set('kernel', $this);
@@ -383,7 +392,7 @@ class Kernel
             error_reporting($errorLevel);
         }
 
-        if ($collectDeprecations = $this->debug && !\defined('PHPUNIT_COMPOSER_INSTALL')) {
+        if ($collectDeprecations = $this->debug && !defined('PHPUNIT_COMPOSER_INSTALL')) {
             $collectedLogs = [];
             $previousHandler = set_error_handler(function ($type, $message, $file, $line) use (&$collectedLogs, &$previousHandler) {
                 if (E_USER_DEPRECATED !== $type && E_DEPRECATED !== $type) {
@@ -400,7 +409,7 @@ class Kernel
                 // Clean the trace by removing first frames added by the error handler itself.
                 for ($i = 0; isset($backtrace[$i]); ++$i) {
                     if (isset($backtrace[$i]['file'], $backtrace[$i]['line']) && $backtrace[$i]['line'] === $line && $backtrace[$i]['file'] === $file) {
-                        $backtrace = \array_slice($backtrace, 1 + $i);
+                        $backtrace = array_slice($backtrace, 1 + $i);
                         break;
                     }
                 }
@@ -444,14 +453,14 @@ class Kernel
 
         update_option($prefix . 'cached-plugin-versions', json_encode($currentPluginsVersions));
 
-        if ($oldContainer && \get_class($this->container) !== $oldContainer->name) {
+        if ($oldContainer && get_class($this->container) !== $oldContainer->name) {
             // Because concurrent requests might still be using them,
             // old container files are not removed immediately,
             // but on a next dump of the container.
             static $legacyContainers = [];
-            $oldContainerDir = \dirname($oldContainer->getFileName());
+            $oldContainerDir = dirname($oldContainer->getFileName());
             $legacyContainers[$oldContainerDir.'.legacy'] = true;
-            foreach (glob(\dirname($oldContainerDir).\DIRECTORY_SEPARATOR.'*.legacy', GLOB_NOSORT) as $legacyContainer) {
+            foreach (glob(dirname($oldContainerDir).DIRECTORY_SEPARATOR.'*.legacy', GLOB_NOSORT) as $legacyContainer) {
                 if (!isset($legacyContainers[$legacyContainer]) && @unlink($legacyContainer)) {
                     (new Filesystem())->remove(substr($legacyContainer, 0, -7));
                 }
@@ -485,14 +494,14 @@ class Kernel
         ]);
 
         $rootCode = array_pop($content);
-        $dir = \dirname($cache->getPath()).'/';
+        $dir = dirname($cache->getPath()).'/';
         $fs = new Filesystem();
 
         foreach ($content as $file => $code) {
             $fs->dumpFile($dir.$file, $code);
             @chmod($dir.$file, 0666 & ~umask());
         }
-        $legacyFile = \dirname($dir.$file).'.legacy';
+        $legacyFile = dirname($dir.$file).'.legacy';
         if (file_exists($legacyFile)) {
             @unlink($legacyFile);
         }
@@ -500,8 +509,8 @@ class Kernel
         $cache->write($rootCode, $container->getResources());
 
         if ($this->debug === true) {
-            $prefix = \strtolower(\preg_replace('/(?<!^)[A-Z]/', '-$0', \explode('\\', \get_class($this)))[0]);
-            $cacheDir = \sprintf('%s/%s/cache/', wp_upload_dir()['basedir'], $prefix);
+            $prefix = strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', explode('\\', get_class($this)))[0]);
+            $cacheDir = sprintf('%s/%s/cache/', wp_upload_dir()['basedir'], $prefix);
             $class = 'MooMooCachedContainer';
 
             $xmlCache = new ConfigCache($cacheDir . '/' . $class . '.xml', false);

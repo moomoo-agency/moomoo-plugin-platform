@@ -18,4 +18,9 @@ interface ScriptLocalizationInterface
      * @return mixed
      */
     public function getPropertyData();
+
+    /**
+     * @return int
+     */
+    public function getSortOrder();
 }

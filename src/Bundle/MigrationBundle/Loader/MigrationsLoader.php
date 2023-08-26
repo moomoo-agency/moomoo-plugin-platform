@@ -83,7 +83,9 @@ class MigrationsLoader
         }
         $loadedVersions = [];
         foreach ($this->bundles as $bundleName => $bundle) {
-            $loadedVersions[$bundleName] = $loadedPluginVersions[$bundle->getPluginName()];
+            if (isset($loadedPluginVersions[$bundle->getPluginName()])) {
+                $loadedVersions[$bundleName] = $loadedPluginVersions[$bundle->getPluginName()];
+            }
         }
 
         return $loadedVersions;

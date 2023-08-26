@@ -38,12 +38,13 @@ class MenuBundle extends Bundle
      */
     public function boot()
     {
-        /** @var MenuElementsRegistryInterface $adminMenuPagesRegistry */
-        $adminMenuPagesRegistry = $this->container->get('moomoo_menu.registry.admin_menu_pages');
-        /** @var MenuElementsRegistratorInterface $adminMenuPagesRegistrator */
-        $adminMenuPagesRegistrator = $this->container->get('moomoo_menu.registrator.admin_menu_pages');
-        $adminMenuPagesRegistrator->register($adminMenuPagesRegistry->getMenuElements());
-
+        if (is_admin()) {
+            /** @var MenuElementsRegistryInterface $adminMenuPagesRegistry */
+            $adminMenuPagesRegistry = $this->container->get('moomoo_menu.registry.admin_menu_pages');
+            /** @var MenuElementsRegistratorInterface $adminMenuPagesRegistrator */
+            $adminMenuPagesRegistrator = $this->container->get('moomoo_menu.registrator.admin_menu_pages');
+            $adminMenuPagesRegistrator->register($adminMenuPagesRegistry->getMenuElements());
+        }
         /** @var MenuElementsRegistryInterface $adminBarNodesRegistry */
         $adminBarNodesRegistry = $this->container->get('moomoo_menu.registry.admin_bar_nodes');
         /** @var MenuElementsRegistratorInterface $adminMenuPagesRegistrator */

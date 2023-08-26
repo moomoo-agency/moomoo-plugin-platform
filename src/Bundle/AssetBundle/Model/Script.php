@@ -20,9 +20,19 @@ class Script extends AbstractAsset implements ScriptInterface
      */
     public function getLocalizations()
     {
-        return $this->get(self::LOCALIZATIONS, []);
-    }
+        $localizations = $this->get(self::LOCALIZATIONS, []);
+        usort($localizations, function (ScriptLocalizationInterface $a, ScriptLocalizationInterface $b) {
+            if ($a->getSortOrder() < $b->getSortOrder()) {
+                return -1;
+            } elseif ($a->getSortOrder() > $b->getSortOrder()) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
 
+        return $localizations;
+    }
     /**
      * @inheritDoc
      */
